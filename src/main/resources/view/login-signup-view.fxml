@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="624.0" prefWidth="914.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.loginSignup.LoginSignupViewController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="651.0" layoutY="-1.0" stroke="#fffafa00" strokeType="INSIDE" strokeWidth="0.0" width="913.0" />
+      <Group layoutX="7.0" layoutY="7.0">
+         <children>
+            <ImageView fitHeight="636.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/loginImage1.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="45.0" fitWidth="148.0" layoutX="21.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/Clithify%20Logo/Clothify-Logo-Whhite.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Group>
+      <AnchorPane fx:id="paneForgotPassword" layoutX="457.0" layoutY="1.0" prefHeight="651.0" prefWidth="457.0">
+         <children>
+            <Group layoutX="83.0" layoutY="48.0">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="631.0" layoutX="-82.0" layoutY="-38.0" stroke="#fffafa00" strokeType="INSIDE" strokeWidth="0.0" width="448.0" />
+                  <ImageView fitHeight="31.0" fitWidth="134.0" layoutX="89.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Clithify%20Logo/Clothify-Logo-Black.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="28.0" layoutY="66.0" prefHeight="45.0" prefWidth="238.0" text="Reset Password">
+                     <font>
+                        <Font name="Bodoni MT" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="39.0" layoutY="111.0" prefHeight="17.0" prefWidth="217.0" text="Enter your email to reset your password." />
+                  <Label layoutY="160.0" prefHeight="16.0" prefWidth="34.0" text="Email" />
+                  <TextField fx:id="txtForgotEmail" layoutY="180.0" prefHeight="37.0" prefWidth="290.0" promptText="Enter your email" />
+                  <Label layoutX="2.0" layoutY="368.0" prefHeight="17.0" prefWidth="91.0" text="New Password" />
+                  <JFXButton layoutY="234.0" onAction="#btnSendOTP" prefHeight="37.0" prefWidth="290.0" stylesheets="@../css/styles.css" text="Send OTP to Email" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </JFXButton>
+                  <PasswordField fx:id="txtNewPassword" layoutX="2.0" layoutY="388.0" prefHeight="37.0" prefWidth="290.0" promptText="Enter new password" />
+                  <Label layoutX="2.0" layoutY="296.0" prefHeight="16.0" prefWidth="34.0" text="OTP" />
+                  <TextField fx:id="txtOTP" layoutX="2.0" layoutY="316.0" prefHeight="37.0" prefWidth="290.0" promptText="Enter your OTP" />
+                  <Label layoutX="3.0" layoutY="440.0" prefHeight="17.0" prefWidth="106.0" text="Confirm Password" />
+                  <PasswordField fx:id="txtConfirmPassword" layoutX="3.0" layoutY="460.0" prefHeight="37.0" prefWidth="290.0" promptText="Confirm your password" />
+                  <JFXButton layoutX="52.0" layoutY="517.0" onAction="#btnResetPassword" prefHeight="44.0" prefWidth="241.0" stylesheets="@../css/styles.css" text="Reset Password" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </JFXButton>
+                  <ImageView fitHeight="41.0" fitWidth="43.0" layoutX="4.0" layoutY="518.0" onMousePressed="#btnBackOnAction" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/backIcon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Group>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="paneLogin" layoutX="456.0" prefHeight="651.0" prefWidth="457.0">
+         <children>
+            <Group layoutX="84.0" layoutY="49.0">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="634.0" layoutX="-74.0" layoutY="-41.0" stroke="#fffafa00" strokeType="INSIDE" strokeWidth="0.0" width="434.0" />
+                  <ImageView fitHeight="31.0" fitWidth="134.0" layoutX="89.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Clithify%20Logo/Clothify-Logo-Black.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="33.0" layoutY="119.0" prefHeight="45.0" prefWidth="225.0" text="Welcome Back">
+                     <font>
+                        <Font name="Bodoni MT" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label layoutY="168.0" prefHeight="17.0" prefWidth="290.0" text="Enter your email and password to access your account" />
+                  <Label layoutY="213.0" prefHeight="16.0" prefWidth="34.0" text="Email" />
+                  <TextField fx:id="txtLoginEmail" layoutY="233.0" prefHeight="37.0" prefWidth="290.0" promptText="Enter your email" />
+                  <Label layoutX="1.0" layoutY="285.0" prefHeight="16.0" prefWidth="59.0" text="Password" />
+                  <Label fx:id="lblForgitPassword" layoutX="192.0" layoutY="354.0" onMouseEntered="#lblForgotPasswordMouseEntered" onMouseExited="#lblForgotPasswordMouseExited" onMousePressed="#lblForgotPasswordOnAction" prefHeight="17.0" prefWidth="99.0" text="Forgot Password ?" />
+                  <JFXButton fx:id="btnLogin" layoutY="386.0" onAction="#btnLogInOnAction" prefHeight="37.0" prefWidth="290.0" stylesheets="@../css/styles.css" text="Log In" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </JFXButton>
+                  <PasswordField fx:id="txtLoginPassword" layoutX="1.0" layoutY="305.0" prefHeight="37.0" prefWidth="290.0" promptText="Enter your password" />
+                  <Label layoutX="52.0" layoutY="517.0" prefHeight="17.0" prefWidth="189.0" text="Copyright © 2025 NipunBasnayake" />
+                  <Label layoutX="98.0" layoutY="536.0" prefHeight="17.0" prefWidth="98.0" text="All rights reserved" />
+               </children>
+            </Group>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
