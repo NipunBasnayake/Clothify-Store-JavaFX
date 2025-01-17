@@ -22,7 +22,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 
-public class LoginSignupViewController implements Initializable {
+public class LoginSignupViewController {
     static String otp;
 
     public Label lblForgitPassword;
@@ -151,19 +151,14 @@ public class LoginSignupViewController implements Initializable {
     void lblForgotPasswordOnAction(MouseEvent event) {
         new SlideInRight(paneForgotPassword).play();
         paneForgotPassword.toFront();
+
+        txtForgotEmail.setText(txtLoginEmail.getText());
     }
 
     @FXML
     void btnBackOnAction(MouseEvent event) {
         new SlideInRight(paneLogin).play();
         paneLogin.toFront();
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        txtOTP.setEditable(false);
-        txtNewPassword.setEditable(false);
-        txtConfirmPassword.setEditable(false);
     }
 
     private String generateOTP() {
@@ -177,8 +172,8 @@ public class LoginSignupViewController implements Initializable {
 
     private void sendOtpEmail(String recipientEmail, String otp) {
         String host = "smtp.gmail.com";
-        final String user = "nbasnayaka99@gmail.com";
-        final String password = "iqtf wokw vuyo aqjq";
+        final String user = "reg.clothify@gmail.com";
+        final String password = "wyds qhbr aiqx moja";
 
         Properties properties = new Properties();
         properties.put("mail.smtp.host", host);

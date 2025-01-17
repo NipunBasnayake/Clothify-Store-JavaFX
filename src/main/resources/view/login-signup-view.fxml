@@ -52,11 +52,11 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </JFXButton>
-                  <PasswordField fx:id="txtNewPassword" layoutX="2.0" layoutY="388.0" prefHeight="37.0" prefWidth="290.0" promptText="Enter new password" />
+                  <PasswordField fx:id="txtNewPassword" editable="false" layoutX="2.0" layoutY="388.0" prefHeight="37.0" prefWidth="290.0" promptText="Enter new password" />
                   <Label layoutX="2.0" layoutY="296.0" prefHeight="16.0" prefWidth="34.0" text="OTP" />
-                  <TextField fx:id="txtOTP" layoutX="2.0" layoutY="316.0" prefHeight="37.0" prefWidth="290.0" promptText="Enter your OTP" />
+                  <TextField fx:id="txtOTP" editable="false" layoutX="2.0" layoutY="316.0" prefHeight="37.0" prefWidth="290.0" promptText="Enter your OTP" />
                   <Label layoutX="3.0" layoutY="440.0" prefHeight="17.0" prefWidth="106.0" text="Confirm Password" />
-                  <PasswordField fx:id="txtConfirmPassword" layoutX="3.0" layoutY="460.0" prefHeight="37.0" prefWidth="290.0" promptText="Confirm your password" />
+                  <PasswordField fx:id="txtConfirmPassword" editable="false" layoutX="3.0" layoutY="460.0" prefHeight="37.0" prefWidth="290.0" promptText="Confirm your password" />
                   <JFXButton layoutX="52.0" layoutY="517.0" onAction="#btnResetPassword" prefHeight="44.0" prefWidth="241.0" stylesheets="@../css/styles.css" text="Reset Password" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
@@ -89,14 +89,14 @@
                   <Label layoutY="168.0" prefHeight="17.0" prefWidth="290.0" text="Enter your email and password to access your account" />
                   <Label layoutY="213.0" prefHeight="16.0" prefWidth="34.0" text="Email" />
                   <TextField fx:id="txtLoginEmail" layoutY="233.0" prefHeight="37.0" prefWidth="290.0" promptText="Enter your email" />
-                  <Label layoutX="1.0" layoutY="285.0" prefHeight="16.0" prefWidth="59.0" text="Password" />
-                  <Label fx:id="lblForgitPassword" layoutX="192.0" layoutY="354.0" onMouseEntered="#lblForgotPasswordMouseEntered" onMouseExited="#lblForgotPasswordMouseExited" onMousePressed="#lblForgotPasswordOnAction" prefHeight="17.0" prefWidth="99.0" text="Forgot Password ?" />
+                  <PasswordField fx:id="txtLoginPassword" layoutX="1.0" layoutY="305.0" prefHeight="37.0" prefWidth="290.0" promptText="Enter your password" />
                   <JFXButton fx:id="btnLogin" layoutY="386.0" onAction="#btnLogInOnAction" prefHeight="37.0" prefWidth="290.0" stylesheets="@../css/styles.css" text="Log In" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </JFXButton>
-                  <PasswordField fx:id="txtLoginPassword" layoutX="1.0" layoutY="305.0" prefHeight="37.0" prefWidth="290.0" promptText="Enter your password" />
+                  <Label fx:id="lblForgitPassword" layoutX="192.0" layoutY="354.0" onMouseEntered="#lblForgotPasswordMouseEntered" onMouseExited="#lblForgotPasswordMouseExited" onMousePressed="#lblForgotPasswordOnAction" prefHeight="17.0" prefWidth="99.0" text="Forgot Password ?" />
+                  <Label layoutX="1.0" layoutY="285.0" prefHeight="16.0" prefWidth="59.0" text="Password" />
                   <Label layoutX="52.0" layoutY="517.0" prefHeight="17.0" prefWidth="189.0" text="Copyright © 2025 NipunBasnayake" />
                   <Label layoutX="98.0" layoutY="536.0" prefHeight="17.0" prefWidth="98.0" text="All rights reserved" />
                </children>

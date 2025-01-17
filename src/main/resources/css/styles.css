@@ -1,11 +1,18 @@
-.image-view {
-    /*-fx-background-color: transparent;*/
-    -fx-background-radius: 20px;
+.image-view{
     -fx-border-radius: 20px;
-    /*-fx-border-color: transparent;*/
-    /*-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 4);*/
-    /*-fx-padding: 5px;*/
+    -fx-background-radius: 20px;
 }
+
+
+
+/*.image-view {*/
+/*    !*-fx-background-color: transparent;*!*/
+/*    -fx-background-radius: 20px;*/
+/*    -fx-border-radius: 20px;*/
+/*    !*-fx-border-color: transparent;*!*/
+/*    !*-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 4);*!*/
+/*    !*-fx-padding: 5px;*!*/
+/*}*/
 
 .text-field {
     -fx-font-family: "Arial";
