@@ -2,13 +2,12 @@ package controller.loginSignup;
 
 import db.DBConnection;
 import model.User;
-import org.jasypt.util.text.BasicTextEncryptor;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class LoginSignUpController implements loginSignupServices{
+public class LoginSignUpController implements LoginSignupServices {
     private static LoginSignUpController loginSignUpController;
 
     public static LoginSignUpController getInstance() {

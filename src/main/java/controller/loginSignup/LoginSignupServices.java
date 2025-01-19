@@ -2,7 +2,7 @@ package controller.loginSignup;
 
 import model.User;
 
-public interface loginSignupServices {
+public interface LoginSignupServices {
     User login(String email, String password);
     boolean updatePassword(String email, String password);
 }
