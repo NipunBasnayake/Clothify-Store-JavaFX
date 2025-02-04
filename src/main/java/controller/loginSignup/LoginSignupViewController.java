@@ -5,21 +5,19 @@ import com.jfoenix.controls.JFXButton;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import service.custom.impl.LoginSignUpControllerImpl;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.net.URL;
 import java.util.Properties;
 import java.util.Random;
-import java.util.ResourceBundle;
 
 
 public class LoginSignupViewController {
@@ -61,7 +59,7 @@ public class LoginSignupViewController {
             alert.setHeaderText("Fields are empty");
             alert.show();
         } else {
-            if (LoginSignUpController.getInstance().login(txtLoginEmail.getText(), txtLoginPassword.getText()) == null) {
+            if (LoginSignUpControllerImpl.getInstance().login(txtLoginEmail.getText(), txtLoginPassword.getText()) == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Login Error");
                 alert.setHeaderText("Username or Password is incorrect");
@@ -123,7 +121,7 @@ public class LoginSignupViewController {
             return;
         }
 
-        boolean isUpdated = LoginSignUpController.getInstance().updatePassword(txtForgotEmail.getText(), txtNewPassword.getText());
+        boolean isUpdated = LoginSignUpControllerImpl.getInstance().updatePassword(txtForgotEmail.getText(), txtNewPassword.getText());
         if (isUpdated) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");

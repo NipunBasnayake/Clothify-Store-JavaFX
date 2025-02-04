@@ -1,4 +1,4 @@
-package controller.dashboard;
+package service.custom;
 
 public interface DashboardServices {
 }

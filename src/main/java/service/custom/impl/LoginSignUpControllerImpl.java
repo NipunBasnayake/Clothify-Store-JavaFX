@@ -1,17 +1,18 @@
-package controller.loginSignup;
+package service.custom.impl;
 
 import db.DBConnection;
 import model.User;
+import service.custom.LoginSignupServices;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class LoginSignUpController implements LoginSignupServices {
-    private static LoginSignUpController loginSignUpController;
+public class LoginSignUpControllerImpl implements LoginSignupServices {
+    private static LoginSignUpControllerImpl loginSignUpController;
 
-    public static LoginSignUpController getInstance() {
-        return loginSignUpController==null?loginSignUpController=new LoginSignUpController():loginSignUpController;
+    public static LoginSignUpControllerImpl getInstance() {
+        return loginSignUpController==null?loginSignUpController=new LoginSignUpControllerImpl():loginSignUpController;
     }
 
     @Override
