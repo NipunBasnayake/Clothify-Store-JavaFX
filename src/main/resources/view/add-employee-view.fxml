@@ -15,7 +15,7 @@
          </font>
       </Label>
       <TextField fx:id="txtAddEmployeeName" layoutX="90.0" layoutY="135.0" prefHeight="48.0" prefWidth="421.0" />
-      <JFXButton layoutX="205.0" layoutY="390.0" onAction="#btnSaveProductOnAction" prefHeight="48.0" prefWidth="191.0" stylesheets="@../css/styles.css" text="Save Employee" textFill="WHITE">
+      <JFXButton layoutX="205.0" layoutY="390.0" onAction="#btnSaveEmployeeOnAction" prefHeight="48.0" prefWidth="191.0" stylesheets="@../css/styles.css" text="Save Employee" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>

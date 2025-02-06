@@ -5,17 +5,21 @@ import com.jfoenix.controls.JFXButton;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import service.custom.impl.LoginSignUpControllerImpl;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 
@@ -65,12 +69,16 @@ public class LoginSignupViewController {
                 alert.setHeaderText("Username or Password is incorrect");
                 alert.show();
             } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Login Success");
-                alert.setHeaderText("Login Success");
-                alert.show();
+                Stage stage = new Stage();
+                try {
+                    stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/home-view.fxml"))));
+                    stage.setTitle("Clothify");
+                    stage.setResizable(false);
+                    stage.show();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
-
         }
     }
 
@@ -127,6 +135,15 @@ public class LoginSignupViewController {
             alert.setTitle("Success");
             alert.setHeaderText("Password updated successfully");
             alert.show();
+            Stage stage = new Stage();
+            try {
+                stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/home-view.fxml"))));
+                stage.setTitle("Clothify");
+                stage.setResizable(false);
+                stage.show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

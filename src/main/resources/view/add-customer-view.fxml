@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="486.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerViewController">
+   <children>
+      <Label layoutX="156.0" layoutY="29.0" prefHeight="60.0" prefWidth="291.0" text="Add Customer">
+         <font>
+            <Font name="Bodoni MT" size="48.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtAddCustomerName" layoutX="90.0" layoutY="135.0" prefHeight="48.0" prefWidth="421.0" />
+      <JFXButton layoutX="205.0" layoutY="390.0" onAction="#btnSaveCustomerOnAction" prefHeight="48.0" prefWidth="191.0" stylesheets="@../css/styles.css" text="Save Customer" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXButton>
+      <Label layoutX="90.0" layoutY="113.0" text="Customer Name" />
+      <Label layoutX="90.0" layoutY="201.0" text="Mobile Number" />
+      <TextField fx:id="txtAddCustomerMobileNumber" layoutX="91.0" layoutY="225.0" prefHeight="48.0" prefWidth="421.0" />
+      <Label layoutX="90.0" layoutY="289.0" text="Address" />
+      <TextField fx:id="txtAddCustomerAddress" layoutX="90.0" layoutY="312.0" prefHeight="48.0" prefWidth="421.0" />
+   </children>
+</AnchorPane>

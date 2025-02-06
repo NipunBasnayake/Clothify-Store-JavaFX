@@ -51,6 +51,11 @@
                   <Font size="18.0" />
                </font>
             </JFXButton>
+            <JFXButton layoutX="32.0" layoutY="471.0" onAction="#btnReportsOnAction" prefHeight="48.0" prefWidth="251.0" text="Reports" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXButton>
          </children>
       </AnchorPane>
    </children>

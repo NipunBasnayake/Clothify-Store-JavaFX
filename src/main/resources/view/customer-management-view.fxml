@@ -1,16 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="1002.0" prefWidth="1601.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerViewController">
+<AnchorPane prefHeight="1002.0" prefWidth="1601.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerViewController">
    <children>
-      <Label layoutX="574.0" layoutY="44.0" prefHeight="60.0" prefWidth="454.0" text="CustomerManagement">
+      <Label layoutX="574.0" layoutY="38.0" prefHeight="60.0" prefWidth="454.0" text="CustomerManagement">
          <font>
             <Font name="Bodoni MT" size="48.0" />
          </font>
       </Label>
+      <JFXButton layoutX="980.0" layoutY="131.0" onAction="#btnAddCustomerOnAction" prefHeight="48.0" prefWidth="191.0" text="Add Customer" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXButton>
+      <TextField fx:id="txtSearchCustomer" layoutX="402.0" layoutY="131.0" prefHeight="48.0" prefWidth="421.0" />
+      <JFXButton layoutX="830.0" layoutY="131.0" onAction="#btnSearchCustomerOnAction" prefHeight="48.0" prefWidth="117.0" style="-fx-background-color: #495057;" text="Search" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXButton>
+      <TableView fx:id="tblCustomerDetails" layoutX="33.0" layoutY="215.0" prefHeight="758.0" prefWidth="1535.0">
+         <columns>
+            <TableColumn fx:id="colEmployeeId" prefWidth="120.0" text="Employee Id" />
+            <TableColumn fx:id="colEmploteeName" prefWidth="458.0" text="Employee Name" />
+            <TableColumn fx:id="colEmploteeEmail" prefWidth="234.0" text="Employee Email" />
+            <TableColumn fx:id="colEmploteeRole" prefWidth="370.0" text="Employee Role" />
+            <TableColumn fx:id="colEmploteeUpdateAction" prefWidth="181.0" text="Update Action" />
+            <TableColumn fx:id="colEmploteeDeleteAction" prefWidth="171.0" text="Delete Action" />
+         </columns>
+      </TableView>
    </children>
 </AnchorPane>

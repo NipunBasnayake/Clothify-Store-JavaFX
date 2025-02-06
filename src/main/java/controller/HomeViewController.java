@@ -112,4 +112,15 @@ public class HomeViewController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
+    public void btnReportsOnAction(ActionEvent actionEvent) {
+        AnchorPane pane = null;
+        try {
+            pane = new FXMLLoader().load(getClass().getResource("/view/reports-view.fxml"));
+            paneLoadFXML.getChildren().clear();
+            paneLoadFXML.getChildren().add(pane);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
