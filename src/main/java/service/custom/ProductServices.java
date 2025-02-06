@@ -4,5 +4,6 @@ import model.Product;
 
 import java.util.List;
 
-public interface DashboardServices {
+public interface ProductServices {
+    List<Product> getProducts();
 }

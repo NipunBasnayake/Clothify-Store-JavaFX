@@ -3,6 +3,8 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -59,7 +61,19 @@
                   <Font size="18.0" />
                </font>
             </JFXButton>
-            <ListView fx:id="procustsListView" layoutX="25.0" layoutY="276.0" prefHeight="699.0" prefWidth="1552.0" />
+            <ListView fx:id="procustsListView" layoutX="25.0" layoutY="782.0" prefHeight="193.0" prefWidth="1552.0" />
+            <TableView fx:id="tblProducts" layoutX="22.0" layoutY="299.0" prefHeight="217.0" prefWidth="1552.0">
+               <columns>
+                  <TableColumn fx:id="colProdutId" prefWidth="75.0" text="ID" />
+                  <TableColumn fx:id="colProductName" prefWidth="294.0" text="Name" />
+                  <TableColumn fx:id="colProductCategory" prefWidth="185.0" text="Category" />
+                  <TableColumn fx:id="ColProductSize" prefWidth="127.0" text="Size" />
+                  <TableColumn fx:id="colProductPrice" prefWidth="140.0" text="Price" />
+                  <TableColumn fx:id="colProductQty" prefWidth="124.0" text="Qty" />
+                  <TableColumn fx:id="colProductImage" prefWidth="416.0" text="Image" />
+                  <TableColumn fx:id="colProsuctSupplier" prefWidth="190.0" text="Supplier" />
+               </columns>
+            </TableView>
          </children>
       </AnchorPane>
    </children>
