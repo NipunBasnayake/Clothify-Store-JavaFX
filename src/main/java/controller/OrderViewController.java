@@ -1,4 +1,4 @@
-package controller.order;
+package controller;
 
 public class OrderViewController {
 }

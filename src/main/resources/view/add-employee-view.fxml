@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="486.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EmployeeViewController">
+   <children>
+      <Label layoutX="151.0" layoutY="29.0" prefHeight="60.0" prefWidth="300.0" text="Add Employee">
+         <font>
+            <Font name="Bodoni MT" size="48.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtAddEmployeeName" layoutX="90.0" layoutY="135.0" prefHeight="48.0" prefWidth="421.0" />
+      <JFXButton layoutX="205.0" layoutY="390.0" onAction="#btnSaveProductOnAction" prefHeight="48.0" prefWidth="191.0" stylesheets="@../css/styles.css" text="Save Employee" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXButton>
+      <Label layoutX="90.0" layoutY="113.0" text="Employee Name" />
+      <Label layoutX="90.0" layoutY="201.0" text="Email" />
+      <TextField fx:id="txtAddEmployeeEmail" layoutX="91.0" layoutY="225.0" prefHeight="48.0" prefWidth="421.0" />
+      <Label layoutX="90.0" layoutY="289.0" text="Employee Role" />
+      <ComboBox fx:id="cmbAddEmployeeRole" layoutX="90.0" layoutY="312.0" prefHeight="48.0" prefWidth="421.0" />
+   </children>
+</AnchorPane>

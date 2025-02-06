@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1002.0" prefWidth="1601.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProductViewController">
+   <children>
+      <AnchorPane fx:id="paneProductManagement" prefHeight="1002.0" prefWidth="1601.0" style="-fx-background-color: #e0e0e0;">
+         <children>
+            <Label layoutX="549.0" layoutY="36.0" prefHeight="60.0" prefWidth="477.0" text="Employee Management">
+               <font>
+                  <Font name="Bodoni MT" size="48.0" />
+               </font>
+            </Label>
+            <JFXButton layoutX="981.0" layoutY="119.0" onAction="#btnAddEmployeeOnAction" prefHeight="48.0" prefWidth="191.0" text="Add Employee" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXButton>
+            <ImageView fitHeight="177.0" fitWidth="360.0" layoutX="64.0" layoutY="617.0" pickOnBounds="true" preserveRatio="true" />
+            <TextField fx:id="txtSearchEmployee" layoutX="403.0" layoutY="119.0" prefHeight="48.0" prefWidth="421.0" />
+            <JFXButton layoutX="831.0" layoutY="119.0" onAction="#btnSearchEmployeeOnAction" prefHeight="48.0" prefWidth="117.0" style="-fx-background-color: #495057;" text="Search" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXButton>
+            <TableView fx:id="tblEmployeeDetails" layoutX="34.0" layoutY="203.0" prefHeight="758.0" prefWidth="1535.0">
+              <columns>
+                <TableColumn fx:id="colEmployeeId" prefWidth="120.0" text="Employee Id" />
+                <TableColumn fx:id="colEmploteeName" prefWidth="458.0" text="Employee Name" />
+                  <TableColumn fx:id="colEmploteeEmail" prefWidth="234.0" text="Employee Email" />
+                  <TableColumn fx:id="colEmploteeRole" prefWidth="370.0" text="Employee Role" />
+                  <TableColumn fx:id="colEmploteeUpdateAction" prefWidth="181.0" text="Update Action" />
+                  <TableColumn fx:id="colEmploteeDeleteAction" prefWidth="171.0" text="Delete Action" />
+              </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

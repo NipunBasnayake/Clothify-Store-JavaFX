@@ -1,4 +1,4 @@
-package controller.loginSignup;
+package controller;
 
 import animatefx.animation.SlideInRight;
 import com.jfoenix.controls.JFXButton;

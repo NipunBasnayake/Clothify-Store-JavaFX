@@ -1,4 +1,4 @@
-package controller.dashboard;
+package controller;
 
 public class DashboardViewController {
 }

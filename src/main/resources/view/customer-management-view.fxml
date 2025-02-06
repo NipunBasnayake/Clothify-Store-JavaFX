@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.customer.CustomerViewController"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane prefHeight="1002.0" prefWidth="1601.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerViewController">
+   <children>
+      <Label layoutX="574.0" layoutY="44.0" prefHeight="60.0" prefWidth="454.0" text="CustomerManagement">
+         <font>
+            <Font name="Bodoni MT" size="48.0" />
+         </font>
+      </Label>
+   </children>
 </AnchorPane>
