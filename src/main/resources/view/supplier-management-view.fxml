@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1002.0" prefWidth="1601.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SupplierViewController">
+   <children>
+      <Label layoutX="580.0" layoutY="38.0" prefHeight="60.0" prefWidth="442.0" text="Supplier Management">
+         <font>
+            <Font name="Bodoni MT" size="48.0" />
+         </font>
+      </Label>
+      <JFXButton layoutX="980.0" layoutY="131.0" onAction="#btnAddSupplierOnAction" prefHeight="48.0" prefWidth="191.0" text="Add Supplier" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXButton>
+      <TextField fx:id="txtSearchSupplier" layoutX="402.0" layoutY="131.0" prefHeight="48.0" prefWidth="421.0" promptText="Search by supplier name" />
+      <JFXButton layoutX="830.0" layoutY="131.0" onAction="#btnSearchSupplierOnAction" prefHeight="48.0" prefWidth="117.0" text="Search" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXButton>
+      <TableView fx:id="tblSupplier" layoutX="33.0" layoutY="215.0" prefHeight="758.0" prefWidth="1535.0">
+         <columns>
+            <TableColumn fx:id="colSupplierId" prefWidth="120.0" text="Supplier Id" />
+            <TableColumn fx:id="colSupplierName" prefWidth="458.0" text="Supplier Name" />
+            <TableColumn fx:id="colSupplierCompany" prefWidth="234.0" text="Supplier Company" />
+            <TableColumn fx:id="colSupplierEmail" minWidth="0.0" prefWidth="320.0" text="Supplier Email" />
+            <TableColumn fx:id="colSypplyItem" prefWidth="155.0" text="Item" />
+            <TableColumn fx:id="colSupplierUpdateAction" prefWidth="124.0" text="Update Action" />
+            <TableColumn fx:id="colSupplierDeleteAction" prefWidth="123.0" text="Delete Action" />
+         </columns>
+      </TableView>
+   </children>
+</AnchorPane>

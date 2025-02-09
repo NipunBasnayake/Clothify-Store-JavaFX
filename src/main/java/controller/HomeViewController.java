@@ -123,4 +123,16 @@ public class HomeViewController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
+    public void btnSupplierManagementOnAction(ActionEvent actionEvent) {
+        System.out.println("Supplier Management");
+        try {
+            AnchorPane pane = new FXMLLoader().load(getClass().getResource("/view/supplier-management-view.fxml"));
+            paneLoadFXML.getChildren().clear();
+            paneLoadFXML.getChildren().add(pane);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
