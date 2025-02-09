@@ -24,6 +24,12 @@ public class ProductViewController implements Initializable {
     List<Product> productList;
     List<Product> sortedList = new ArrayList<>();
 
+    private Product product;
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         colProdutId.setCellValueFactory(new PropertyValueFactory("productID"));

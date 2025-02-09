@@ -62,4 +62,14 @@ public class ProductControllerImpl implements ProductServices {
             return false;
         }
     }
+
+    @Override
+    public boolean updateProduct(Product product) {
+        return false;
+    }
+
+    @Override
+    public boolean deleteProduct(String productId) {
+        return false;
+    }
 }
