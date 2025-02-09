@@ -11,13 +11,18 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.Product;
 import service.custom.impl.ProductControllerImpl;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ProductViewController implements Initializable {
+    List<Product> productList;
+    List<Product> sortedList = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -83,43 +88,62 @@ public class ProductViewController implements Initializable {
 
     @FXML
     void btnSearchProductOnAction(ActionEvent event) {
-
+        if (!txtSearchProduct.getText().isEmpty()) {
+            sortedList.clear();
+            for (Product product : productList) {
+                if (txtSearchProduct.getText().toLowerCase().equals(product.getProductName().toLowerCase())) {
+                    sortedList.add(product);
+                }
+            }
+        }
+        ObservableList sorterObserverbleList = FXCollections.observableArrayList(sortedList);
+        tblProducts.setItems(sorterObserverbleList);
     }
 
     @FXML
     void btnSortAccessoriesOnAction(ActionEvent event) {
-
+        sortTable("Accessories");
     }
 
     @FXML
     void btnSortAllProductsOnAction(ActionEvent event) {
-
+        populateTable();
     }
 
     @FXML
     void btnSortFootwareOnAction(ActionEvent event) {
-
+        sortTable("Footware");
     }
 
     @FXML
     void btnSortGentsOnAction(ActionEvent event) {
-
+        sortTable("Gents");
     }
 
     @FXML
     void btnSortKidsOnAction(ActionEvent event) {
-
+        sortTable("Kids");
     }
 
     @FXML
     void btnSortLadiesOnAction(ActionEvent event) {
+        sortTable("Ladies");
+    }
 
+    private void sortTable(String category) {
+        sortedList.clear();
+        for (Product product : productList) {
+            if (product.getProductCategory().equals(category)) {
+                sortedList.add(product);
+            }
+        }
+        ObservableList sorterObserverbleList = FXCollections.observableArrayList(sortedList);
+        tblProducts.setItems(sorterObserverbleList);
     }
 
     private void populateTable() {
-        ProductControllerImpl controller = new ProductControllerImpl();
-        ObservableList products = FXCollections.observableArrayList();
-        products.addAll(controller.getProducts());
+        productList= ProductControllerImpl.getInstance().getProducts();
+        ObservableList products = FXCollections.observableArrayList(productList);
         tblProducts.setItems(products);
     }
 

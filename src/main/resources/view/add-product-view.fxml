@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="853.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddProductViewController">
    <children>
       <Label layoutX="169.0" layoutY="29.0" prefHeight="60.0" prefWidth="262.0" text="Add Product">
@@ -25,9 +24,9 @@
       </JFXButton>
       <Label layoutX="90.0" layoutY="113.0" text="Product Name" />
       <Label layoutX="90.0" layoutY="201.0" text="Product Category" />
-      <ComboBox fx:id="cmbAddProductCategory" layoutX="90.0" layoutY="224.0" prefHeight="48.0" prefWidth="421.0" />
+      <ComboBox fx:id="cmbAddProductCategory" layoutX="90.0" layoutY="224.0" prefHeight="48.0" prefWidth="421.0" promptText="Select Product Category" />
       <Label layoutX="90.0" layoutY="294.0" text="Product Size" />
-      <ComboBox fx:id="cmbAddProductSize" layoutX="90.0" layoutY="317.0" prefHeight="48.0" prefWidth="421.0" />
+      <ComboBox fx:id="cmbAddProductSize" layoutX="90.0" layoutY="317.0" prefHeight="48.0" prefWidth="421.0" promptText="Select product Size" />
       <TextField fx:id="txtAddProductPrice" layoutX="90.0" layoutY="410.0" prefHeight="48.0" prefWidth="421.0" />
       <Label layoutX="90.0" layoutY="388.0" text="Price" />
       <TextField fx:id="txtAddProductQuantityOnHand" layoutX="90.0" layoutY="503.0" prefHeight="48.0" prefWidth="421.0" />
@@ -47,7 +46,7 @@
          </graphic>
       </JFXButton>
       <Label layoutX="90.0" layoutY="664.0" text="Supplier" />
-      <ComboBox fx:id="cmbAddProcutSupplierId" layoutX="90.0" layoutY="687.0" prefHeight="48.0" prefWidth="362.0" />
+      <ComboBox fx:id="cmbAddProcutSupplierId" layoutX="90.0" layoutY="687.0" prefHeight="48.0" prefWidth="362.0" promptText="Select Supplier" />
       <JFXButton layoutX="462.0" layoutY="596.0" onAction="#btnAddProductImageOnAction" prefHeight="48.0" prefWidth="49.0" stylesheets="@../css/styles.css" text=" " textFill="WHITE">
          <font>
             <Font size="18.0" />
