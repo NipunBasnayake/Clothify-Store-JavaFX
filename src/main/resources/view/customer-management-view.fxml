@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="1002.0" prefWidth="1601.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerViewController">
    <children>
-      <Label layoutX="574.0" layoutY="38.0" prefHeight="60.0" prefWidth="454.0" text="CustomerManagement">
+      <Label layoutX="566.0" layoutY="37.0" prefHeight="60.0" prefWidth="470.0" text="Customer Management">
          <font>
             <Font name="Bodoni MT" size="48.0" />
          </font>
@@ -28,12 +28,12 @@
       </JFXButton>
       <TableView fx:id="tblCustomerDetails" layoutX="33.0" layoutY="215.0" prefHeight="758.0" prefWidth="1535.0">
          <columns>
-            <TableColumn fx:id="colEmployeeId" prefWidth="120.0" text="Employee Id" />
-            <TableColumn fx:id="colEmploteeName" prefWidth="458.0" text="Employee Name" />
-            <TableColumn fx:id="colEmploteeEmail" prefWidth="234.0" text="Employee Email" />
-            <TableColumn fx:id="colEmploteeRole" prefWidth="370.0" text="Employee Role" />
-            <TableColumn fx:id="colEmploteeUpdateAction" prefWidth="181.0" text="Update Action" />
-            <TableColumn fx:id="colEmploteeDeleteAction" prefWidth="171.0" text="Delete Action" />
+            <TableColumn fx:id="colCustomerId" prefWidth="120.0" text="Customer Id" />
+            <TableColumn fx:id="colCustomerName" prefWidth="458.0" text="Customer Name" />
+            <TableColumn fx:id="colMobileNumber" prefWidth="234.0" text="Mobile Number" />
+            <TableColumn fx:id="colCustomerAddress" prefWidth="370.0" text="Address" />
+            <TableColumn fx:id="colCustomerUpdateAction" prefWidth="181.0" text="Update Action" />
+            <TableColumn fx:id="colCustomerDeleteAction" prefWidth="171.0" text="Delete Action" />
          </columns>
       </TableView>
    </children>

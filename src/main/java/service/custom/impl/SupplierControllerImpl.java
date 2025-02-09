@@ -4,6 +4,7 @@ import db.DBConnection;
 import model.Supplier;
 import service.custom.SupplierServices;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -45,8 +46,12 @@ public class SupplierControllerImpl implements SupplierServices {
     public boolean addSupplier(Supplier supplier) {
         String query = "INSERT INTO supplier (Name, Company, Email, Item) VALUES (?,?,?,?)";
         try {
-            ResultSet resultSet = DBConnection.getInstance().getConnection().createStatement().executeQuery(query);
-            return resultSet.next();
+            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+            statement.setString(1, supplier.getSupplierName());
+            statement.setString(2, supplier.getSupplierCompany());
+            statement.setString(3, supplier.getSupplierEmail());
+            statement.setString(4, supplier.getSupplyItem());
+            return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             return false;
         }

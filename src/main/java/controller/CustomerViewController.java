@@ -1,35 +1,53 @@
 package controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Customer;
+import service.custom.impl.CustomerControllerImpl;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
 
-public class CustomerViewController {
+public class CustomerViewController implements Initializable {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        colCustomerId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        colCustomerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        colMobileNumber.setCellValueFactory(new PropertyValueFactory<>("customerMobile"));
+        colCustomerAddress.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
 
-    @FXML
-    private TableColumn colEmploteeDeleteAction;
-
-    @FXML
-    private TableColumn colEmploteeEmail;
-
-    @FXML
-    private TableColumn colEmploteeName;
-
-    @FXML
-    private TableColumn colEmploteeRole;
-
-    @FXML
-    private TableColumn colEmploteeUpdateAction;
+        populateTable();
+    }
 
     @FXML
-    private TableColumn colEmployeeId;
+    private TableColumn colCustomerAddress;
+
+    @FXML
+    private TableColumn colCustomerDeleteAction;
+
+    @FXML
+    private TableColumn colCustomerId;
+
+    @FXML
+    private TableColumn colCustomerName;
+
+    @FXML
+    private TableColumn colCustomerUpdateAction;
+
+    @FXML
+    private TableColumn colMobileNumber;
 
     @FXML
     private TableView tblCustomerDetails;
@@ -55,7 +73,10 @@ public class CustomerViewController {
 
     }
 
-
-    public void btnSaveCustomerOnAction(ActionEvent actionEvent) {
+    private void populateTable() {
+        List<Customer> customers = CustomerControllerImpl.getInstance().getCustomers();
+        ObservableList<Customer> observableCustomers = FXCollections.observableList(customers);
+        tblCustomerDetails.setItems(observableCustomers);
     }
+
 }
