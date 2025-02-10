@@ -69,7 +69,7 @@ public class ProductControllerImpl implements ProductServices {
     }
 
     @Override
-    public boolean deleteProduct(String productId) {
+    public boolean deleteProduct(Integer productId) {
         return false;
     }
 }

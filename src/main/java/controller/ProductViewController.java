@@ -137,15 +137,15 @@ public class ProductViewController implements Initializable {
         productCard.setStyle("-fx-padding: 12; -fx-background-color: #ffffff; "
                 + "-fx-border-width: 2; -fx-border-color: #ccc; "
                 + "-fx-background-radius: 10; -fx-border-radius: 10;");
-        productCard.setPrefWidth(177);
+        productCard.setPrefWidth(182);
         productCard.setPrefHeight(300);
         productCard.setAlignment(Pos.CENTER);
 
         ImageView productImage = new ImageView(new Image("file:" + product.getProductImage()));
-        productImage.setFitWidth(177);
+        productImage.setFitWidth(182);
         productImage.setFitHeight(130);
 
-        Rectangle clip = new Rectangle(177, 130);
+        Rectangle clip = new Rectangle(182, 130);
         clip.setArcWidth(12);
         clip.setArcHeight(12);
         productImage.setClip(clip);
@@ -200,10 +200,21 @@ public class ProductViewController implements Initializable {
         }
     }
 
-
     private void deleteProduct(Product product) {
-        System.out.println("Deleting Product: " + product.getProductName());
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Delete Product");
+        confirmationAlert.setHeaderText("Are you sure you want to delete this product?");
+        confirmationAlert.setContentText("This action cannot be undone.");
+
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            boolean isProductDeleted = ProductControllerImpl.getInstance().deleteProduct(product.getProductID());
+
+            Alert alert = new Alert(isProductDeleted ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
+            alert.setTitle(isProductDeleted ? "Product Deleted" : "Delete Product Error");
+            alert.setHeaderText(isProductDeleted ? "Product successfully deleted." : "Product not deleted.");
+            alert.show();
+        }
     }
-
-
 }

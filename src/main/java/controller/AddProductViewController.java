@@ -57,16 +57,14 @@ public class AddProductViewController implements Initializable {
     void btnAddProductImageOnAction(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Product Image");
-
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
         );
+
         File selectedFile = fileChooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
+
         if (selectedFile != null) {
-            String filePath = selectedFile.getAbsolutePath();
-            txtAddProductImagePath.setText(filePath);
-        } else {
-            System.out.println("No file selected.");
+            txtAddProductImagePath.setText(selectedFile.getAbsolutePath());
         }
     }
 
