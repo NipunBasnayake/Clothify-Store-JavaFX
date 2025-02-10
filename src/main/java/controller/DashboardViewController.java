@@ -14,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.Customer;
 import model.Product;
@@ -138,12 +139,18 @@ public class DashboardViewController implements Initializable {
     private VBox createProductCard(Product product) {
         VBox productCard = new VBox(5);
         productCard.setStyle("-fx-padding: 10; -fx-background-color: #ffffff; -fx-border-width: 2; -fx-border-color: #ccc; -fx-background-radius: 10; -fx-border-radius: 10");
-        productCard.setPrefWidth(220);
+        productCard.setPrefWidth(200);
         productCard.setPrefHeight(320);
 
         ImageView productImage = new ImageView(new Image("file:" + product.getProductImage()));
         productImage.setFitWidth(180);
         productImage.setFitHeight(130);
+
+        Rectangle clip = new Rectangle(180, 130);
+        clip.setArcWidth(12);
+        clip.setArcHeight(12);
+        productImage.setClip(clip);
+        productImage.setStyle("-fx-border-color: black; -fx-border-width: 2px;");
 
         Label lblProductId = new Label("ID: " + product.getProductID());
         Label lblProductName = new Label(product.getProductName());
