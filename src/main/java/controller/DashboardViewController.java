@@ -13,8 +13,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -27,18 +25,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class DashboardViewController implements Initializable {
     private List<Product> productList;
-    private List<Product> sortedList = new ArrayList<>();
 
     @FXML
     private FlowPane flowPaneProducts;
 
     @FXML
-    public TableColumn colUnitPrice, colQty, colTotal, colRemoveAction;
+    public TableColumn<?, ?> colUnitPrice, colQty, colTotal, colRemoveAction;
 
     @FXML
     private ComboBox<String> cmbSelectCustomer;
@@ -49,90 +45,105 @@ public class DashboardViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadCustomersComboBox();
-        loadProductPanes();
+        productList = ProductControllerImpl.getInstance().getProducts();
+        loadProductPanes(productList);
     }
 
     @FXML
     void btnPayBillOnAction(ActionEvent event) {
-        // Implement payment logic
+
     }
 
-    public void btnAllProductsOnAction(ActionEvent actionEvent) {
-//        populateTable();
+    @FXML
+    void btnAllProductsOnAction(ActionEvent actionEvent) {
+        loadProductPanes(productList);
     }
 
-    public void btnGentsOnAction(ActionEvent actionEvent) {
-        sortTable("Gents");
+    @FXML
+    void btnGentsOnAction(ActionEvent actionEvent) {
+        loadProductPanes(sortProductsByCategory("Gents"));
     }
 
-    public void btnLadiesOnAction(ActionEvent actionEvent) {
-        sortTable("Ladies");
+    @FXML
+    void btnLadiesOnAction(ActionEvent actionEvent) {
+        loadProductPanes(sortProductsByCategory("Ladies"));
     }
 
-    public void btnKidsOnAction(ActionEvent actionEvent) {
-        sortTable("Kids");
+    @FXML
+    void btnKidsOnAction(ActionEvent actionEvent) {
+        loadProductPanes(sortProductsByCategory("Kids"));
     }
 
-    public void btnAccessoriesOnAction(ActionEvent actionEvent) {
-        sortTable("Accessories");
+    @FXML
+    void btnAccessoriesOnAction(ActionEvent actionEvent) {
+        loadProductPanes(sortProductsByCategory("Accessories"));
     }
 
-    public void btnFootwearOnAction(ActionEvent actionEvent) {
-        sortTable("Footwear");
+    @FXML
+    void btnFootwearOnAction(ActionEvent actionEvent) {
+        loadProductPanes(sortProductsByCategory("Footwear"));
     }
 
-    public void btnAddNewCustomerOnAction(ActionEvent actionEvent) {
+    @FXML
+    void btnAddNewCustomerOnAction(ActionEvent actionEvent) {
         try {
             Stage stage = new Stage();
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/add-customer-view.fxml"))));
+            Parent root = FXMLLoader.load(getClass().getResource("/view/add-customer-view.fxml"));
+            stage.setScene(new Scene(root));
             stage.setTitle("Add Customer");
+
+            stage.setOnHidden(e -> loadCustomersComboBox());
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void btnSearchProductOnAction(ActionEvent actionEvent) {
-//        String searchText = txtSearchProductText.getText().trim().toLowerCase();
-//        if (!searchText.isEmpty()) {
-//            sortedList.clear();
-//            for (Product product : productList) {
-//                if (product.getProductName().toLowerCase().contains(searchText)) {
-//                    sortedList.add(product);
-//                }
-//            }
-//            tblProducts.setItems(FXCollections.observableArrayList(sortedList));
-//        }
+    @FXML
+    void btnSearchProductOnAction(ActionEvent actionEvent) {
+        String searchText = txtSearchProductText.getText().trim().toLowerCase();
+        List<Product> filteredList = new ArrayList<>();
+
+        if (!searchText.isEmpty()) {
+            for (Product product : productList) {
+                if (product.getProductName().toLowerCase().contains(searchText)) {
+                    filteredList.add(product);
+                }
+            }
+            loadProductPanes(filteredList);
+        } else {
+            loadProductPanes(productList);
+        }
     }
 
-    private void sortTable(String category) {
-        sortedList.clear();
+    private List<Product> sortProductsByCategory(String category) {
+        List<Product> sortedList = new ArrayList<>();
         for (Product product : productList) {
             if (product.getProductCategory().equals(category)) {
                 sortedList.add(product);
             }
         }
-//        tblProducts.setItems(FXCollections.observableArrayList(sortedList));
+        return sortedList;
     }
 
     private void loadCustomersComboBox() {
         List<Customer> customerList = CustomerControllerImpl.getInstance().getCustomers();
         ObservableList<String> customerObservableList = FXCollections.observableArrayList();
+
         for (Customer customer : customerList) {
             customerObservableList.add(customer.getCustomerId() + " - " + customer.getCustomerName() + " - " + customer.getCustomerMobile());
         }
         cmbSelectCustomer.setItems(customerObservableList);
     }
 
-    private void loadProductPanes() {
+    private void loadProductPanes(List<Product> products) {
         flowPaneProducts.getChildren().clear();
         flowPaneProducts.setHgap(15);
         flowPaneProducts.setVgap(15);
         flowPaneProducts.setPrefWrapLength(950);
 
-        productList = ProductControllerImpl.getInstance().getProducts();
-
-        for (Product product : productList) {
+        for (Product product : products) {
             VBox productCard = createProductCard(product);
             flowPaneProducts.getChildren().add(productCard);
         }
@@ -178,10 +189,4 @@ public class DashboardViewController implements Initializable {
             System.out.println("Clicked on: " + product.getProductName());
         });
     }
-
-
-
-
-
-
 }

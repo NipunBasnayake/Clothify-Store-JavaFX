@@ -65,11 +65,32 @@ public class ProductControllerImpl implements ProductServices {
 
     @Override
     public boolean updateProduct(Product product) {
-        return false;
+        String query = "UPDATE product SET ProductName = ?, Category = ?, Size = ?, Price = ?, Quantity = ?, Image = ?, SupplierID = ? WHERE ProductID = ?";
+        try {
+            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+            statement.setString(1, product.getProductName());
+            statement.setString(2, product.getProductCategory());
+            statement.setString(3, product.getProductSize());
+            statement.setDouble(4, product.getProductPrice());
+            statement.setInt(5, product.getProductQuantity());
+            statement.setString(6, product.getProductImage());
+            statement.setInt(7, product.getSupplierID());
+            statement.setInt(8, product.getProductID());
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     @Override
     public boolean deleteProduct(Integer productId) {
-        return false;
+        String query = "DELETE FROM product WHERE ProductID = ?";
+        try {
+            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+            statement.setInt(1, productId);
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 }

@@ -195,6 +195,8 @@ public class ProductViewController implements Initializable {
             stage.setResizable(false);
             stage.show();
 
+            stage.setOnHidden(e -> loadProductPanes());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -215,6 +217,7 @@ public class ProductViewController implements Initializable {
             alert.setTitle(isProductDeleted ? "Product Deleted" : "Delete Product Error");
             alert.setHeaderText(isProductDeleted ? "Product successfully deleted." : "Product not deleted.");
             alert.show();
+            loadProductPanes();
         }
     }
 }
