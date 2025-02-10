@@ -164,21 +164,24 @@ public class DashboardViewController implements Initializable {
     }
 
     private void openUpdateProductView(Product product) {
+        System.out.println("Opening Update Product View for: " + product.getProductName());
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/update-product-view.fxml"));
             Parent root = loader.load();
 
-            ProductViewController controller = loader.getController();
+            UpdateProductViewController controller = loader.getController();
             controller.setProduct(product);
 
             Stage stage = new Stage();
             stage.setTitle("Update Product");
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
 
     private void deleteProduct(Product product) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -190,10 +193,16 @@ public class DashboardViewController implements Initializable {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             boolean isDeleted = ProductControllerImpl.getInstance().deleteProduct(String.valueOf(product.getProductID()));
             if (isDeleted) {
-                System.out.println("Product deleted: " + product.getProductName());
+                Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+                alert2.setTitle("Delete Product");
+                alert2.setHeaderText("Deleted Product");
+                alert2.show();
                 loadProductPanes();
             } else {
-                System.out.println("Failed to delete product: " + product.getProductName());
+                Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+                alert2.setTitle("Product Not Delete");
+                alert2.setHeaderText("Product Not Delete");
+                alert2.show();
             }
         }
     }
