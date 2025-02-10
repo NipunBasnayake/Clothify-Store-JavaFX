@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -132,64 +133,61 @@ public class ProductViewController implements Initializable {
     }
 
     private VBox createProductCard(Product product) {
-        VBox productCard = new VBox(7);
-        productCard.setStyle("-fx-padding: 10; -fx-background-color: #ffffff; -fx-border-width: 2; -fx-border-color: #ccc; -fx-background-radius: 10; -fx-border-radius: 10");
-        productCard.setPrefWidth(210);
-        productCard.setPrefHeight(320);
+        VBox productCard = new VBox(5);
+        productCard.setStyle("-fx-padding: 12; -fx-background-color: #ffffff; "
+                + "-fx-border-width: 2; -fx-border-color: #ccc; "
+                + "-fx-background-radius: 10; -fx-border-radius: 10;");
+        productCard.setPrefWidth(177);
+        productCard.setPrefHeight(300);
+        productCard.setAlignment(Pos.CENTER);
 
         ImageView productImage = new ImageView(new Image("file:" + product.getProductImage()));
-        productImage.setFitWidth(185);
+        productImage.setFitWidth(177);
         productImage.setFitHeight(130);
 
-        Rectangle clip = new Rectangle(185, 130);
+        Rectangle clip = new Rectangle(177, 130);
         clip.setArcWidth(12);
         clip.setArcHeight(12);
         productImage.setClip(clip);
 
         Label lblProductId = new Label("ID: " + product.getProductID());
+        lblProductId.setStyle("-fx-font-size: 12; -fx-text-fill: #666;");
+
         Label lblProductName = new Label(product.getProductName());
+        lblProductName.setStyle("-fx-font-weight: bold; -fx-font-size: 16;");
+
         Label lblCategory = new Label("Category: " + product.getProductCategory());
-        Label lblPrice = new Label("Price: Rs. " + product.getProductPrice());
         Label lblQuantity = new Label("Stock: " + product.getProductQuantity());
 
+        Label lblPrice = new Label("LKR " + product.getProductPrice());
+        lblPrice.setStyle("-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #333;");
+
+        VBox textContainer = new VBox(3, lblProductId, lblProductName, lblCategory, lblQuantity);
+        textContainer.setAlignment(Pos.CENTER);
+
         Button btnUpdate = new Button("Update");
-        btnUpdate.setOnAction(e -> openUpdateProductView(product));
+        btnUpdate.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+        btnUpdate.setOnAction(e -> updateProduct(product));
 
         Button btnDelete = new Button("Delete");
+        btnDelete.setStyle("-fx-background-color: #E53935; -fx-text-fill: white;");
         btnDelete.setOnAction(e -> deleteProduct(product));
 
-        HBox buttonBox = new HBox(5, btnUpdate, btnDelete);
-        productCard.getChildren().addAll(productImage, lblProductId, lblProductName, lblCategory, lblPrice, lblQuantity, buttonBox);
+        HBox buttonBox = new HBox(10, btnUpdate, btnDelete);
+        buttonBox.setAlignment(Pos.CENTER);
+
+        productCard.getChildren().addAll(productImage, textContainer, lblPrice, buttonBox);
 
         return productCard;
     }
 
-    private void openUpdateProductView(Product product) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/update-product-view.fxml"));
-            Parent root = loader.load();
-
-            UpdateProductViewController controller = loader.getController();
-            controller.setProduct(product);
-
-            Stage stage = new Stage();
-            stage.setTitle("Update Product");
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void updateProduct(Product product) {
+        System.out.println("Updating Product: " + product.getProductName());
     }
 
     private void deleteProduct(Product product) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete " + product.getProductName() + "?", ButtonType.YES, ButtonType.NO);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.YES) {
-            boolean isDeleted = ProductControllerImpl.getInstance().deleteProduct(String.valueOf(product.getProductID()));
-            if (isDeleted) {
-                loadProductPanes();
-            }
-        }
+        System.out.println("Deleting Product: " + product.getProductName());
     }
+
 
 }
