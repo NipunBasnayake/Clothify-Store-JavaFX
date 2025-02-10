@@ -4,6 +4,7 @@
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -89,7 +90,12 @@
                   </Label>
                </children>
             </AnchorPane>
-            <FlowPane fx:id="flowPaneProducts" hgap="15" layoutX="14.0" layoutY="177.0" maxWidth="1088.0" prefHeight="808.0" prefWidth="1088.0" vgap="15" />
+            <ScrollPane fitToHeight="false" fitToWidth="true" layoutX="15.0" layoutY="177.0" pannable="true" prefHeight="808.0" prefWidth="1101.0" style="-fx-background-color: #e0e0e0;">
+               <content>
+                  <FlowPane fx:id="flowPaneProducts" hgap="15" prefWidth="1088.0" style="-fx-background-color: #e0e0e0;" vgap="15" />
+               </content>
+            </ScrollPane>
+
          </children>
       </AnchorPane>
    </children>

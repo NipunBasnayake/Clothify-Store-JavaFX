@@ -31,16 +31,7 @@ import java.util.ResourceBundle;
 
 @Setter
 public class ProductViewController implements Initializable {
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        loadProductPanes();
-    }
-
     private List<Product> productList;
-    private List<Product> sortedList = new ArrayList<>();
-
-    private Product product;
-
 
     @FXML
     private FlowPane flowPaneProductsManagement;
@@ -51,6 +42,12 @@ public class ProductViewController implements Initializable {
     @FXML
     private TextField txtSearchProduct;
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        productList = ProductControllerImpl.getInstance().getProducts();
+        loadProductPanes(productList);
+    }
+
     @FXML
     void btnAddProductOnAction(ActionEvent event) {
         try {
@@ -59,6 +56,7 @@ public class ProductViewController implements Initializable {
             stage.setScene(new Scene(root));
             stage.setTitle("Add Product");
             stage.show();
+            stage.setOnHidden(e -> loadProductPanes(ProductControllerImpl.getInstance().getProducts()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,66 +65,67 @@ public class ProductViewController implements Initializable {
     @FXML
     void btnSearchProductOnAction(ActionEvent event) {
         String searchText = txtSearchProduct.getText().trim().toLowerCase();
+        List<Product> filteredList = new ArrayList<>();
+
         if (!searchText.isEmpty()) {
-            sortedList.clear();
             for (Product product : productList) {
                 if (product.getProductName().toLowerCase().contains(searchText)) {
-                    sortedList.add(product);
+                    filteredList.add(product);
                 }
             }
+        } else {
+            filteredList = productList;
         }
-        ObservableList<Product> sortedObservableList = FXCollections.observableArrayList(sortedList);
-    }
-
-    @FXML
-    void btnSortAccessoriesOnAction(ActionEvent event) {
-
+        loadProductPanes(filteredList);
     }
 
     @FXML
     void btnSortAllProductsOnAction(ActionEvent event) {
-
-    }
-
-    @FXML
-    void btnSortFootwareOnAction(ActionEvent event) {
-
+        loadProductPanes(productList);
     }
 
     @FXML
     void btnSortGentsOnAction(ActionEvent event) {
-
-    }
-
-    @FXML
-    void btnSortKidsOnAction(ActionEvent event) {
-
+        loadProductPanes(sortProductsByCategory("Gents"));
     }
 
     @FXML
     void btnSortLadiesOnAction(ActionEvent event) {
-
+        loadProductPanes(sortProductsByCategory("Ladies"));
     }
 
-    private void sortTable(String category) {
-        sortedList.clear();
+    @FXML
+    void btnSortKidsOnAction(ActionEvent event) {
+        loadProductPanes(sortProductsByCategory("Kids"));
+    }
+
+    @FXML
+    void btnSortAccessoriesOnAction(ActionEvent event) {
+        loadProductPanes(sortProductsByCategory("Accessories"));
+    }
+
+    @FXML
+    void btnSortFootwareOnAction(ActionEvent event) {
+        loadProductPanes(sortProductsByCategory("Footwear"));
+    }
+
+    private List<Product> sortProductsByCategory(String category) {
+        List<Product> sortedList = new ArrayList<>();
         for (Product product : productList) {
             if (product.getProductCategory().equals(category)) {
                 sortedList.add(product);
             }
         }
-        ObservableList<Product> sortedObservableList = FXCollections.observableArrayList(sortedList);
+        return sortedList;
     }
 
-    private void loadProductPanes() {
+    private void loadProductPanes(List<Product> products) {
         flowPaneProductsManagement.getChildren().clear();
         flowPaneProductsManagement.setHgap(15);
         flowPaneProductsManagement.setVgap(15);
         flowPaneProductsManagement.setPrefWrapLength(950);
 
-        productList = ProductControllerImpl.getInstance().getProducts();
-
-        for (Product product : productList) {
+        for (Product product : products) {
             VBox productCard = createProductCard(product);
             flowPaneProductsManagement.getChildren().add(productCard);
         }
@@ -194,8 +193,7 @@ public class ProductViewController implements Initializable {
             stage.setTitle("Update Product");
             stage.setResizable(false);
             stage.show();
-
-            stage.setOnHidden(e -> loadProductPanes());
+            stage.setOnHidden(e -> loadProductPanes(ProductControllerImpl.getInstance().getProducts()));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -217,7 +215,7 @@ public class ProductViewController implements Initializable {
             alert.setTitle(isProductDeleted ? "Product Deleted" : "Delete Product Error");
             alert.setHeaderText(isProductDeleted ? "Product successfully deleted." : "Product not deleted.");
             alert.show();
-            loadProductPanes();
+            loadProductPanes(ProductControllerImpl.getInstance().getProducts());
         }
     }
 }
