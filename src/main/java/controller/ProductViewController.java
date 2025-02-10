@@ -182,8 +182,24 @@ public class ProductViewController implements Initializable {
     }
 
     private void updateProduct(Product product) {
-        System.out.println("Updating Product: " + product.getProductName());
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/update-product-view.fxml"));
+            Parent root = loader.load();
+
+            UpdateProductViewController controller = loader.getController();
+            controller.setProduct(product);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Update Product");
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     private void deleteProduct(Product product) {
         System.out.println("Deleting Product: " + product.getProductName());
