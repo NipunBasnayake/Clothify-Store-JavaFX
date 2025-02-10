@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -59,7 +60,11 @@
                   <Font size="18.0" />
                </font>
             </JFXButton>
-            <FlowPane fx:id="flowPaneProductsManagement" layoutX="18.0" layoutY="279.0" prefHeight="700.0" prefWidth="1562.0" />
+            <ScrollPane fitToHeight="false" fitToWidth="true" layoutX="18.0" layoutY="279.0" pannable="true" prefHeight="700.0" prefWidth="1579.0" style="-fx-background-color: #e0e0e0;">
+               <content>
+                  <FlowPane fx:id="flowPaneProductsManagement" hgap="15" prefWidth="1562.0" style="-fx-background-color: #e0e0e0;" vgap="15" />
+               </content>
+            </ScrollPane>
          </children>
       </AnchorPane>
    </children>
