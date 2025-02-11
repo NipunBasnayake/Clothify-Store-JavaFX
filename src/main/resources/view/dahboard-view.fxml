@@ -56,8 +56,8 @@
             </Group>
             <AnchorPane fx:id="panePlaceOrder" layoutX="1117.0" layoutY="1.0" prefHeight="1001.0" prefWidth="484.0" style="-fx-background-color: #ffffff;">
                <children>
-                  <ComboBox fx:id="cmbSelectCustomer" layoutX="29.0" layoutY="30.0" prefHeight="48.0" prefWidth="265.0" promptText="Select Customer" />
-                  <JFXButton layoutX="303.0" layoutY="30.0" onAction="#btnAddNewCustomerOnAction" prefHeight="49.0" prefWidth="154.0" style="-fx-background-color: #495057;" text=" New Customer" textFill="WHITE">
+                  <ComboBox fx:id="cmbSelectCustomer" layoutX="14.0" layoutY="30.0" prefHeight="48.0" prefWidth="280.0" promptText="Select Customer" />
+                  <JFXButton layoutX="303.0" layoutY="30.0" onAction="#btnAddNewCustomerOnAction" prefHeight="49.0" prefWidth="168.0" style="-fx-background-color: #495057;" text=" New Customer" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -82,6 +82,16 @@
                         <FlowPane fx:id="flowPaneCart" prefHeight="673.0" prefWidth="459.0" style="-fx-background-color: #ffffff;" />
                      </content>
                   </ScrollPane>
+                  <Label layoutX="14.0" layoutY="97.0" text="Order Id :">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="txtOrderId" layoutX="106.0" layoutY="97.0" prefHeight="27.0" prefWidth="174.0" text=" ">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
             <ScrollPane fitToHeight="false" fitToWidth="true" layoutX="15.0" layoutY="177.0" pannable="true" prefHeight="808.0" prefWidth="1101.0" style="-fx-background-color: #e0e0e0;">

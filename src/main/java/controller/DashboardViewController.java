@@ -34,6 +34,9 @@ public class DashboardViewController implements Initializable {
     private List<Product> cartList = new ArrayList<>();
 
     @FXML
+    public Label txtOrderId;
+
+    @FXML
     public Label txtTotalAmount;
 
     @FXML
