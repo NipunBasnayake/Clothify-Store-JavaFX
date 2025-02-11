@@ -1,23 +1,26 @@
 package controller;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.Customer;
 import model.Product;
+import org.kordamp.ikonli.fontawesome.FontAwesome;
+import org.kordamp.ikonli.javafx.FontIcon;
 import service.custom.impl.CustomerControllerImpl;
 import service.custom.impl.ProductControllerImpl;
 
@@ -29,12 +32,16 @@ import java.util.ResourceBundle;
 
 public class DashboardViewController implements Initializable {
     private List<Product> productList;
+    private List<Product> cartList = new ArrayList<>(); // ✅ Fixed (initialized cartList)
+
+    @FXML
+    public Label txtTotalAmount;
+
+    @FXML
+    public FlowPane flowPaneCart;
 
     @FXML
     private FlowPane flowPaneProducts;
-
-    @FXML
-    public TableColumn<?, ?> colUnitPrice, colQty, colTotal, colRemoveAction;
 
     @FXML
     private ComboBox<String> cmbSelectCustomer;
@@ -50,9 +57,7 @@ public class DashboardViewController implements Initializable {
     }
 
     @FXML
-    void btnPayBillOnAction(ActionEvent event) {
-
-    }
+    void btnPayBillOnAction(ActionEvent event) {}
 
     @FXML
     void btnAllProductsOnAction(ActionEvent actionEvent) {
@@ -186,7 +191,106 @@ public class DashboardViewController implements Initializable {
 
     private void setProductCardClickAction(VBox productCard, Product product) {
         productCard.setOnMouseClicked(event -> {
-            System.out.println("Clicked on: " + product.getProductName());
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Enter Quantity");
+            dialog.setHeaderText("Enter the quantity for " + product.getProductName());
+            dialog.setContentText("Quantity:");
+
+            dialog.showAndWait().ifPresent(input -> {
+                try {
+                    int quantity = Integer.parseInt(input);
+                    cartList.add(new Product(product.getProductID(), product.getProductName(), product.getProductCategory(),
+                            product.getProductSize(), product.getProductPrice(), quantity, product.getProductImage(), product.getSupplierID()));
+                    loadCartPane();
+                } catch (NumberFormatException e) {
+                    new Alert(Alert.AlertType.ERROR, "Invalid quantity! Please enter a valid number.").show();
+                }
+            });
         });
     }
+
+    private void loadCartPane() {
+        flowPaneCart.getChildren().clear();
+        double totalAmount = 0;
+
+        for (Product product : cartList) {
+            HBox cartItem = new HBox(10);
+            cartItem.setStyle("-fx-padding: 10; -fx-background-color: #f8f9fa; "
+                    + "-fx-border-width: 1; -fx-border-color: #ccc; "
+                    + "-fx-background-radius: 5; -fx-border-radius: 5;");
+            cartItem.setAlignment(Pos.CENTER_LEFT);
+            cartItem.setPrefWidth(450);
+            cartItem.setPadding(new Insets(5, 10, 5, 10));
+
+            Label lblProductName = new Label(product.getProductName());
+            lblProductName.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+            lblProductName.setPrefWidth(150);
+
+            Label lblPrice = new Label("LKR " + product.getProductPrice());
+            lblPrice.setStyle("-fx-font-size: 14; -fx-text-fill: #333;");
+            lblPrice.setPrefWidth(80);
+
+            TextField txtQuantity = new TextField(String.valueOf(product.getProductQuantity()));
+            txtQuantity.setPrefWidth(50);
+            txtQuantity.setAlignment(Pos.CENTER);
+            txtQuantity.setStyle("-fx-border-radius: 5; -fx-background-radius: 5;");
+
+            Label lblTotal = new Label("LKR " + (product.getProductPrice() * product.getProductQuantity()));
+            lblTotal.setStyle("-fx-font-size: 14; -fx-font-weight: bold;");
+            lblTotal.setPrefWidth(80);
+
+            txtQuantity.textProperty().addListener((observable, oldValue, newValue) -> {
+                try {
+                    int newQuantity = Integer.parseInt(newValue.trim());
+                    if (newQuantity > 0) {
+                        product.setProductQuantity(newQuantity);
+                        lblTotal.setText("LKR " + (product.getProductPrice() * newQuantity));
+                        updateTotalAmount();
+                    } else {
+                        txtQuantity.setText(oldValue);
+                    }
+                } catch (NumberFormatException e) {
+                    txtQuantity.setText(oldValue);
+                }
+            });
+
+            Button btnRemove = getButton(product);
+
+            Pane spacer = new Pane();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+
+            cartItem.getChildren().addAll(lblProductName, lblPrice, txtQuantity, lblTotal, spacer, btnRemove);
+            flowPaneCart.getChildren().add(cartItem);
+
+            totalAmount += product.getProductPrice() * product.getProductQuantity();
+        }
+
+        txtTotalAmount.setText("Total: LKR " + totalAmount);
+    }
+
+    private Button getButton(Product product) {
+        FontIcon closeIcon = new FontIcon(FontAwesome.CLOSE);
+        closeIcon.setIconSize(16);
+        closeIcon.setStyle("-fx-fill: white;");
+
+        Button btnRemove = new Button();
+        btnRemove.setGraphic(closeIcon);
+        btnRemove.setStyle("-fx-background-color: #dc3545; -fx-padding: 6 12 6 12; -fx-background-radius: 5;");
+        btnRemove.setTooltip(new Tooltip("Remove Item"));
+        btnRemove.setOnAction(event -> {
+            cartList.remove(product);
+            loadCartPane();
+        });
+        return btnRemove;
+    }
+
+    private void updateTotalAmount() {
+        double newTotal = cartList.stream()
+                .mapToDouble(p -> p.getProductPrice() * p.getProductQuantity())
+                .sum();
+        txtTotalAmount.setText(String.valueOf(newTotal));
+    }
+
+
+
 }
