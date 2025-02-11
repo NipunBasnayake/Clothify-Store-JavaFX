@@ -1,6 +1,5 @@
 package controller;
 
-import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,7 +18,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.Customer;
 import model.Product;
-import org.kordamp.ikonli.fontawesome.FontAwesome;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
 import service.custom.impl.CustomerControllerImpl;
 import service.custom.impl.ProductControllerImpl;
@@ -32,7 +31,7 @@ import java.util.ResourceBundle;
 
 public class DashboardViewController implements Initializable {
     private List<Product> productList;
-    private List<Product> cartList = new ArrayList<>(); // ✅ Fixed (initialized cartList)
+    private List<Product> cartList = new ArrayList<>();
 
     @FXML
     public Label txtTotalAmount;
@@ -213,6 +212,9 @@ public class DashboardViewController implements Initializable {
         flowPaneCart.getChildren().clear();
         double totalAmount = 0;
 
+        VBox cartContainer = new VBox(10);
+        cartContainer.setPadding(new Insets(10, 0, 10, 0));
+
         for (Product product : cartList) {
             HBox cartItem = new HBox(10);
             cartItem.setStyle("-fx-padding: 10; -fx-background-color: #f8f9fa; "
@@ -224,20 +226,20 @@ public class DashboardViewController implements Initializable {
 
             Label lblProductName = new Label(product.getProductName());
             lblProductName.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
-            lblProductName.setPrefWidth(150);
+            lblProductName.setPrefWidth(130);
 
             Label lblPrice = new Label("LKR " + product.getProductPrice());
             lblPrice.setStyle("-fx-font-size: 14; -fx-text-fill: #333;");
             lblPrice.setPrefWidth(80);
 
             TextField txtQuantity = new TextField(String.valueOf(product.getProductQuantity()));
-            txtQuantity.setPrefWidth(50);
+            txtQuantity.setPrefWidth(70);
             txtQuantity.setAlignment(Pos.CENTER);
             txtQuantity.setStyle("-fx-border-radius: 5; -fx-background-radius: 5;");
 
             Label lblTotal = new Label("LKR " + (product.getProductPrice() * product.getProductQuantity()));
             lblTotal.setStyle("-fx-font-size: 14; -fx-font-weight: bold;");
-            lblTotal.setPrefWidth(80);
+            lblTotal.setPrefWidth(100);
 
             txtQuantity.textProperty().addListener((observable, oldValue, newValue) -> {
                 try {
@@ -254,42 +256,40 @@ public class DashboardViewController implements Initializable {
                 }
             });
 
-            Button btnRemove = getButton(product);
+            Image closeImage = new Image(getClass().getResourceAsStream("/images/closeIcon.png"));
+            ImageView closeImageView = new ImageView(closeImage);
+            closeImageView.setFitWidth(16);
+            closeImageView.setFitHeight(16);
+
+            Button btnRemove = new Button();
+            btnRemove.setGraphic(closeImageView);
+            btnRemove.setStyle("-fx-background-color: transparent; -fx-padding: 6;");
+            btnRemove.setTooltip(new Tooltip("Remove Item"));
+            btnRemove.setOnAction(event -> {
+                cartList.remove(product);
+                loadCartPane();
+            });
 
             Pane spacer = new Pane();
             HBox.setHgrow(spacer, Priority.ALWAYS);
 
             cartItem.getChildren().addAll(lblProductName, lblPrice, txtQuantity, lblTotal, spacer, btnRemove);
-            flowPaneCart.getChildren().add(cartItem);
+            cartContainer.getChildren().add(cartItem);
 
             totalAmount += product.getProductPrice() * product.getProductQuantity();
         }
 
         txtTotalAmount.setText("Total: LKR " + totalAmount);
-    }
-
-    private Button getButton(Product product) {
-        FontIcon closeIcon = new FontIcon(FontAwesome.CLOSE);
-        closeIcon.setIconSize(16);
-        closeIcon.setStyle("-fx-fill: white;");
-
-        Button btnRemove = new Button();
-        btnRemove.setGraphic(closeIcon);
-        btnRemove.setStyle("-fx-background-color: #dc3545; -fx-padding: 6 12 6 12; -fx-background-radius: 5;");
-        btnRemove.setTooltip(new Tooltip("Remove Item"));
-        btnRemove.setOnAction(event -> {
-            cartList.remove(product);
-            loadCartPane();
-        });
-        return btnRemove;
+        flowPaneCart.getChildren().setAll(cartContainer);
     }
 
     private void updateTotalAmount() {
         double newTotal = cartList.stream()
                 .mapToDouble(p -> p.getProductPrice() * p.getProductQuantity())
                 .sum();
-        txtTotalAmount.setText(String.valueOf(newTotal));
+        txtTotalAmount.setText("Total: LKR " + newTotal);
     }
+
 
 
 
