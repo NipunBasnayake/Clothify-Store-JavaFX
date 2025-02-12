@@ -1,5 +1,16 @@
 package controller;
 
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,28 +22,48 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.Customer;
 import model.Product;
 import service.custom.impl.CustomerControllerImpl;
+import service.custom.impl.OrderControllerImpl;
 import service.custom.impl.ProductControllerImpl;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DashboardViewController implements Initializable {
+
+    public Label lblDate;
+    public Label lblTime;
     private List<Product> productList;
     private List<Product> cartList = new ArrayList<>();
 
     @FXML
-    public Label txtOrderId;
+    public Label lblLoadOrderId;
 
     @FXML
     public Label txtTotalAmount;
@@ -54,10 +85,28 @@ public class DashboardViewController implements Initializable {
         loadCustomersComboBox();
         productList = ProductControllerImpl.getInstance().getProducts();
         loadProductPanes(productList);
+        loadOrderId();
+        loadDateAdnTime();
     }
 
     @FXML
-    void btnPayBillOnAction(ActionEvent event) {}
+    void btnPayBillOnAction(ActionEvent event) {
+//        System.out.println("Order Id :" + lblLoadOrderId.getText());
+//        System.out.println("Customer : " + getCustomerNameByComboBox());
+//        int count = 1;
+//        for (Product product : cartList) {
+//            System.out.println(count + "\t" + product.getProductName() + "\t" + product.getProductQuantity() + "\t" + product.getProductPrice());
+//            count++;
+//        }
+//        Double totalAmount = 0.0;
+//        for (Product product : cartList) {
+//            totalAmount += product.getProductPrice();
+//        }
+//        System.out.println("Total : " + totalAmount);
+
+        generateBillPdf();
+    }
+
 
     @FXML
     void btnAllProductsOnAction(ActionEvent actionEvent) {
@@ -228,7 +277,6 @@ public class DashboardViewController implements Initializable {
         });
     }
 
-
     private void loadCartPane() {
         flowPaneCart.getChildren().clear();
         double totalAmount = 0;
@@ -308,10 +356,103 @@ public class DashboardViewController implements Initializable {
         double newTotal = cartList.stream()
                 .mapToDouble(p -> p.getProductPrice() * p.getProductQuantity())
                 .sum();
-        txtTotalAmount.setText("Total: LKR " + newTotal);
+        txtTotalAmount.setText(String.valueOf(newTotal));
     }
 
+    private void loadOrderId() {
+        int lastOrderId = OrderControllerImpl.getInstance().getLastOrderId();
+        lblLoadOrderId.setText(String.valueOf(lastOrderId + 1));
+    }
 
+    private String getCustomerNameByComboBox() {
+        String selectedValue = cmbSelectCustomer.getValue();
+        if (selectedValue == null || selectedValue.isEmpty()) {
+            return "N/A";
+        }
+        String pattern = "\\d+\\s*-\\s*([A-Za-z\\s]+)\\s*-";
+        Pattern regex = Pattern.compile(pattern);
+        Matcher matcher = regex.matcher(selectedValue);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return "N/A";
+    }
 
+    private void loadDateAdnTime() {
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        lblDate.setText(formatter.format(date));
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, e -> {
+                    LocalTime now = LocalTime.now();
+                    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
+                    lblTime.setText(now.format(dateFormatter));
+                }),
+                new KeyFrame(Duration.seconds(1))
+        );
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
+
+    public void generateBillPdf() {
+        try {
+            String filePath = Paths.get(System.getProperty("user.home"), "Downloads", "Clothify_PDF", "Clothify_Invoice_" + lblLoadOrderId.getText() + ".pdf").toString();
+            Files.createDirectories(Paths.get(System.getProperty("user.home"), "Downloads", "Clothify_PDF"));
+            PdfWriter writer = new PdfWriter(filePath);
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf, PageSize.A5);
+
+            document.add(new Paragraph("Clothify Store").setBold().setFontSize(18).setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph("INVOICE").setBold().setFontSize(14).setTextAlignment(TextAlignment.CENTER));
+
+            document.add(new Paragraph("\nCustomer: " + getCustomerNameByComboBox()).setFontSize(10));
+            document.add(new Paragraph("Date: " + lblDate.getText()).setFontSize(10));
+            document.add(new Paragraph("Time: " + lblTime.getText()).setFontSize(10));
+
+            float[] columnWidths = {3, 10, 4, 6, 6};
+            Table table = new Table(columnWidths);
+            table.setWidth(UnitValue.createPercentValue(100));
+
+            table.addHeaderCell(new Cell().add(new Paragraph("#").setBold().setFontSize(10)));
+            table.addHeaderCell(new Cell().add(new Paragraph("Item").setBold().setFontSize(10)));
+            table.addHeaderCell(new Cell().add(new Paragraph("Price").setBold().setFontSize(10)));
+            table.addHeaderCell(new Cell().add(new Paragraph("Qty").setBold().setFontSize(10)));
+            table.addHeaderCell(new Cell().add(new Paragraph("Amount").setBold().setFontSize(10)));
+
+            int count = 1;
+            double totalAmount = 0.0;
+            for (Product product : cartList) {
+                double amount = product.getProductPrice() * product.getProductQuantity();
+                totalAmount += amount;
+
+                table.addCell(new Cell().add(new Paragraph(String.valueOf(count)).setFontSize(10)));
+                table.addCell(new Cell().add(new Paragraph(product.getProductName()).setFontSize(10)));
+                table.addCell(new Cell().add(new Paragraph(String.format("%.2f", product.getProductPrice())).setFontSize(10)));
+                table.addCell(new Cell().add(new Paragraph(String.valueOf(product.getProductQuantity())).setFontSize(10)));
+                table.addCell(new Cell().add(new Paragraph(String.format("%.2f", amount)).setFontSize(10)));
+                count++;
+            }
+            document.add(table);
+
+            double discountRate = 5.0;
+            double discountPrice = totalAmount * (discountRate / 100);
+            double finalAmount = totalAmount - discountPrice;
+
+            document.add(new Paragraph("\nTotal Amount: LKR " + String.format("%.2f", totalAmount)).setFontSize(10));
+            document.add(new Paragraph("Discount Rate: " + discountRate + "%").setFontSize(10));
+            document.add(new Paragraph("Discount Price: LKR " + String.format("%.2f", discountPrice)).setFontSize(10));
+            document.add(new Paragraph("Final Amount: LKR " + String.format("%.2f", finalAmount)).setFontSize(10).setBold());
+            document.add(new Paragraph("\nThank you for your purchase!").setFontSize(10).setTextAlignment(TextAlignment.CENTER));
+
+            document.close();
+            File pdfFile = new File(filePath);
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(pdfFile);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

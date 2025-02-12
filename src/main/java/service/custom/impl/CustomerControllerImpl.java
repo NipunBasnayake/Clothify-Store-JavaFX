@@ -54,4 +54,29 @@ public class CustomerControllerImpl implements CustomerServices {
             return false;
         }
     }
+
+    @Override
+    public Customer getCustomerById(int id) {
+        String query = "SELECT id, name, MobileNumber, Address FROM customers WHERE id = ?";
+        Customer customer = null;
+
+        try (PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    customer = new Customer(
+                            resultSet.getInt(1),
+                            resultSet.getString(2),
+                            resultSet.getString(3),
+                            resultSet.getString(4)
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching customer by ID", e);
+        }
+        return customer;
+    }
+
+
 }
