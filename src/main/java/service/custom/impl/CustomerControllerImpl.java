@@ -78,5 +78,33 @@ public class CustomerControllerImpl implements CustomerServices {
         return customer;
     }
 
+    @Override
+    public boolean updateCustomer(Customer customer) {
+        String query = "UPDATE customers SET name = ?, MobileNumber = ?, Address = ? WHERE id = ?";
+        try (PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query)) {
+            statement.setString(1, customer.getCustomerName());
+            statement.setString(2, customer.getCustomerMobile());
+            statement.setString(3, customer.getCustomerAddress());
+            statement.setInt(4, customer.getCustomerId());
+
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+
+    @Override
+    public boolean deleteCustomer(int customerId) {
+        String query = "DELETE FROM customers WHERE id = ?";
+        try {
+            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+            statement.setInt(1, customerId);
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
 
 }

@@ -1,19 +1,85 @@
-.image-view{
+/*.image-view{*/
+/*    -fx-border-radius: 20px;*/
+/*    -fx-background-radius: 20px;*/
+/*}*/
+
+
+
+/*!*.image-view {*!*/
+/*!*    !*-fx-background-color: transparent;*!*!*/
+/*!*    -fx-background-radius: 20px;*!*/
+/*!*    -fx-border-radius: 20px;*!*/
+/*!*    !*-fx-border-color: transparent;*!*!*/
+/*!*    !*-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 4);*!*!*/
+/*!*    !*-fx-padding: 5px;*!*!*/
+/*!*}*!*/
+
+/*.text-field {*/
+/*    -fx-font-family: "Arial";*/
+/*    -fx-font-size: 14px;*/
+/*    -fx-padding: 12 16;*/
+/*    -fx-border-color: #ccc;*/
+/*    -fx-border-radius: 5;*/
+/*    -fx-background-radius: 5;*/
+/*    -fx-border-width: 1;*/
+/*    -fx-background-color: #ffffff;*/
+/*    -fx-prompt-text-fill: #aaa;*/
+/*    -fx-text-fill: #000000;*/
+/*}*/
+
+/*.text-field:focused {*/
+/*    -fx-border-color: #000000;*/
+/*    -fx-effect: dropshadow(three-pass-box, rgba(150, 0, 0, 0.2), 5, 0, 0, 0);*/
+/*}*/
+
+/*.button {*/
+/*    -fx-font-family: "Arial";*/
+/*    -fx-font-size: 14px;*/
+/*    -fx-text-fill: white;*/
+/*    -fx-background-color: #000000;*/
+/*    -fx-padding: 14 16;*/
+/*    -fx-border-radius: 8;*/
+/*    -fx-background-radius: 8;*/
+/*    -fx-cursor: hand;*/
+/*    -fx-border-width: 0;*/
+/*    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 0);*/
+/*    -fx-min-width: 100%;*/
+/*    -fx-transition: background-color 0.7s ease, -fx-effect 0.7s ease;*/
+/*}*/
+
+/*#btnPayBill{*/
+/*    -fx-font-family: "Arial";*/
+/*    -fx-font-weight: bold;*/
+/*    -fx-font-size: 25px;*/
+/*    -fx-text-fill: white;*/
+/*    -fx-background-color: #000000;*/
+/*    -fx-padding: 14 16;*/
+/*    -fx-border-radius: 8;*/
+/*    -fx-background-radius: 8;*/
+/*    -fx-cursor: hand;*/
+/*    -fx-border-width: 0;*/
+/*    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 0);*/
+/*    -fx-min-width: 100%;*/
+/*    -fx-transition: background-color 0.7s ease, -fx-effect 0.7s ease;*/
+/*}*/
+
+/*.button:hover {*/
+/*    -fx-background-color: linear-gradient(to right, #000000, #4c0000, #000000);*/
+/*    -fx-effect: dropshadow(three-pass-box, rgba(128, 0, 0, 0.3), 10, 0, 0, 0); !* Darker shadow *!*/
+/*}*/
+
+/*.button:pressed {*/
+/*    -fx-background-color: #5a0000; !* Darker maroon when pressed *!*/
+/*}*/
+
+
+/* Image View */
+.image-view {
     -fx-border-radius: 20px;
     -fx-background-radius: 20px;
 }
 
-
-
-/*.image-view {*/
-/*    !*-fx-background-color: transparent;*!*/
-/*    -fx-background-radius: 20px;*/
-/*    -fx-border-radius: 20px;*/
-/*    !*-fx-border-color: transparent;*!*/
-/*    !*-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 4);*!*/
-/*    !*-fx-padding: 5px;*!*/
-/*}*/
-
+/* Text Field Styles */
 .text-field {
     -fx-font-family: "Arial";
     -fx-font-size: 14px;
@@ -32,6 +98,7 @@
     -fx-effect: dropshadow(three-pass-box, rgba(150, 0, 0, 0.2), 5, 0, 0, 0);
 }
 
+/* Button Styles */
 .button {
     -fx-font-family: "Arial";
     -fx-font-size: 14px;
@@ -47,7 +114,7 @@
     -fx-transition: background-color 0.7s ease, -fx-effect 0.7s ease;
 }
 
-#btnPayBill{
+#btnPayBill {
     -fx-font-family: "Arial";
     -fx-font-weight: bold;
     -fx-font-size: 25px;
@@ -65,12 +132,75 @@
 
 .button:hover {
     -fx-background-color: linear-gradient(to right, #000000, #4c0000, #000000);
-    -fx-effect: dropshadow(three-pass-box, rgba(128, 0, 0, 0.3), 10, 0, 0, 0); /* Darker shadow */
+    -fx-effect: dropshadow(three-pass-box, rgba(128, 0, 0, 0.3), 10, 0, 0, 0);
 }
 
 .button:pressed {
-    -fx-background-color: #5a0000; /* Darker maroon when pressed */
+    -fx-background-color: #5a0000;
 }
 
+/* Table View Styles */
+.table-view {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5;
+    -fx-padding: 5;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 4);
+}
 
+.table-column {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-text-fill: #000000;
+    -fx-padding: 5;
+    -fx-alignment: CENTER;
+}
+
+.table-cell {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-text-fill: #000000;
+    -fx-padding: 5;
+}
+
+/* ComboBox Styles */
+.combo-box {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-padding: 12 16;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-border-width: 1;
+    -fx-border-color: #ccc;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+}
+
+.combo-box:focused {
+    -fx-border-color: #000000;
+    -fx-effect: dropshadow(three-pass-box, rgba(150, 0, 0, 0.2), 5, 0, 0, 0);
+}
+
+.combo-box .button {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-padding: 10;
+}
+
+/* ComboBox Drop-down List */
+.combo-box-popup {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1;
+    -fx-font-size: 14px;
+    -fx-font-family: "Arial";
+    -fx-text-fill: #000000;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #000000;
+}
 

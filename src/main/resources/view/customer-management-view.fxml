@@ -28,10 +28,10 @@
       </JFXButton>
       <TableView fx:id="tblCustomerDetails" layoutX="33.0" layoutY="215.0" prefHeight="758.0" prefWidth="1535.0">
          <columns>
-            <TableColumn fx:id="colCustomerId" prefWidth="120.0" text="Customer Id" />
-            <TableColumn fx:id="colCustomerName" prefWidth="458.0" text="Customer Name" />
+            <TableColumn fx:id="colCustomerId" prefWidth="92.0" text="Customer Id" />
+            <TableColumn fx:id="colCustomerName" prefWidth="364.0" text="Customer Name" />
             <TableColumn fx:id="colMobileNumber" prefWidth="234.0" text="Mobile Number" />
-            <TableColumn fx:id="colCustomerAddress" prefWidth="370.0" text="Address" />
+            <TableColumn fx:id="colCustomerAddress" prefWidth="492.0" text="Address" />
             <TableColumn fx:id="colCustomerUpdateAction" prefWidth="181.0" text="Update Action" />
             <TableColumn fx:id="colCustomerDeleteAction" prefWidth="171.0" text="Delete Action" />
          </columns>
