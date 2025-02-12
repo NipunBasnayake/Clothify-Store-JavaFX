@@ -70,15 +70,13 @@
             <version>1.6.2</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.itextpdf/itext-core -->
         <dependency>
             <groupId>com.itextpdf</groupId>
-            <artifactId>itext7-core</artifactId>
-            <version>7.1.15</version> <!-- Make sure to use a valid version -->
+            <artifactId>itext-core</artifactId>
+            <version>9.0.0</version>
+            <type>pom</type>
         </dependency>
-
-
-
-
 
 
     </dependencies>

@@ -1,9 +1,9 @@
 package controller;
 
-import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
@@ -37,7 +37,6 @@ import service.custom.impl.CustomerControllerImpl;
 import service.custom.impl.OrderControllerImpl;
 import service.custom.impl.ProductControllerImpl;
 import com.itextpdf.layout.element.Cell;
-import com.itextpdf.layout.element.Paragraph;
 
 import java.awt.*;
 import java.io.File;
@@ -91,19 +90,6 @@ public class DashboardViewController implements Initializable {
 
     @FXML
     void btnPayBillOnAction(ActionEvent event) {
-//        System.out.println("Order Id :" + lblLoadOrderId.getText());
-//        System.out.println("Customer : " + getCustomerNameByComboBox());
-//        int count = 1;
-//        for (Product product : cartList) {
-//            System.out.println(count + "\t" + product.getProductName() + "\t" + product.getProductQuantity() + "\t" + product.getProductPrice());
-//            count++;
-//        }
-//        Double totalAmount = 0.0;
-//        for (Product product : cartList) {
-//            totalAmount += product.getProductPrice();
-//        }
-//        System.out.println("Total : " + totalAmount);
-
         generateBillPdf();
     }
 
@@ -399,26 +385,31 @@ public class DashboardViewController implements Initializable {
         try {
             String filePath = Paths.get(System.getProperty("user.home"), "Downloads", "Clothify_PDF", "Clothify_Invoice_" + lblLoadOrderId.getText() + ".pdf").toString();
             Files.createDirectories(Paths.get(System.getProperty("user.home"), "Downloads", "Clothify_PDF"));
+
             PdfWriter writer = new PdfWriter(filePath);
             PdfDocument pdf = new PdfDocument(writer);
-            Document document = new Document(pdf, PageSize.A5);
+            Document document = new Document(pdf, com.itextpdf.kernel.geom.PageSize.A5);
+            document.setMargins(36, 36, 36, 36);
 
-            document.add(new Paragraph("Clothify Store").setBold().setFontSize(18).setTextAlignment(TextAlignment.CENTER));
-            document.add(new Paragraph("INVOICE").setBold().setFontSize(14).setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph("Clothify Store").setFontSize(20).setTextAlignment(TextAlignment.CENTER));
+            document.add(new Paragraph("INVOICE").setFontSize(14).setTextAlignment(TextAlignment.CENTER).setMarginBottom(10));
 
-            document.add(new Paragraph("\nCustomer: " + getCustomerNameByComboBox()).setFontSize(10));
-            document.add(new Paragraph("Date: " + lblDate.getText()).setFontSize(10));
-            document.add(new Paragraph("Time: " + lblTime.getText()).setFontSize(10));
+            Table dateTimeTable = new Table(new float[]{1, 1});
+            dateTimeTable.setWidth(UnitValue.createPercentValue(100));
+            dateTimeTable.addCell(new Cell().add(new Paragraph("Date: " + lblDate.getText()).setFontSize(10)).setBorder(com.itextpdf.layout.borders.Border.NO_BORDER));
+            dateTimeTable.addCell(new Cell().add(new Paragraph("Time: " + lblTime.getText()).setFontSize(10).setTextAlignment(TextAlignment.RIGHT)).setBorder(com.itextpdf.layout.borders.Border.NO_BORDER));
+            document.add(dateTimeTable);
 
-            float[] columnWidths = {3, 10, 4, 6, 6};
+            document.add(new Paragraph("Customer: " + getCustomerNameByComboBox()).setFontSize(10).setMarginBottom(10));
+
+            float[] columnWidths = {2, 6, 3, 3, 4};
             Table table = new Table(columnWidths);
             table.setWidth(UnitValue.createPercentValue(100));
-
-            table.addHeaderCell(new Cell().add(new Paragraph("#").setBold().setFontSize(10)));
-            table.addHeaderCell(new Cell().add(new Paragraph("Item").setBold().setFontSize(10)));
-            table.addHeaderCell(new Cell().add(new Paragraph("Price").setBold().setFontSize(10)));
-            table.addHeaderCell(new Cell().add(new Paragraph("Qty").setBold().setFontSize(10)));
-            table.addHeaderCell(new Cell().add(new Paragraph("Amount").setBold().setFontSize(10)));
+            table.addHeaderCell(new Cell().add(new Paragraph("#").setFontSize(10)));
+            table.addHeaderCell(new Cell().add(new Paragraph("Item").setFontSize(10)));
+            table.addHeaderCell(new Cell().add(new Paragraph("Price").setFontSize(10)));
+            table.addHeaderCell(new Cell().add(new Paragraph("Qty").setFontSize(10)));
+            table.addHeaderCell(new Cell().add(new Paragraph("Amount").setFontSize(10)));
 
             int count = 1;
             double totalAmount = 0.0;
@@ -433,19 +424,21 @@ public class DashboardViewController implements Initializable {
                 table.addCell(new Cell().add(new Paragraph(String.format("%.2f", amount)).setFontSize(10)));
                 count++;
             }
-            document.add(table);
+            document.add(table.setMarginBottom(10));
 
-            double discountRate = 5.0;
-            double discountPrice = totalAmount * (discountRate / 100);
-            double finalAmount = totalAmount - discountPrice;
+            Table summaryTable = new Table(new float[]{3, 2});
+            summaryTable.setWidth(UnitValue.createPercentValue(100));
+            summaryTable.addCell(new Cell().add(new Paragraph("Total Amount:").setFontSize(10)).setBorder(com.itextpdf.layout.borders.Border.NO_BORDER));
+            summaryTable.addCell(new Cell().add(new Paragraph("LKR " + String.format("%.2f", totalAmount)).setFontSize(10)).setBorder(com.itextpdf.layout.borders.Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
+            summaryTable.addCell(new Cell().add(new Paragraph("Final Amount:").setFontSize(12)).setBorder(Border.NO_BORDER));
+            summaryTable.addCell(new Cell().add(new Paragraph("LKR " + String.format("%.2f", totalAmount)).setFontSize(12)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
 
-            document.add(new Paragraph("\nTotal Amount: LKR " + String.format("%.2f", totalAmount)).setFontSize(10));
-            document.add(new Paragraph("Discount Rate: " + discountRate + "%").setFontSize(10));
-            document.add(new Paragraph("Discount Price: LKR " + String.format("%.2f", discountPrice)).setFontSize(10));
-            document.add(new Paragraph("Final Amount: LKR " + String.format("%.2f", finalAmount)).setFontSize(10).setBold());
-            document.add(new Paragraph("\nThank you for your purchase!").setFontSize(10).setTextAlignment(TextAlignment.CENTER));
+            document.add(summaryTable.setMarginBottom(10));
+
+            document.add(new Paragraph("Thank you for your purchase!").setFontSize(10).setTextAlignment(TextAlignment.CENTER));
 
             document.close();
+
             File pdfFile = new File(filePath);
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().open(pdfFile);
@@ -454,5 +447,6 @@ public class DashboardViewController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
 }
