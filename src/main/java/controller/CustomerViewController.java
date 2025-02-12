@@ -156,7 +156,7 @@ public class CustomerViewController implements Initializable {
             stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
