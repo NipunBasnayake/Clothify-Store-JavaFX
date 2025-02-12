@@ -18,8 +18,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.Customer;
 import model.Product;
-import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
-import org.kordamp.ikonli.javafx.FontIcon;
 import service.custom.impl.CustomerControllerImpl;
 import service.custom.impl.ProductControllerImpl;
 
@@ -201,8 +199,27 @@ public class DashboardViewController implements Initializable {
             dialog.showAndWait().ifPresent(input -> {
                 try {
                     int quantity = Integer.parseInt(input);
-                    cartList.add(new Product(product.getProductID(), product.getProductName(), product.getProductCategory(),
-                            product.getProductSize(), product.getProductPrice(), quantity, product.getProductImage(), product.getSupplierID()));
+
+                    boolean found = false;
+                    for (Product listProduct : cartList) {
+                        if (product.getProductName().equals(listProduct.getProductName())) {
+                            listProduct.setProductQuantity(listProduct.getProductQuantity() + quantity);
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        cartList.add(new Product(product.getProductID(),
+                                product.getProductName(),
+                                product.getProductCategory(),
+                                product.getProductSize(),
+                                product.getProductPrice(),
+                                quantity,
+                                product.getProductImage(),
+                                product.getSupplierID()));
+                    }
+
                     loadCartPane();
                 } catch (NumberFormatException e) {
                     new Alert(Alert.AlertType.ERROR, "Invalid quantity! Please enter a valid number.").show();
@@ -210,6 +227,7 @@ public class DashboardViewController implements Initializable {
             });
         });
     }
+
 
     private void loadCartPane() {
         flowPaneCart.getChildren().clear();
