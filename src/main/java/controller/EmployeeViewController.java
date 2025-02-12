@@ -44,13 +44,6 @@ public class EmployeeViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        if (tblEmployeeDetails == null || colEmployeeId == null || colEmployeeName == null ||
-                colEmployeeEmail == null || colEmployeeRole == null) {
-            LOGGER.log(Level.SEVERE, "FXML elements are not properly injected!");
-            return;
-        }
-
         colEmployeeId.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
         colEmployeeName.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
         colEmployeeEmail.setCellValueFactory(new PropertyValueFactory<>("employeeEmail"));

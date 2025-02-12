@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="583.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpdateSupplierViewController">
+   <children>
+      <Label layoutX="135.0" layoutY="28.0" prefHeight="60.0" prefWidth="334.0" text="Update Supplier">
+         <font>
+            <Font name="Bodoni MT" size="48.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtSupplierName" layoutX="90.0" layoutY="135.0" prefHeight="48.0" prefWidth="421.0" />
+      <JFXButton layoutX="205.0" layoutY="491.0" onAction="#btnSaveSupplierOnAction" prefHeight="48.0" prefWidth="191.0" stylesheets="@../css/styles.css" text="Update Supplier" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXButton>
+      <Label layoutX="90.0" layoutY="113.0" text="Supplier Name" />
+      <Label layoutX="90.0" layoutY="201.0" text="Company" />
+      <TextField fx:id="txtSupplierCompany" layoutX="91.0" layoutY="225.0" prefHeight="48.0" prefWidth="421.0" />
+      <Label layoutX="90.0" layoutY="289.0" text="Email" />
+      <TextField fx:id="txtSupplierEmail" layoutX="90.0" layoutY="312.0" prefHeight="48.0" prefWidth="421.0" />
+      <ComboBox fx:id="cmbSupplyItem" layoutX="90.0" layoutY="403.0" prefHeight="48.0" prefWidth="421.0" promptText="Select Item Type" />
+      <Label layoutX="90.0" layoutY="380.0" text="Item" />
+   </children>
+</AnchorPane>

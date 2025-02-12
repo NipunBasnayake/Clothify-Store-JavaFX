@@ -56,4 +56,32 @@ public class SupplierControllerImpl implements SupplierServices {
             return false;
         }
     }
+
+    @Override
+    public boolean updateSupplier(Supplier supplier) {
+        String query = "Update supplier SET Name = ?, Company = ?, Email = ?, Item = ? WHERE SupplierID = ?";
+        try {
+            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+            statement.setString(1, supplier.getSupplierName());
+            statement.setString(2, supplier.getSupplierCompany());
+            statement.setString(3, supplier.getSupplierEmail());
+            statement.setString(4, supplier.getSupplyItem());
+            statement.setInt(5, supplier.getSupplierId());
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteSupplier(int supplierId) {
+        String query = "DELETE FROM supplier WHERE SupplierID = ?";
+        try {
+            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+            statement.setInt(1, supplierId);
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
 }
