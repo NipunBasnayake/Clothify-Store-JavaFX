@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1002.0" prefWidth="1601.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OrderHistoryViewController">
+   <children>
+      <Label layoutX="656.0" layoutY="45.0" prefHeight="60.0" prefWidth="288.0" text="Order History">
+         <font>
+            <Font name="Bodoni MT" size="48.0" />
+         </font>
+      </Label>
+      <TableView fx:id="tblOrderHistory" layoutX="21.0" layoutY="126.0" prefHeight="853.0" prefWidth="1557.0">
+        <columns>
+          <TableColumn fx:id="colOrderId" prefWidth="90.0" text="Order Id" />
+          <TableColumn fx:id="colOrderDate" prefWidth="242.0" text="Order Date" />
+            <TableColumn fx:id="colProductName" prefWidth="269.0" text="Product Name" />
+            <TableColumn fx:id="colUnitPrice" minWidth="0.0" prefWidth="140.0" text="Unit Price" />
+            <TableColumn fx:id="colQuantity" minWidth="0.0" prefWidth="155.0" text="Quantity" />
+            <TableColumn fx:id="colTotalAmount" minWidth="0.0" prefWidth="130.0" text="Total Amount" />
+            <TableColumn fx:id="colPaymentType" minWidth="0.0" prefWidth="127.0" text="Payment Type" />
+            <TableColumn fx:id="colCustomerName" minWidth="0.0" prefWidth="201.0" text="Customer Name" />
+            <TableColumn fx:id="colEmployeeName" minWidth="0.0" prefWidth="192.0" text="Employee Name" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

@@ -81,4 +81,14 @@ public class EmployeeControllerImpl implements EmployeeServices {
             return false;
         }
     }
+
+    @Override
+    public Employee getEmployeeById(int employeeId) {
+        for (Employee employee : getEmployees()) {
+            if (employee.getEmployeeId() == employeeId) {
+                return employee;
+            }
+        }
+        return null;
+    }
 }

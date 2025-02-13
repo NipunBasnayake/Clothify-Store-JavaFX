@@ -9,4 +9,5 @@ public interface ProductServices {
     boolean addProduct(Product product);
     boolean updateProduct(Product product);
     boolean deleteProduct(Integer productId);
+    Product getProductById(Integer productId);
 }

@@ -93,4 +93,14 @@ public class ProductControllerImpl implements ProductServices {
             return false;
         }
     }
+
+    @Override
+    public Product getProductById(Integer productId) {
+        for (Product product : getProducts()) {
+            if (product.getProductID() == productId) {
+                return product;
+            }
+        }
+        return null;
+    }
 }

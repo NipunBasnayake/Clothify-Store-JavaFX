@@ -70,7 +70,7 @@ public class HomeViewController implements Initializable {
     void btnOrderManagementOnAction(ActionEvent event) {
         AnchorPane pane = null;
         try {
-            pane = new FXMLLoader().load(getClass().getResource("/view/order-management-view.fxml"));
+            pane = new FXMLLoader().load(getClass().getResource("/view/order-history-view.fxml"));
             paneLoadFXML.getChildren().clear();
             paneLoadFXML.getChildren().add(pane);
         } catch (IOException e) {
