@@ -29,7 +29,7 @@
         </columns>
       </TableView>
       <TextField fx:id="txtSearchOrder" layoutX="528.0" layoutY="122.0" prefHeight="48.0" prefWidth="421.0" />
-      <JFXButton layoutX="956.0" layoutY="122.0" onAction="#btnSearchOrderHistory" prefHeight="48.0" prefWidth="117.0" style="-fx-background-color: #495057;" text="Search" textFill="WHITE">
+      <JFXButton layoutX="956.0" layoutY="122.0" onAction="#btnSearchOrderHistory" prefHeight="48.0" prefWidth="117.0" text="Search" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>

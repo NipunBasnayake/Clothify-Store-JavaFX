@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="1002.0" prefWidth="1601.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProductViewController">
    <children>
-      <AnchorPane fx:id="paneProductManagement" prefHeight="1002.0" prefWidth="1601.0" style="-fx-background-color: #e0e0e0;">
+      <AnchorPane fx:id="paneProductManagement" prefHeight="1002.0" prefWidth="1601.0" style="-fx-background-color: #e0e0e0;" stylesheets="@../css/styles.css">
          <children>
             <Label layoutX="580.0" layoutY="35.0" prefHeight="60.0" prefWidth="441.0" text="Product Management">
                <font>
@@ -24,38 +24,38 @@
                </font>
             </JFXButton>
             <ImageView fitHeight="177.0" fitWidth="360.0" layoutX="64.0" layoutY="617.0" pickOnBounds="true" preserveRatio="true" />
-            <JFXButton layoutX="339.0" layoutY="127.0" onAction="#btnSortAllProductsOnAction" prefHeight="48.0" prefWidth="132.0" style="-fx-background-color: #495057;" text="All Produts" textFill="WHITE">
+            <JFXButton layoutX="339.0" layoutY="127.0" onAction="#btnSortAllProductsOnAction" prefHeight="48.0" prefWidth="132.0" text="All Produts" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
             </JFXButton>
-            <JFXButton layoutX="497.0" layoutY="127.0" onAction="#btnSortGentsOnAction" prefHeight="48.0" prefWidth="132.0" style="-fx-background-color: #495057;" text="Gents" textFill="WHITE">
+            <JFXButton layoutX="497.0" layoutY="127.0" onAction="#btnSortGentsOnAction" prefHeight="48.0" prefWidth="132.0" text="Gents" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
             </JFXButton>
-            <JFXButton layoutX="655.0" layoutY="127.0" onAction="#btnSortLadiesOnAction" prefHeight="48.0" prefWidth="132.0" style="-fx-background-color: #495057;" text="Ladies" textFill="WHITE">
+            <JFXButton layoutX="655.0" layoutY="127.0" onAction="#btnSortLadiesOnAction" prefHeight="48.0" prefWidth="132.0" text="Ladies" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
             </JFXButton>
-            <JFXButton layoutX="813.0" layoutY="127.0" onAction="#btnSortKidsOnAction" prefHeight="48.0" prefWidth="132.0" style="-fx-background-color: #495057;" text="Kids" textFill="WHITE">
+            <JFXButton layoutX="813.0" layoutY="127.0" onAction="#btnSortKidsOnAction" prefHeight="48.0" prefWidth="132.0" text="Kids" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
             </JFXButton>
-            <JFXButton layoutX="972.0" layoutY="127.0" onAction="#btnSortAccessoriesOnAction" prefHeight="48.0" prefWidth="132.0" style="-fx-background-color: #495057;" text="Accessories" textFill="WHITE">
+            <JFXButton layoutX="972.0" layoutY="127.0" onAction="#btnSortAccessoriesOnAction" prefHeight="48.0" prefWidth="132.0" text="Accessories" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
             </JFXButton>
-            <JFXButton layoutX="1130.0" layoutY="127.0" onAction="#btnSortFootwareOnAction" prefHeight="48.0" prefWidth="132.0" style="-fx-background-color: #495057;" text="Footwear" textFill="WHITE">
+            <JFXButton layoutX="1130.0" layoutY="127.0" onAction="#btnSortFootwareOnAction" prefHeight="48.0" prefWidth="132.0" text="Footwear" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
             </JFXButton>
             <TextField fx:id="txtSearchProduct" layoutX="403.0" layoutY="199.0" prefHeight="48.0" prefWidth="421.0" />
-            <JFXButton layoutX="831.0" layoutY="199.0" onAction="#btnSearchProductOnAction" prefHeight="48.0" prefWidth="117.0" style="-fx-background-color: #495057;" text="Search" textFill="WHITE">
+            <JFXButton layoutX="831.0" layoutY="199.0" onAction="#btnSearchProductOnAction" prefHeight="48.0" prefWidth="117.0" text="Search" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>

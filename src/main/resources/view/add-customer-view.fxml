@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="486.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddCustomerViewController">
+<AnchorPane prefHeight="486.0" prefWidth="600.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddCustomerViewController">
    <children>
       <Label layoutX="156.0" layoutY="29.0" prefHeight="60.0" prefWidth="291.0" text="Add Customer">
          <font>
@@ -14,7 +14,7 @@
          </font>
       </Label>
       <TextField fx:id="txtAddCustomerName" layoutX="90.0" layoutY="135.0" prefHeight="48.0" prefWidth="421.0" />
-      <JFXButton layoutX="205.0" layoutY="390.0" onAction="#btnSaveCustomerOnAction" prefHeight="48.0" prefWidth="191.0" stylesheets="@../css/styles.css" text="Save Customer" textFill="WHITE">
+      <JFXButton layoutX="205.0" layoutY="390.0" onAction="#btnSaveCustomerOnAction" prefHeight="48.0" prefWidth="191.0" text="Save Customer" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>

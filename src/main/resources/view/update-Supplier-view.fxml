@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="583.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpdateSupplierViewController">
+<AnchorPane prefHeight="583.0" prefWidth="600.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpdateSupplierViewController">
    <children>
       <Label layoutX="135.0" layoutY="28.0" prefHeight="60.0" prefWidth="334.0" text="Update Supplier">
          <font>
@@ -15,7 +15,7 @@
          </font>
       </Label>
       <TextField fx:id="txtSupplierName" layoutX="90.0" layoutY="135.0" prefHeight="48.0" prefWidth="421.0" />
-      <JFXButton layoutX="205.0" layoutY="491.0" onAction="#btnSaveSupplierOnAction" prefHeight="48.0" prefWidth="191.0" stylesheets="@../css/styles.css" text="Update Supplier" textFill="WHITE">
+      <JFXButton layoutX="205.0" layoutY="491.0" onAction="#btnSaveSupplierOnAction" prefHeight="48.0" prefWidth="191.0" text="Update Supplier" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>

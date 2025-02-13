@@ -165,11 +165,15 @@ public class ProductViewController implements Initializable {
         textContainer.setAlignment(Pos.CENTER);
 
         Button btnUpdate = new Button("Update");
-        btnUpdate.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+        btnUpdate.setStyle("-fx-background-color: #495057; -fx-text-fill: white;");
+        btnUpdate.setOnMouseEntered(e -> btnUpdate.setStyle("-fx-background-color: #363b3e; -fx-text-fill: white;"));
+        btnUpdate.setOnMouseExited(e -> btnUpdate.setStyle("-fx-background-color: #495057; -fx-text-fill: white;"));
         btnUpdate.setOnAction(e -> updateProduct(product));
 
         Button btnDelete = new Button("Delete");
-        btnDelete.setStyle("-fx-background-color: #E53935; -fx-text-fill: white;");
+        btnDelete.setStyle("-fx-background-color: #6e0000; -fx-text-fill: white;");
+        btnDelete.setOnMouseEntered(e -> btnDelete.setStyle("-fx-background-color: #4c0000; -fx-text-fill: white;"));
+        btnDelete.setOnMouseExited(e -> btnDelete.setStyle("-fx-background-color: #6e0000; -fx-text-fill: white;"));
         btnDelete.setOnAction(e -> deleteProduct(product));
 
         HBox buttonBox = new HBox(10, btnUpdate, btnDelete);

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="853.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpdateProductViewController">
+<AnchorPane prefHeight="853.0" prefWidth="600.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpdateProductViewController">
    <children>
       <Label layoutX="138.0" layoutY="29.0" prefHeight="60.0" prefWidth="326.0" text="Update Product">
          <font>
@@ -17,7 +17,7 @@
          </font>
       </Label>
       <TextField fx:id="txtUpdateProductName" layoutX="90.0" layoutY="135.0" prefHeight="48.0" prefWidth="421.0" />
-      <JFXButton layoutX="205.0" layoutY="768.0" onAction="#btnUpdateProductOnAction" prefHeight="48.0" prefWidth="191.0" stylesheets="@../css/styles.css" text="Update Product" textFill="WHITE">
+      <JFXButton layoutX="205.0" layoutY="768.0" onAction="#btnUpdateProductOnAction" prefHeight="48.0" prefWidth="191.0" text="Update Product" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
@@ -33,7 +33,7 @@
       <Label layoutX="90.0" layoutY="481.0" text="Quantity  On Hand" />
       <TextField fx:id="txtUpdateProductImagePath" layoutX="90.0" layoutY="596.0" prefHeight="48.0" prefWidth="362.0" />
       <Label layoutX="90.0" layoutY="574.0" text="Product Image" />
-      <JFXButton layoutX="462.0" layoutY="687.0" onAction="#btnAddSupplierOnAction" prefHeight="48.0" prefWidth="49.0" stylesheets="@../css/styles.css" text=" " textFill="WHITE">
+      <JFXButton layoutX="462.0" layoutY="687.0" onAction="#btnAddSupplierOnAction" prefHeight="48.0" prefWidth="49.0" text=" " textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
@@ -47,7 +47,7 @@
       </JFXButton>
       <Label layoutX="90.0" layoutY="664.0" text="Supplier" />
       <ComboBox fx:id="cmbUpdateProcutSupplierId" layoutX="90.0" layoutY="687.0" prefHeight="48.0" prefWidth="362.0" promptText="Select Supplier" />
-      <JFXButton layoutX="462.0" layoutY="596.0" onAction="#btnAddProductImageOnAction" prefHeight="48.0" prefWidth="49.0" stylesheets="@../css/styles.css" text=" " textFill="WHITE">
+      <JFXButton layoutX="462.0" layoutY="596.0" onAction="#btnAddProductImageOnAction" prefHeight="48.0" prefWidth="49.0" text=" " textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
