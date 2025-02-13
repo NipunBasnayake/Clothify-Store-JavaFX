@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.User;
 import service.custom.impl.LoginSignUpControllerImpl;
 
 import javax.mail.*;
@@ -63,24 +64,36 @@ public class LoginSignupViewController {
             alert.setHeaderText("Fields are empty");
             alert.show();
         } else {
-            if (LoginSignUpControllerImpl.getInstance().login(txtLoginEmail.getText(), txtLoginPassword.getText()) == null) {
+            User loginUser = LoginSignUpControllerImpl.getInstance().login(txtLoginEmail.getText(), txtLoginPassword.getText());
+            if (loginUser == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Login Error");
                 alert.setHeaderText("Username or Password is incorrect");
                 alert.show();
             } else {
-                Stage stage = new Stage();
                 try {
-                    stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/home-view.fxml"))));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/home-view.fxml"));
+                    Stage stage = (Stage) txtLoginEmail.getScene().getWindow();
+                    stage.setScene(new Scene(loader.load()));
                     stage.setTitle("Clothify");
                     stage.setResizable(false);
+                    stage.centerOnScreen();
+
+                    HomeViewController homeViewController = loader.getController();
+                    homeViewController.setCurrentUser(loginUser);
+
                     stage.show();
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Unable to load the home view.");
+                    alert.show();
+                    e.printStackTrace();
                 }
             }
         }
     }
+
 
     @FXML
     void btnSendOTP(ActionEvent event) {
