@@ -33,6 +33,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Customer;
 import model.Product;
+import model.User;
 import service.custom.impl.CustomerControllerImpl;
 import service.custom.impl.OrderControllerImpl;
 import service.custom.impl.ProductControllerImpl;
@@ -55,9 +56,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DashboardViewController implements Initializable {
+    private static User currentUser;
+    public AnchorPane paneDashboard;
 
-    public Label lblDate;
-    public Label lblTime;
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
     private List<Product> productList;
     private List<Product> cartList = new ArrayList<>();
 
@@ -78,6 +83,13 @@ public class DashboardViewController implements Initializable {
 
     @FXML
     private TextField txtSearchProductText;
+
+    @FXML
+    public Label lblDate;
+
+    @FXML
+    public Label lblTime;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
