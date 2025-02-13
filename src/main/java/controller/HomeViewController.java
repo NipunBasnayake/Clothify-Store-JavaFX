@@ -5,13 +5,32 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import model.User;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class HomeViewController implements Initializable {
+    private static User currentUser;
+    public JFXButton btnUserName;
+    public Label lbl;
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+        setUserButton();
+    }
+
+    private void setUserButton(){
+        btnUserName.setText(currentUser.getUserName());
+        System.out.println(currentUser.getUserName());
+    }
 
     @FXML
     private JFXButton btnAdmin;
@@ -36,6 +55,21 @@ public class HomeViewController implements Initializable {
 
     @FXML
     private AnchorPane paneNavigation;
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        AnchorPane pane = null;
+        try {
+            pane = new FXMLLoader().load(getClass().getResource("/view/dahboard-view.fxml"));
+            paneLoadFXML.getChildren().clear();
+            DashboardViewController dashboardViewController = new DashboardViewController();
+            dashboardViewController.setCurrentUser(currentUser);
+            paneLoadFXML.getChildren().add(pane);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @FXML
     void btnCustomerManagementOnAction(ActionEvent event) {
@@ -63,7 +97,31 @@ public class HomeViewController implements Initializable {
 
     @FXML
     void btnLogOut(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Logout Confirmation");
+        alert.setHeaderText("Are you sure you want to log out?");
+        alert.setContentText("You will be redirected to the login page.");
 
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                Stage currentStage = (Stage) lbl.getScene().getWindow();
+
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login-signup-view.fxml"));
+                    Scene loginScene = new Scene(loader.load());
+
+                    Stage stage = new Stage();
+                    stage.setScene(loginScene);
+                    stage.setTitle("Login");
+                    stage.setResizable(false);
+                    stage.centerOnScreen();
+                    currentStage.close();
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @FXML
@@ -83,18 +141,6 @@ public class HomeViewController implements Initializable {
         AnchorPane pane = null;
         try {
             pane = new FXMLLoader().load(getClass().getResource("/view/product-management-view.fxml"));
-            paneLoadFXML.getChildren().clear();
-            paneLoadFXML.getChildren().add(pane);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        AnchorPane pane = null;
-        try {
-            pane = new FXMLLoader().load(getClass().getResource("/view/dahboard-view.fxml"));
             paneLoadFXML.getChildren().clear();
             paneLoadFXML.getChildren().add(pane);
         } catch (IOException e) {
@@ -133,6 +179,5 @@ public class HomeViewController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 }
