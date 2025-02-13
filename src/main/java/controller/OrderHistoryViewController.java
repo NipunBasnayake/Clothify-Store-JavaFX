@@ -2,10 +2,12 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.*;
 import service.custom.impl.*;
@@ -34,7 +36,11 @@ public class OrderHistoryViewController implements Initializable {
     @FXML
     public TableColumn colEmployeeName;
     @FXML
+    public TextField txtSearchOrder;
+    @FXML
     private TableView<OrderHistory> tblOrderHistory;
+
+    ObservableList<OrderHistory> orderHistoryItems;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -55,7 +61,7 @@ public class OrderHistoryViewController implements Initializable {
         List<Order> orders = OrderControllerImpl.getInstance().getOrders();
         List<OrderProduct> orderProducts = OrderProductControllerImpl.getInstance().getOrderProducts();
 
-        ObservableList<OrderHistory> orderHistoryItems = FXCollections.observableArrayList();
+       orderHistoryItems = FXCollections.observableArrayList();
 
         for (Order order : orders) {
             Customer customer = CustomerControllerImpl.getInstance().getCustomerById(order.getCustomerId());
@@ -79,4 +85,29 @@ public class OrderHistoryViewController implements Initializable {
         }
         tblOrderHistory.setItems(orderHistoryItems);
     }
+
+    public void btnSearchOrderHistory(ActionEvent actionEvent) {
+        String searchText = txtSearchOrder.getText().toLowerCase();
+
+        if (searchText.isEmpty()) {
+            tblOrderHistory.setItems(orderHistoryItems); // Reset to full list if empty
+            return;
+        }
+
+        ObservableList<OrderHistory> filteredList = FXCollections.observableArrayList();
+
+        for (OrderHistory order : orderHistoryItems) {
+            if (String.valueOf(order.getOrderId()).contains(searchText) ||
+                    order.getOrderDate().toString().contains(searchText) ||
+                    order.getProductName().toLowerCase().contains(searchText) ||
+                    order.getCustomerName().toLowerCase().contains(searchText) ||
+                    order.getEmployeeName().toLowerCase().contains(searchText) ||
+                    order.getPaymentMethod().toLowerCase().contains(searchText))
+            {
+                filteredList.add(order);
+            }
+        }
+        tblOrderHistory.setItems(filteredList);
+    }
+
 }

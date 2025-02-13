@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -13,7 +15,7 @@
             <Font name="Bodoni MT" size="48.0" />
          </font>
       </Label>
-      <TableView fx:id="tblOrderHistory" layoutX="21.0" layoutY="126.0" prefHeight="853.0" prefWidth="1557.0">
+      <TableView fx:id="tblOrderHistory" layoutX="21.0" layoutY="197.0" prefHeight="782.0" prefWidth="1557.0">
         <columns>
           <TableColumn fx:id="colOrderId" prefWidth="90.0" text="Order Id" />
           <TableColumn fx:id="colOrderDate" prefWidth="242.0" text="Order Date" />
@@ -26,5 +28,11 @@
             <TableColumn fx:id="colEmployeeName" minWidth="0.0" prefWidth="192.0" text="Employee Name" />
         </columns>
       </TableView>
+      <TextField fx:id="txtSearchOrder" layoutX="528.0" layoutY="122.0" prefHeight="48.0" prefWidth="421.0" />
+      <JFXButton layoutX="956.0" layoutY="122.0" onAction="#btnSearchOrderHistory" prefHeight="48.0" prefWidth="117.0" style="-fx-background-color: #495057;" text="Search" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXButton>
    </children>
 </AnchorPane>
