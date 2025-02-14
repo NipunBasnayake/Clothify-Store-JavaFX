@@ -1,8 +1,8 @@
-package service.custom.impl;
+package dao.Custom.impl;
 
+import dao.Custom.OrderDao;
 import db.DBConnection;
 import model.Order;
-import service.custom.OrderServices;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,14 +11,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderControllerImpl implements OrderServices {
-    private static OrderControllerImpl orderControllerImpl;
+public class OrderDaoImpl implements OrderDao {
+    private static OrderDaoImpl orderDaoImpl;
 
-    public static OrderControllerImpl getInstance() {
-        if (orderControllerImpl == null) {
-            orderControllerImpl = new OrderControllerImpl();
+    public static OrderDaoImpl getInstance() {
+        if (orderDaoImpl == null) {
+            orderDaoImpl = new OrderDaoImpl();
         }
-        return orderControllerImpl;
+        return orderDaoImpl;
     }
 
     @Override
@@ -36,7 +36,6 @@ public class OrderControllerImpl implements OrderServices {
         } catch (SQLException e) {
             throw new RuntimeException("Error fetching last OrderID", e);
         }
-
         return lastOrderId;
     }
 
@@ -85,6 +84,5 @@ public class OrderControllerImpl implements OrderServices {
             throw new RuntimeException(e);
         }
     }
-
 
 }

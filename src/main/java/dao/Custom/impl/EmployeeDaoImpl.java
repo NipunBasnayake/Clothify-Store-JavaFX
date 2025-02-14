@@ -1,8 +1,8 @@
-package service.custom.impl;
+package dao.Custom.impl;
 
+import dao.Custom.EmployeeDao;
 import db.DBConnection;
 import model.Employee;
-import service.custom.EmployeeServices;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,14 +10,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeControllerImpl implements EmployeeServices {
-    private static EmployeeServices employeeService;
+public class EmployeeDaoImpl implements EmployeeDao {
+    private static EmployeeDaoImpl employeeDao;
 
-    public static EmployeeServices getInstance() {
-        if (employeeService == null) {
-            employeeService = new EmployeeControllerImpl();
+    public static EmployeeDao getInstance() {
+        if (employeeDao == null) {
+            employeeDao = new EmployeeDaoImpl();
         }
-        return employeeService;
+        return employeeDao;
     }
 
     @Override
@@ -91,4 +91,5 @@ public class EmployeeControllerImpl implements EmployeeServices {
         }
         return null;
     }
+
 }

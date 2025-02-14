@@ -15,8 +15,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Product;
 import model.Supplier;
-import service.custom.impl.ProductControllerImpl;
-import service.custom.impl.SupplierControllerImpl;
+import service.ServiceFactory;
+import service.custom.ProductService;
+import service.custom.SupplierService;
+import service.custom.impl.ProductServiceImpl;
+import service.custom.impl.SupplierServiceImpl;
+import util.ServiceType;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +29,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class AddProductViewController implements Initializable {
+
+    ProductService service = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
+    SupplierService supplierService = ServiceFactory.getInstance().getService(ServiceType.SUPPLIER);
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadProductCategoryComboBox();
@@ -83,7 +91,7 @@ public class AddProductViewController implements Initializable {
 
     @FXML
     void btnSaveProductOnAction(ActionEvent event) {
-        boolean isProductAdded = ProductControllerImpl.getInstance().addProduct(new Product(
+        boolean isProductAdded = service.addProduct(new Product(
                 1,
                 txtAddProductName.getText(),
                 cmbAddProductCategory.getSelectionModel().getSelectedItem().toString(),
@@ -107,7 +115,7 @@ public class AddProductViewController implements Initializable {
     }
 
     private void loadProductSupplierComboBox() {
-        List<Supplier> supplierList = SupplierControllerImpl.getInstance().getSuppliers();
+        List<Supplier> supplierList = supplierService.getSuppliers();
         ObservableList<String> supplierObservableList = FXCollections.observableArrayList();
         for (Supplier supplier : supplierList) {
             supplierObservableList.add(supplier.getSupplierId() + " - " + supplier.getSupplierName() + " - " + supplier.getSupplierCompany());

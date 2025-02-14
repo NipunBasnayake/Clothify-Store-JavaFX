@@ -34,10 +34,15 @@ import javafx.util.Duration;
 import model.Customer;
 import model.Product;
 import model.User;
-import service.custom.impl.CustomerControllerImpl;
-import service.custom.impl.OrderControllerImpl;
-import service.custom.impl.ProductControllerImpl;
+import service.ServiceFactory;
+import service.custom.CustomerService;
+import service.custom.OrderService;
+import service.custom.ProductService;
+import service.custom.impl.CustomerServiceImpl;
+import service.custom.impl.OrderServiceImpl;
+import service.custom.impl.ProductServiceImpl;
 import com.itextpdf.layout.element.Cell;
+import util.ServiceType;
 
 import java.awt.*;
 import java.io.File;
@@ -56,8 +61,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DashboardViewController implements Initializable {
+    CustomerService customerService = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
+    ProductService productService = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
+    OrderService orderService = ServiceFactory.getInstance().getService(ServiceType.ORDERS);
+
     private static User currentUser;
-    public AnchorPane paneDashboard;
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
@@ -90,11 +98,14 @@ public class DashboardViewController implements Initializable {
     @FXML
     public Label lblTime;
 
+    @FXML
+    public AnchorPane paneDashboard;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadCustomersComboBox();
-        productList = ProductControllerImpl.getInstance().getProducts();
+        productList = productService.getProducts();
         loadProductPanes(productList);
         loadOrderId();
         loadDateAdnTime();
@@ -180,7 +191,7 @@ public class DashboardViewController implements Initializable {
     }
 
     private void loadCustomersComboBox() {
-        List<Customer> customerList = CustomerControllerImpl.getInstance().getCustomers();
+        List<Customer> customerList = customerService.getCustomers();
         ObservableList<String> customerObservableList = FXCollections.observableArrayList();
 
         for (Customer customer : customerList) {
@@ -346,19 +357,17 @@ public class DashboardViewController implements Initializable {
             totalAmount += product.getProductPrice() * product.getProductQuantity();
         }
 
-        txtTotalAmount.setText("Total: LKR " + totalAmount);
+        txtTotalAmount.setText(String.valueOf(totalAmount));
         flowPaneCart.getChildren().setAll(cartContainer);
     }
 
     private void updateTotalAmount() {
-        double newTotal = cartList.stream()
-                .mapToDouble(p -> p.getProductPrice() * p.getProductQuantity())
-                .sum();
+        double newTotal = cartList.stream().mapToDouble(p -> p.getProductPrice() * p.getProductQuantity()).sum();
         txtTotalAmount.setText(String.valueOf(newTotal));
     }
 
     private void loadOrderId() {
-        int lastOrderId = OrderControllerImpl.getInstance().getLastOrderId();
+        int lastOrderId = orderService.getLastOrderId();
         lblLoadOrderId.setText(String.valueOf(lastOrderId + 1));
     }
 

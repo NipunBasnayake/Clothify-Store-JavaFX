@@ -1,10 +1,11 @@
-package service.custom;
+package dao.Custom;
 
+import dao.SuperDao;
 import model.Employee;
 
 import java.util.List;
 
-public interface EmployeeServices {
+public interface EmployeeDao extends SuperDao {
     boolean addEmployee (Employee employee);
     boolean updateEmployee (Employee employee);
     List<Employee> getEmployees();

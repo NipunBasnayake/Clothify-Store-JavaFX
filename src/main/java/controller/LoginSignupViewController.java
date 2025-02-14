@@ -15,7 +15,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.User;
-import service.custom.impl.LoginSignUpControllerImpl;
+import service.ServiceFactory;
+import service.custom.LoginSignupService;
+import service.custom.impl.LoginSignUpServiceImpl;
+import util.ServiceType;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -56,6 +59,8 @@ public class LoginSignupViewController {
     @FXML
     private TextField txtOTP;
 
+    LoginSignupService loginSignupService = ServiceFactory.getInstance().getService(ServiceType.USER);
+
     @FXML
     void btnLogInOnAction(ActionEvent event) {
         if (txtLoginEmail.getText().isEmpty() || txtLoginPassword.getText().isEmpty()) {
@@ -64,7 +69,7 @@ public class LoginSignupViewController {
             alert.setHeaderText("Fields are empty");
             alert.show();
         } else {
-            User loginUser = LoginSignUpControllerImpl.getInstance().login(txtLoginEmail.getText(), txtLoginPassword.getText());
+            User loginUser = loginSignupService.login(txtLoginEmail.getText(), txtLoginPassword.getText());
             if (loginUser == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Login Error");
@@ -142,7 +147,7 @@ public class LoginSignupViewController {
             return;
         }
 
-        boolean isUpdated = LoginSignUpControllerImpl.getInstance().updatePassword(txtForgotEmail.getText(), txtNewPassword.getText());
+        boolean isUpdated = loginSignupService.updatePassword(txtForgotEmail.getText(), txtNewPassword.getText());
         if (isUpdated) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");

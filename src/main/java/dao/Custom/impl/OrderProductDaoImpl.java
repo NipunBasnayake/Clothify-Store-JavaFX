@@ -1,23 +1,22 @@
-package service.custom.impl;
+package dao.Custom.impl;
 
+import dao.Custom.OrderProductDao;
 import db.DBConnection;
 import model.OrderProduct;
-import service.custom.OrderProductServices;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderProductControllerImpl implements OrderProductServices {
+public class OrderProductDaoImpl implements OrderProductDao {
+    private static OrderProductDaoImpl orderProductDaoImpl;
 
-    private static OrderProductControllerImpl orderProductControllerImpl;
-
-    public static OrderProductControllerImpl getInstance() {
-        if (orderProductControllerImpl == null) {
-            orderProductControllerImpl = new OrderProductControllerImpl();
+    public static OrderProductDaoImpl getInstance() {
+        if (orderProductDaoImpl == null) {
+            orderProductDaoImpl = new OrderProductDaoImpl();
         }
-        return orderProductControllerImpl;
+        return orderProductDaoImpl;
     }
 
     @Override
@@ -39,4 +38,5 @@ public class OrderProductControllerImpl implements OrderProductServices {
         }
         return orderProducts;
     }
+
 }

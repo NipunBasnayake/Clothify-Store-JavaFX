@@ -1,0 +1,5 @@
+package util;
+
+public enum DaoType {
+    CUSTOMERS,EMPLOYEE,ORDERPRODUCT,ORDERS,PRODUCT,SUPPLIER,USER;
+}

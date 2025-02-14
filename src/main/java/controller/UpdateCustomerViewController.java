@@ -5,9 +5,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import model.Customer;
-import service.custom.impl.CustomerControllerImpl;
+import service.ServiceFactory;
+import service.custom.CustomerService;
+import service.custom.impl.CustomerServiceImpl;
+import util.ServiceType;
 
 public class UpdateCustomerViewController {
+    CustomerService service = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
+
     private Customer customer;
 
     public void setCustomer(Customer customer) {
@@ -28,7 +33,7 @@ public class UpdateCustomerViewController {
 
     @FXML
     void btnUpdateCustomerOnAction(ActionEvent event) {
-        boolean isUpdatedCustomer = CustomerControllerImpl.getInstance().updateCustomer(new Customer(
+        boolean isUpdatedCustomer = service.updateCustomer(new Customer(
                 customer.getCustomerId(),
                 txtUpdateCustomerName.getText(),
                 txtUpdateCustomerMobileNumber.getText(),

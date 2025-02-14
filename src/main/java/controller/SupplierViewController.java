@@ -1,7 +1,6 @@
 package controller;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +10,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Supplier;
-import service.custom.impl.SupplierControllerImpl;
+import service.ServiceFactory;
+import service.custom.SupplierService;
+import service.custom.impl.SupplierServiceImpl;
+import util.ServiceType;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,6 +23,8 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class SupplierViewController implements Initializable {
+
+    SupplierService supplierService = ServiceFactory.getInstance().getService(ServiceType.SUPPLIER);
 
     @FXML
     private TableView<Supplier> tblSupplier;
@@ -86,10 +90,7 @@ public class SupplierViewController implements Initializable {
     void btnSearchSupplierOnAction(ActionEvent event) {
         String searchText = txtSearchSupplier.getText().toLowerCase();
 
-        List<Supplier> filteredList = SupplierControllerImpl.getInstance()
-                .getSuppliers()
-                .stream()
-                .filter(s -> s.getSupplierName().toLowerCase().contains(searchText) ||
+        List<Supplier> filteredList = supplierService.getSuppliers().stream().filter(s -> s.getSupplierName().toLowerCase().contains(searchText) ||
                         s.getSupplierEmail().toLowerCase().contains(searchText))
                 .collect(Collectors.toList());
 
@@ -97,7 +98,7 @@ public class SupplierViewController implements Initializable {
     }
 
     private void populateTable() {
-        tblSupplier.setItems(FXCollections.observableArrayList(SupplierControllerImpl.getInstance().getSuppliers()));
+        tblSupplier.setItems(FXCollections.observableArrayList(supplierService.getSuppliers()));
     }
 
     private void openUpdateSupplierView(Supplier supplier) {
@@ -119,13 +120,12 @@ public class SupplierViewController implements Initializable {
         }
     }
 
-
     private void deleteSupplier(Supplier supplier) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this supplier? This action cannot be undone.", ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.YES) {
-            boolean isDeletedSupplier = SupplierControllerImpl.getInstance().deleteSupplier(supplier.getSupplierId());
+            boolean isDeletedSupplier = supplierService.deleteSupplier(supplier.getSupplierId());
 
             if (isDeletedSupplier) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "Supplier deleted successfully.", ButtonType.OK);
@@ -137,7 +137,6 @@ public class SupplierViewController implements Initializable {
             }
         }
     }
-
 
     private void openWindow(String resource, String title) {
         try {

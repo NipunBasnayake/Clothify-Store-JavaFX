@@ -1,7 +1,5 @@
 package controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +18,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import lombok.Setter;
 import model.Product;
-import service.custom.impl.ProductControllerImpl;
+import service.ServiceFactory;
+import service.custom.ProductService;
+import service.custom.impl.ProductServiceImpl;
+import util.ServiceType;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,6 +32,8 @@ import java.util.ResourceBundle;
 
 @Setter
 public class ProductViewController implements Initializable {
+    ProductService service = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
+
     private List<Product> productList;
 
     @FXML
@@ -44,7 +47,7 @@ public class ProductViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        productList = ProductControllerImpl.getInstance().getProducts();
+        productList = service.getProducts();
         loadProductPanes(productList);
     }
 
@@ -56,7 +59,7 @@ public class ProductViewController implements Initializable {
             stage.setScene(new Scene(root));
             stage.setTitle("Add Product");
             stage.show();
-            stage.setOnHidden(e -> loadProductPanes(ProductControllerImpl.getInstance().getProducts()));
+            stage.setOnHidden(e -> loadProductPanes(service.getProducts()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -197,7 +200,7 @@ public class ProductViewController implements Initializable {
             stage.setTitle("Update Product");
             stage.setResizable(false);
             stage.show();
-            stage.setOnHidden(e -> loadProductPanes(ProductControllerImpl.getInstance().getProducts()));
+            stage.setOnHidden(e -> loadProductPanes(service.getProducts()));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -213,13 +216,13 @@ public class ProductViewController implements Initializable {
         Optional<ButtonType> result = confirmationAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isProductDeleted = ProductControllerImpl.getInstance().deleteProduct(product.getProductID());
+            boolean isProductDeleted = service.deleteProduct(product.getProductID());
 
             Alert alert = new Alert(isProductDeleted ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
             alert.setTitle(isProductDeleted ? "Product Deleted" : "Delete Product Error");
             alert.setHeaderText(isProductDeleted ? "Product successfully deleted." : "Product not deleted.");
             alert.show();
-            loadProductPanes(ProductControllerImpl.getInstance().getProducts());
+            loadProductPanes(service.getProducts());
         }
     }
 }

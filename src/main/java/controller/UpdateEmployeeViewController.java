@@ -1,15 +1,20 @@
 package controller;
 
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import model.Employee;
-import service.custom.impl.EmployeeControllerImpl;
+import service.ServiceFactory;
+import service.custom.EmployeeService;
+import service.custom.impl.EmployeeServiceImpl;
+import util.ServiceType;
 
 public class UpdateEmployeeViewController {
+
+    EmployeeService employeeService = ServiceFactory.getInstance().getService(ServiceType.EMPLOYEE);
+
     private Employee employee;
 
     public void setEmployee(Employee employee) {
@@ -39,7 +44,7 @@ public class UpdateEmployeeViewController {
             employee.setEmployeeEmail(txtUpdateEmployeeEmail.getText());
             employee.setEmployeeRole(cmbUpdateEmployeeRole.getValue());
 
-            boolean isEmployeeUpdated = EmployeeControllerImpl.getInstance().updateEmployee(employee);
+            boolean isEmployeeUpdated = employeeService.updateEmployee(employee);
 
             Alert alert = new Alert(isEmployeeUpdated ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
             alert.setTitle("Update Employee");

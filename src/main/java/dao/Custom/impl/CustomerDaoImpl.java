@@ -1,8 +1,8 @@
-package service.custom.impl;
+package dao.Custom.impl;
 
+import dao.Custom.CustomerDao;
 import db.DBConnection;
 import model.Customer;
-import service.custom.CustomerServices;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,14 +10,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerControllerImpl implements CustomerServices {
-    private static CustomerControllerImpl customerControllerImpl;
+public class CustomerDaoImpl implements CustomerDao {
+    private static CustomerDaoImpl customerDaoImpl;
 
-    public static CustomerControllerImpl getInstance() {
-        if (customerControllerImpl == null) {
-            customerControllerImpl = new CustomerControllerImpl();
+    public static CustomerDaoImpl getInstance() {
+        if (customerDaoImpl == null) {
+            customerDaoImpl = new CustomerDaoImpl();
         }
-        return customerControllerImpl;
+        return customerDaoImpl;
     }
 
     @Override
@@ -93,7 +93,6 @@ public class CustomerControllerImpl implements CustomerServices {
         }
     }
 
-
     @Override
     public boolean deleteCustomer(int customerId) {
         String query = "DELETE FROM customers WHERE id = ?";
@@ -105,6 +104,5 @@ public class CustomerControllerImpl implements CustomerServices {
             return false;
         }
     }
-
 
 }

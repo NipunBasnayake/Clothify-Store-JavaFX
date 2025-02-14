@@ -7,9 +7,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Supplier;
-import service.custom.impl.SupplierControllerImpl;
+import service.ServiceFactory;
+import service.custom.SupplierService;
+import service.custom.impl.SupplierServiceImpl;
+import util.ServiceType;
 
 public class UpdateSupplierViewController {
+
+    SupplierService supplierService = ServiceFactory.getInstance().getService(ServiceType.SUPPLIER);
 
     private Supplier supplier;
 
@@ -50,7 +55,7 @@ public class UpdateSupplierViewController {
         supplier.setSupplierCompany(txtSupplierCompany.getText());
         supplier.setSupplyItem(cmbSupplyItem.getValue());
 
-        boolean isSupplierUpdated = SupplierControllerImpl.getInstance().updateSupplier(supplier);
+        boolean isSupplierUpdated = supplierService.updateSupplier(supplier);
 
         if (isSupplierUpdated) {
             showAlert(Alert.AlertType.INFORMATION, "Update Supplier", "Supplier Updated Successfully.");

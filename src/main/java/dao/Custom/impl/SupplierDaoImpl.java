@@ -1,8 +1,8 @@
-package service.custom.impl;
+package dao.Custom.impl;
 
+import dao.Custom.SupplierDao;
 import db.DBConnection;
 import model.Supplier;
-import service.custom.SupplierServices;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,14 +10,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SupplierControllerImpl implements SupplierServices {
-    private static SupplierControllerImpl supplierController;
+public class SupplierDaoImpl implements SupplierDao {
+    private static SupplierDaoImpl supplierDaoImpl;
 
-    public static SupplierControllerImpl getInstance() {
-        if (supplierController == null) {
-            supplierController = new SupplierControllerImpl();
+    public static SupplierDaoImpl getInstance() {
+        if (supplierDaoImpl == null) {
+            supplierDaoImpl = new SupplierDaoImpl();
         }
-        return supplierController;
+        return supplierDaoImpl;
     }
 
     @Override
@@ -84,4 +84,5 @@ public class SupplierControllerImpl implements SupplierServices {
             return false;
         }
     }
+
 }

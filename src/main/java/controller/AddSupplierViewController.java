@@ -7,12 +7,17 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import model.Supplier;
-import service.custom.impl.SupplierControllerImpl;
+import service.ServiceFactory;
+import service.custom.SupplierService;
+import service.custom.impl.SupplierServiceImpl;
+import util.ServiceType;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AddSupplierViewController implements Initializable {
+
+    SupplierService supplierService = ServiceFactory.getInstance().getService(ServiceType.SUPPLIER);
 
     @FXML
     private ComboBox cmbSupplyItem;
@@ -29,7 +34,7 @@ public class AddSupplierViewController implements Initializable {
     @FXML
     void btnSaveSupplierOnAction(ActionEvent event) {
 
-        boolean isSupplierAdded = SupplierControllerImpl.getInstance().addSupplier(new Supplier(
+        boolean isSupplierAdded = supplierService.addSupplier(new Supplier(
                 1,
                 txtSupplierName.getText(),
                 txtSupplierCompany.getText(),

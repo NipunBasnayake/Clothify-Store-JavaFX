@@ -12,7 +12,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.Employee;
-import service.custom.impl.EmployeeControllerImpl;
+import service.ServiceFactory;
+import service.custom.EmployeeService;
+import service.custom.impl.EmployeeServiceImpl;
+import util.ServiceType;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,6 +26,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class EmployeeViewController implements Initializable {
+
+    EmployeeService employeeService = ServiceFactory.getInstance().getService(ServiceType.EMPLOYEE);
 
     private static final Logger LOGGER = Logger.getLogger(EmployeeViewController.class.getName());
     public AnchorPane paneProductManagement;
@@ -121,15 +126,7 @@ public class EmployeeViewController implements Initializable {
 
         String searchText = txtSearchEmployee.getText();
         if (searchText == null) searchText = "";
-
-        List<Employee> employees = EmployeeControllerImpl.getInstance() != null ?
-                EmployeeControllerImpl.getInstance().getEmployees() : null;
-
-        if (employees == null) {
-            LOGGER.log(Level.WARNING, "Employee list is null.");
-            return;
-        }
-
+        List<Employee> employees = employeeService.getEmployees();
         ObservableList<Employee> filteredList = FXCollections.observableArrayList();
 
         for (Employee emp : employees) {
@@ -144,7 +141,7 @@ public class EmployeeViewController implements Initializable {
     }
 
     private void populateTable() {
-        List<Employee> employees = EmployeeControllerImpl.getInstance().getEmployees();
+        List<Employee> employees = employeeService.getEmployees();
         tblEmployeeDetails.setItems(FXCollections.observableList(employees));
     }
 
@@ -181,21 +178,20 @@ public class EmployeeViewController implements Initializable {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            if (EmployeeControllerImpl.getInstance() != null) {
-                boolean isEmployeeDeleted = EmployeeControllerImpl.getInstance().deleteEmployee(employee.getEmployeeId());
-                if (isEmployeeDeleted) {
-                    Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert1.setTitle("Delete Confirmation");
-                    alert1.setHeaderText("Delete Confirmation");
-                    alert1.show();
-                    populateTable();
-                }else {
-                    Alert alert1 = new Alert(Alert.AlertType.ERROR);
-                    alert1.setTitle("Delete Error");
-                    alert1.setHeaderText("Delete Error");
-                    alert1.show();
-                }
+            boolean isEmployeeDeleted = employeeService.deleteEmployee(employee.getEmployeeId());
+            if (isEmployeeDeleted) {
+                Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
+                alert1.setTitle("Delete Confirmation");
+                alert1.setHeaderText("Delete Confirmation");
+                alert1.show();
+                populateTable();
+            } else {
+                Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                alert1.setTitle("Delete Error");
+                alert1.setHeaderText("Delete Error");
+                alert1.show();
             }
         }
     }
+
 }

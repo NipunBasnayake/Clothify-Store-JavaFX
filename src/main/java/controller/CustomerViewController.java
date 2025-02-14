@@ -11,7 +11,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Customer;
-import service.custom.impl.CustomerControllerImpl;
+import service.ServiceFactory;
+import service.custom.CustomerService;
+import service.custom.impl.CustomerServiceImpl;
+import util.ServiceType;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,6 +22,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class CustomerViewController implements Initializable {
+
+    CustomerService customerService = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         colCustomerId.setCellValueFactory(new PropertyValueFactory<>("customerId"));
@@ -125,7 +131,7 @@ public class CustomerViewController implements Initializable {
         String searchText = txtSearchCustomer.getText().trim().toLowerCase();
         if (!searchText.isEmpty()) {
             ObservableList<Customer> filteredCustomers = FXCollections.observableArrayList();
-            for (Customer customer : CustomerControllerImpl.getInstance().getCustomers()) {
+            for (Customer customer : customerService.getCustomers()) {
                 if (customer.getCustomerName().toLowerCase().contains(searchText) ||
                         String.valueOf(customer.getCustomerId()).contains(searchText) ||
                         customer.getCustomerMobile().contains(searchText)) {
@@ -138,9 +144,8 @@ public class CustomerViewController implements Initializable {
         }
     }
 
-
     private void populateTable() {
-        List<Customer> customers = CustomerControllerImpl.getInstance().getCustomers();
+        List<Customer> customers = customerService.getCustomers();
         ObservableList<Customer> observableCustomers = FXCollections.observableList(customers);
         tblCustomerDetails.setItems(observableCustomers);
     }
@@ -161,7 +166,7 @@ public class CustomerViewController implements Initializable {
     }
 
     private void deleteCustomer(Customer customer) {
-        boolean isDeleted = CustomerControllerImpl.getInstance().deleteCustomer(customer.getCustomerId());
+        boolean isDeleted = customerService.deleteCustomer(customer.getCustomerId());
         if (isDeleted) {
             tblCustomerDetails.getItems().remove(customer);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

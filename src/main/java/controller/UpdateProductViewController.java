@@ -15,8 +15,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Product;
 import model.Supplier;
-import service.custom.impl.ProductControllerImpl;
-import service.custom.impl.SupplierControllerImpl;
+import service.ServiceFactory;
+import service.custom.ProductService;
+import service.custom.SupplierService;
+import service.custom.impl.ProductServiceImpl;
+import service.custom.impl.SupplierServiceImpl;
+import util.ServiceType;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +28,9 @@ import java.util.List;
 
 
 public class UpdateProductViewController {
+    ProductService productService = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
+    SupplierService supplierService = ServiceFactory.getInstance().getService(ServiceType.SUPPLIER);
+
     private Product product;
 
     public void setProduct(Product product) {
@@ -127,7 +134,7 @@ public class UpdateProductViewController {
                     supplierID
             );
 
-            boolean isProductUpdated = ProductControllerImpl.getInstance().updateProduct(updatedProduct);
+            boolean isProductUpdated = productService.updateProduct(updatedProduct);
 
             Alert alert = new Alert(isProductUpdated ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
             alert.setTitle(isProductUpdated ? "Successfully Updated" : "Update Error");
@@ -144,7 +151,7 @@ public class UpdateProductViewController {
     }
 
     private void loadProductSupplierComboBox() {
-        List<Supplier> supplierList = SupplierControllerImpl.getInstance().getSuppliers();
+        List<Supplier> supplierList = supplierService.getSuppliers();
         ObservableList<String> supplierObservableList = FXCollections.observableArrayList();
         for (Supplier supplier : supplierList) {
             supplierObservableList.add(supplier.getSupplierId() + " - " + supplier.getSupplierName() + " - " + supplier.getSupplierCompany());

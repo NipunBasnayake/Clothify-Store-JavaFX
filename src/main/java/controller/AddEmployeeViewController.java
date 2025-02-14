@@ -7,12 +7,17 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import model.Employee;
-import service.custom.impl.EmployeeControllerImpl;
+import service.ServiceFactory;
+import service.custom.EmployeeService;
+import service.custom.impl.EmployeeServiceImpl;
+import util.ServiceType;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AddEmployeeViewController implements Initializable {
+
+    EmployeeService employeeService = ServiceFactory.getInstance().getService(ServiceType.EMPLOYEE);
 
     @FXML
     private ComboBox cmbAddEmployeeRole;
@@ -25,7 +30,7 @@ public class AddEmployeeViewController implements Initializable {
 
     @FXML
     void btnSaveEmployeeOnAction(ActionEvent event) {
-        boolean isEmployeeAdded = EmployeeControllerImpl.getInstance().addEmployee(new Employee(
+        boolean isEmployeeAdded = employeeService.addEmployee(new Employee(
                 1,
                 txtAddEmployeeName.getText(),
                 txtAddEmployeeEmail.getText(),

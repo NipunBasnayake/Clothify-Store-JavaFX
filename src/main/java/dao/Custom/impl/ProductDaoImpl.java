@@ -1,8 +1,8 @@
-package service.custom.impl;
+package dao.Custom.impl;
 
+import dao.Custom.ProductDao;
 import db.DBConnection;
 import model.Product;
-import service.custom.ProductServices;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,14 +10,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductControllerImpl implements ProductServices {
-    private static ProductControllerImpl productControllerImpl;
+public class ProductDaoImpl implements ProductDao {
+    private static ProductDaoImpl productDaoImpl;
 
-    public static ProductControllerImpl getInstance() {
-        if (productControllerImpl == null) {
-            productControllerImpl = new ProductControllerImpl();
+    public static ProductDaoImpl getInstance() {
+        if (productDaoImpl == null) {
+            productDaoImpl = new ProductDaoImpl();
         }
-        return productControllerImpl;
+        return productDaoImpl;
     }
 
     @Override
