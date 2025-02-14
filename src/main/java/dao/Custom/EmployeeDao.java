@@ -1,7 +1,7 @@
 package dao.Custom;
 
 import dao.SuperDao;
-import model.Employee;
+import dto.Employee;
 
 import java.util.List;
 

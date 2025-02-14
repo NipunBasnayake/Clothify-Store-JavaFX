@@ -2,7 +2,7 @@ package dao.Custom.impl;
 
 import dao.Custom.OrderDao;
 import db.DBConnection;
-import model.Order;
+import dto.Order;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

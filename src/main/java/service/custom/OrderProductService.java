@@ -1,6 +1,6 @@
 package service.custom;
 
-import model.OrderProduct;
+import dto.OrderProduct;
 import service.SuperService;
 
 import java.util.List;

@@ -1,17 +1,11 @@
 package service.custom.impl;
 
 import dao.Custom.EmployeeDao;
-import dao.Custom.impl.EmployeeDaoImpl;
 import dao.DaoFactory;
-import db.DBConnection;
-import model.Employee;
+import dto.Employee;
 import service.custom.EmployeeService;
 import util.DaoType;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeServiceImpl implements EmployeeService {

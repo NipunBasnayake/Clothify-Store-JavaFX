@@ -17,10 +17,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import lombok.Setter;
-import model.Product;
+import dto.Product;
 import service.ServiceFactory;
 import service.custom.ProductService;
-import service.custom.impl.ProductServiceImpl;
 import util.ServiceType;
 
 import java.io.IOException;

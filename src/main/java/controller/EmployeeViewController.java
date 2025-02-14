@@ -11,10 +11,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import model.Employee;
+import dto.Employee;
 import service.ServiceFactory;
 import service.custom.EmployeeService;
-import service.custom.impl.EmployeeServiceImpl;
 import util.ServiceType;
 
 import java.io.IOException;

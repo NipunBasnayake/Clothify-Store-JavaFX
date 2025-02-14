@@ -9,10 +9,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import model.*;
+import dto.*;
 import service.ServiceFactory;
 import service.custom.*;
-import service.custom.impl.*;
 import util.ServiceType;
 
 import java.net.URL;

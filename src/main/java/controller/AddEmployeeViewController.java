@@ -6,10 +6,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import model.Employee;
+import dto.Employee;
 import service.ServiceFactory;
 import service.custom.EmployeeService;
-import service.custom.impl.EmployeeServiceImpl;
 import util.ServiceType;
 
 import java.net.URL;

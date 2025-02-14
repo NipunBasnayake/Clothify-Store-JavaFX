@@ -1,6 +1,6 @@
 package service.custom;
 
-import model.Supplier;
+import dto.Supplier;
 import service.SuperService;
 
 import java.util.List;

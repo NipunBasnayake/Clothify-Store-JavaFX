@@ -2,15 +2,10 @@ package service.custom.impl;
 
 import dao.Custom.ProductDao;
 import dao.DaoFactory;
-import db.DBConnection;
-import model.Product;
+import dto.Product;
 import service.custom.ProductService;
 import util.DaoType;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductServiceImpl implements ProductService {

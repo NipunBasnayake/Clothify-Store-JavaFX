@@ -2,7 +2,8 @@ package dao.Custom.impl;
 
 import dao.Custom.CustomerDao;
 import db.DBConnection;
-import model.Customer;
+import dto.Customer;
+import entity.CustomerEntity;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,34 +22,13 @@ public class CustomerDaoImpl implements CustomerDao {
     }
 
     @Override
-    public List<Customer> getCustomers() {
-        String query = "SELECT * FROM customers";
-        List<Customer> customers = new ArrayList<>();
-        try {
-            ResultSet resultSet = DBConnection.getInstance().getConnection().createStatement().executeQuery(query);
-            while (resultSet.next()) {
-                Customer customer = new Customer(
-                        resultSet.getInt(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3),
-                        resultSet.getString(4)
-                );
-                customers.add(customer);
-            }
-        } catch (SQLException e) {
-            return null;
-        }
-        return customers;
-    }
-
-    @Override
-    public boolean addCustomer(Customer customer) {
+    public boolean save(CustomerEntity entity) {
         String query = "INSERT INTO customers (name, MobileNumber, Address) VALUES (?,?,?)";
         try {
             PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
-            statement.setString(1, customer.getCustomerName());
-            statement.setString(2, customer.getCustomerMobile());
-            statement.setString(3, customer.getCustomerAddress());
+            statement.setString(1, entity.getCustomerName());
+            statement.setString(2, entity.getCustomerMobile());
+            statement.setString(3, entity.getCustomerAddress());
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             return false;
@@ -56,15 +36,15 @@ public class CustomerDaoImpl implements CustomerDao {
     }
 
     @Override
-    public Customer getCustomerById(int id) {
+    public CustomerEntity search(String id) {
         String query = "SELECT id, name, MobileNumber, Address FROM customers WHERE id = ?";
-        Customer customer = null;
+        CustomerEntity customer = null;
 
         try (PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query)) {
-            statement.setInt(1, id);
+            statement.setInt(1, Integer.parseInt(id));
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    customer = new Customer(
+                    customer = new CustomerEntity(
                             resultSet.getInt(1),
                             resultSet.getString(2),
                             resultSet.getString(3),
@@ -73,19 +53,31 @@ public class CustomerDaoImpl implements CustomerDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error fetching customer by ID", e);
+            return null;
         }
         return customer;
     }
 
     @Override
-    public boolean updateCustomer(Customer customer) {
+    public boolean delete(String id) {
+        String query = "DELETE FROM customers WHERE id = ?";
+        try {
+            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+            statement.setInt(1, Integer.parseInt(id));
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean update(CustomerEntity entity) {
         String query = "UPDATE customers SET name = ?, MobileNumber = ?, Address = ? WHERE id = ?";
         try (PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query)) {
-            statement.setString(1, customer.getCustomerName());
-            statement.setString(2, customer.getCustomerMobile());
-            statement.setString(3, customer.getCustomerAddress());
-            statement.setInt(4, customer.getCustomerId());
+            statement.setString(1, entity.getCustomerName());
+            statement.setString(2, entity.getCustomerMobile());
+            statement.setString(3, entity.getCustomerAddress());
+            statement.setInt(4, entity.getCustomerId());
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -94,15 +86,23 @@ public class CustomerDaoImpl implements CustomerDao {
     }
 
     @Override
-    public boolean deleteCustomer(int customerId) {
-        String query = "DELETE FROM customers WHERE id = ?";
+    public List<CustomerEntity> getAll() {
+        String query = "SELECT * FROM customers";
+        List<CustomerEntity> customers = new ArrayList<>();
         try {
-            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
-            statement.setInt(1, customerId);
-            return statement.executeUpdate() > 0;
+            ResultSet resultSet = DBConnection.getInstance().getConnection().createStatement().executeQuery(query);
+            while (resultSet.next()) {
+                CustomerEntity entity = new CustomerEntity(
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4)
+                );
+                customers.add(entity);
+            }
         } catch (SQLException e) {
-            return false;
+            return null;
         }
+        return customers;
     }
-
 }

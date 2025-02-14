@@ -1,4 +1,4 @@
-package model;
+package entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 
-public class Product {
+public class ProductEntity {
     private int productID;
     private String productName;
     private String productCategory;

@@ -2,15 +2,10 @@ package service.custom.impl;
 
 import dao.Custom.SupplierDao;
 import dao.DaoFactory;
-import db.DBConnection;
-import model.Supplier;
+import dto.Supplier;
 import service.custom.SupplierService;
 import util.DaoType;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SupplierServiceImpl implements SupplierService {

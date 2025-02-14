@@ -2,7 +2,7 @@ package dao.Custom.impl;
 
 import dao.Custom.LoginSignUpDao;
 import db.DBConnection;
-import model.User;
+import dto.User;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

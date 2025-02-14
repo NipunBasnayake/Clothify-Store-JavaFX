@@ -2,14 +2,9 @@ package service.custom.impl;
 
 import dao.Custom.LoginSignUpDao;
 import dao.DaoFactory;
-import db.DBConnection;
-import model.User;
+import dto.User;
 import service.custom.LoginSignupService;
 import util.DaoType;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class LoginSignUpServiceImpl implements LoginSignupService {
     private static LoginSignUpServiceImpl loginSignUpController;

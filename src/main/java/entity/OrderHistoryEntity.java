@@ -1,4 +1,4 @@
-package model;
+package entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,11 +11,14 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Order {
+public class OrderHistoryEntity {
     private int orderId;
     private Date orderDate;
-    private Double totalPrice;
+    private String productName;
+    private Double unitPrice;
+    private int quantity;
+    private Double totalAmount;
     private String paymentMethod;
-    private int employeeId;
-    private int customerId;
+    private String customerName;
+    private String employeeName;
 }

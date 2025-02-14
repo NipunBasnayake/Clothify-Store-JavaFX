@@ -5,10 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import model.Employee;
+import dto.Employee;
 import service.ServiceFactory;
 import service.custom.EmployeeService;
-import service.custom.impl.EmployeeServiceImpl;
 import util.ServiceType;
 
 public class UpdateEmployeeViewController {

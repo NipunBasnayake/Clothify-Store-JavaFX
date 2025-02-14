@@ -4,10 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import model.Customer;
+import dto.Customer;
 import service.ServiceFactory;
 import service.custom.CustomerService;
-import service.custom.impl.CustomerServiceImpl;
 import util.ServiceType;
 
 public class AddCustomerViewController {

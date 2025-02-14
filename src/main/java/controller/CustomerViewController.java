@@ -10,10 +10,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import model.Customer;
+import dto.Customer;
 import service.ServiceFactory;
 import service.custom.CustomerService;
-import service.custom.impl.CustomerServiceImpl;
 import util.ServiceType;
 
 import java.io.IOException;

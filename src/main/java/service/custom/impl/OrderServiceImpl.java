@@ -2,16 +2,10 @@ package service.custom.impl;
 
 import dao.Custom.OrderDao;
 import dao.DaoFactory;
-import db.DBConnection;
-import model.Order;
+import dto.Order;
 import service.custom.OrderService;
 import util.DaoType;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {

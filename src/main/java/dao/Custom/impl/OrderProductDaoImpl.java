@@ -2,7 +2,7 @@ package dao.Custom.impl;
 
 import dao.Custom.OrderProductDao;
 import db.DBConnection;
-import model.OrderProduct;
+import dto.OrderProduct;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

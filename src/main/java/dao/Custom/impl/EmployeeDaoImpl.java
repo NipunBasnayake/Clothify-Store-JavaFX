@@ -2,7 +2,7 @@ package dao.Custom.impl;
 
 import dao.Custom.EmployeeDao;
 import db.DBConnection;
-import model.Employee;
+import dto.Employee;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -14,10 +14,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import model.User;
+import dto.User;
 import service.ServiceFactory;
 import service.custom.LoginSignupService;
-import service.custom.impl.LoginSignUpServiceImpl;
 import util.ServiceType;
 
 import javax.mail.*;

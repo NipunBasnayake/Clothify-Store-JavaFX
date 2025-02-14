@@ -13,13 +13,11 @@ import javafx.scene.control.TextField;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import model.Product;
-import model.Supplier;
+import dto.Product;
+import dto.Supplier;
 import service.ServiceFactory;
 import service.custom.ProductService;
 import service.custom.SupplierService;
-import service.custom.impl.ProductServiceImpl;
-import service.custom.impl.SupplierServiceImpl;
 import util.ServiceType;
 
 import java.io.File;
