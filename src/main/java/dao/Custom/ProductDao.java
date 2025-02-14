@@ -1,14 +1,12 @@
 package dao.Custom;
 
+import dao.CrudDao;
 import dao.SuperDao;
 import dto.Product;
+import entity.ProductEntity;
 
 import java.util.List;
 
-public interface ProductDao extends SuperDao {
-    List<Product> getProducts();
-    boolean addProduct(Product product);
-    boolean updateProduct(Product product);
-    boolean deleteProduct(Integer productId);
-    Product getProductById(Integer productId);
+public interface ProductDao extends CrudDao<ProductEntity, Integer> {
+
 }
