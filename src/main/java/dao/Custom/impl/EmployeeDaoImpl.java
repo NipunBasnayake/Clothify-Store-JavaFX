@@ -3,6 +3,7 @@ package dao.Custom.impl;
 import dao.Custom.EmployeeDao;
 import db.DBConnection;
 import dto.Employee;
+import entity.EmployeeEntity;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,13 +22,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public boolean addEmployee(Employee employee) {
+    public boolean save(EmployeeEntity entity) {
         try {
             String query = "INSERT INTO employee (Name, Email, Role) VALUES (?,?,?)";
             PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
-            statement.setString(1, employee.getEmployeeName());
-            statement.setString(2, employee.getEmployeeEmail());
-            statement.setString(3, employee.getEmployeeRole());
+            statement.setString(1, entity.getEmployeeName());
+            statement.setString(2, entity.getEmployeeEmail());
+            statement.setString(3, entity.getEmployeeRole());
             return statement.executeUpdate()>0;
         } catch (SQLException e) {
             return false;
@@ -35,14 +36,36 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public boolean updateEmployee(Employee employee) {
+    public EmployeeEntity search(String id) {
+        for (EmployeeEntity employee : getAll()) {
+            if (String.valueOf(employee.getEmployeeId()).equals(id)) {
+                return employee;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean delete(String id) {
+        String query = "DELETE FROM employee WHERE EmployeeID = ?";
+        try {
+            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+            statement.setInt(1, Integer.parseInt(id));
+            return statement.executeUpdate()>0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean update(EmployeeEntity entity) {
         String query = "Update employee set Name = ?, Email = ?, Role = ? where EmployeeID = ?";
         try {
             PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
-            statement.setString(1, employee.getEmployeeName());
-            statement.setString(2, employee.getEmployeeEmail());
-            statement.setString(3, employee.getEmployeeRole());
-            statement.setInt(4, employee.getEmployeeId());
+            statement.setString(1, entity.getEmployeeName());
+            statement.setString(2, entity.getEmployeeEmail());
+            statement.setString(3, entity.getEmployeeRole());
+            statement.setInt(4, entity.getEmployeeId());
             return statement.executeUpdate()>0;
         } catch (SQLException e) {
             return false;
@@ -50,13 +73,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public List<Employee> getEmployees() {
+    public List<EmployeeEntity> getAll() {
         String query = "SELECT * FROM employee";
-        List<Employee> employees = new ArrayList<>();
+        List<EmployeeEntity> employees = new ArrayList<>();
         try {
             ResultSet resultSet = DBConnection.getInstance().getConnection().createStatement().executeQuery(query);
             while (resultSet.next()) {
-                Employee employee = new Employee(
+                EmployeeEntity employee = new EmployeeEntity(
                         resultSet.getInt(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
@@ -69,27 +92,4 @@ public class EmployeeDaoImpl implements EmployeeDao {
             return null;
         }
     }
-
-    @Override
-    public boolean deleteEmployee(int employeeId) {
-        String query = "DELETE FROM employee WHERE EmployeeID = ?";
-        try {
-            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
-            statement.setInt(1, employeeId);
-            return statement.executeUpdate()>0;
-        } catch (SQLException e) {
-            return false;
-        }
-    }
-
-    @Override
-    public Employee getEmployeeById(int employeeId) {
-        for (Employee employee : getEmployees()) {
-            if (employee.getEmployeeId() == employeeId) {
-                return employee;
-            }
-        }
-        return null;
-    }
-
 }

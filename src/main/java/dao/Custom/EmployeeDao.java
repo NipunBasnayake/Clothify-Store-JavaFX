@@ -1,14 +1,12 @@
 package dao.Custom;
 
+import dao.CrudDao;
 import dao.SuperDao;
 import dto.Employee;
+import entity.EmployeeEntity;
 
 import java.util.List;
 
-public interface EmployeeDao extends SuperDao {
-    boolean addEmployee (Employee employee);
-    boolean updateEmployee (Employee employee);
-    List<Employee> getEmployees();
-    boolean deleteEmployee (int employeeId);
-    Employee getEmployeeById (int employeeId);
+public interface EmployeeDao extends CrudDao<EmployeeEntity, String> {
+
 }
