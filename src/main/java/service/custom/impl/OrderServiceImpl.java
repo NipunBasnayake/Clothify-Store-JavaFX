@@ -3,9 +3,12 @@ package service.custom.impl;
 import dao.Custom.OrderDao;
 import dao.DaoFactory;
 import dto.Order;
+import entity.OrderEntity;
+import org.modelmapper.ModelMapper;
 import service.custom.OrderService;
 import util.DaoType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
@@ -27,13 +30,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getOrders() {
-        return orderDao.getOrders();
+        List<OrderEntity> orderEntities = orderDao.getAll();
+        List<Order> orders = new ArrayList<>();
+        orderEntities.forEach(orderEntity -> {
+            orders.add(new ModelMapper().map(orderEntity, Order.class));
+        });
+        return orders;
     }
 
     @Override
     public Order getOrder(int orderId) {
-        return orderDao.getOrder(orderId);
+        OrderEntity orderEntity = orderDao.search(String.valueOf(orderId));
+        return new ModelMapper().map(orderEntity,Order.class);
     }
-
-
 }

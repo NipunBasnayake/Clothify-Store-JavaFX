@@ -3,6 +3,7 @@ package dao.Custom.impl;
 import dao.Custom.OrderDao;
 import db.DBConnection;
 import dto.Order;
+import entity.OrderEntity;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,14 +26,11 @@ public class OrderDaoImpl implements OrderDao {
     public int getLastOrderId() {
         String query = "SELECT OrderID FROM orders ORDER BY OrderID DESC LIMIT 1";
         int lastOrderId = -1;
-
         try (Statement stmt = DBConnection.getInstance().getConnection().createStatement();
              ResultSet resultSet = stmt.executeQuery(query)) {
-
             if (resultSet.next()) {
                 lastOrderId = resultSet.getInt("OrderID");
             }
-
         } catch (SQLException e) {
             throw new RuntimeException("Error fetching last OrderID", e);
         }
@@ -40,37 +38,20 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> getOrders() {
-        String query = "SELECT OrderID, OrderDate, TotalCost, PaymentType, EmployeeID, customerId FROM orders;";
-        List<Order> orders = new ArrayList<>();
-        try {
-            ResultSet resultSet = DBConnection.getInstance().getConnection().createStatement().executeQuery(query);
-            while (resultSet.next()) {
-                orders.add(new Order(
-                        resultSet.getInt(1),
-                        resultSet.getDate(2),
-                        resultSet.getDouble(3),
-                        resultSet.getString(4),
-                        resultSet.getInt(5),
-                        resultSet.getInt(6)
-                ));
-            }
-        } catch (SQLException e) {
-            return null;
-        }
-        return orders;
+    public boolean save(OrderEntity entity) {
+        return false;
     }
 
     @Override
-    public Order getOrder(int orderId) {
+    public OrderEntity search(String id) {
         String query = "SELECT * FROM orders WHERE OrderID = ?";
         try {
             PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
-            statement.setInt(1, orderId);
+            statement.setInt(1, Integer.parseInt(id));
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                return new Order(
+                return new OrderEntity(
                         resultSet.getInt(1),
                         resultSet.getDate(2),
                         resultSet.getDouble(3),
@@ -85,4 +66,35 @@ public class OrderDaoImpl implements OrderDao {
         }
     }
 
+    @Override
+    public boolean delete(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean update(OrderEntity entity) {
+        return false;
+    }
+
+    @Override
+    public List<OrderEntity> getAll() {
+        String query = "SELECT OrderID, OrderDate, TotalCost, PaymentType, EmployeeID, customerId FROM orders;";
+        List<OrderEntity> orders = new ArrayList<>();
+        try {
+            ResultSet resultSet = DBConnection.getInstance().getConnection().createStatement().executeQuery(query);
+            while (resultSet.next()) {
+                orders.add(new OrderEntity(
+                        resultSet.getInt(1),
+                        resultSet.getDate(2),
+                        resultSet.getDouble(3),
+                        resultSet.getString(4),
+                        resultSet.getInt(5),
+                        resultSet.getInt(6)
+                ));
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+        return orders;
+    }
 }
