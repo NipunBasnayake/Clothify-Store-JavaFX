@@ -3,6 +3,7 @@ package dao.Custom.impl;
 import dao.Custom.SupplierDao;
 import db.DBConnection;
 import dto.Supplier;
+import entity.SupplierEntity;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,13 +22,61 @@ public class SupplierDaoImpl implements SupplierDao {
     }
 
     @Override
-    public List<Supplier> getSuppliers() {
+    public boolean save(SupplierEntity entity) {
+        String query = "INSERT INTO supplier (Name, Company, Email, Item) VALUES (?,?,?,?)";
+        try {
+            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+            statement.setString(1, entity.getSupplierName());
+            statement.setString(2, entity.getSupplierCompany());
+            statement.setString(3, entity.getSupplierEmail());
+            statement.setString(4, entity.getSupplyItem());
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public SupplierEntity search(Integer integer) {
+        return null;
+    }
+
+    @Override
+    public boolean delete(Integer supplierId) {
+        String query = "DELETE FROM supplier WHERE SupplierID = ?";
+        try {
+            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+            statement.setInt(1, supplierId);
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean update(SupplierEntity entity) {
+        String query = "Update supplier SET Name = ?, Company = ?, Email = ?, Item = ? WHERE SupplierID = ?";
+        try {
+            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+            statement.setString(1, entity.getSupplierName());
+            statement.setString(2, entity.getSupplierCompany());
+            statement.setString(3, entity.getSupplierEmail());
+            statement.setString(4, entity.getSupplyItem());
+            statement.setInt(5, entity.getSupplierId());
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public List<SupplierEntity> getAll() {
         String query = "SELECT * FROM supplier";
-        List<Supplier> suppliers = new ArrayList<>();
+        List<SupplierEntity> suppliers = new ArrayList<>();
         try {
             ResultSet resultSet = DBConnection.getInstance().getConnection().createStatement().executeQuery(query);
             while (resultSet.next()) {
-                Supplier supplier = new Supplier(
+                SupplierEntity supplier = new SupplierEntity(
                         resultSet.getInt(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
@@ -41,48 +90,4 @@ public class SupplierDaoImpl implements SupplierDao {
         }
         return suppliers;
     }
-
-    @Override
-    public boolean addSupplier(Supplier supplier) {
-        String query = "INSERT INTO supplier (Name, Company, Email, Item) VALUES (?,?,?,?)";
-        try {
-            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
-            statement.setString(1, supplier.getSupplierName());
-            statement.setString(2, supplier.getSupplierCompany());
-            statement.setString(3, supplier.getSupplierEmail());
-            statement.setString(4, supplier.getSupplyItem());
-            return statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean updateSupplier(Supplier supplier) {
-        String query = "Update supplier SET Name = ?, Company = ?, Email = ?, Item = ? WHERE SupplierID = ?";
-        try {
-            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
-            statement.setString(1, supplier.getSupplierName());
-            statement.setString(2, supplier.getSupplierCompany());
-            statement.setString(3, supplier.getSupplierEmail());
-            statement.setString(4, supplier.getSupplyItem());
-            statement.setInt(5, supplier.getSupplierId());
-            return statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean deleteSupplier(int supplierId) {
-        String query = "DELETE FROM supplier WHERE SupplierID = ?";
-        try {
-            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
-            statement.setInt(1, supplierId);
-            return statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            return false;
-        }
-    }
-
 }

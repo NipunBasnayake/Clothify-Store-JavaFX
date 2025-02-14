@@ -1,13 +1,11 @@
 package dao.Custom;
 
+import dao.CrudDao;
 import dao.SuperDao;
 import dto.Supplier;
+import entity.SupplierEntity;
 
 import java.util.List;
 
-public interface SupplierDao extends SuperDao {
-    List<Supplier> getSuppliers();
-    boolean addSupplier(Supplier supplier);
-    boolean updateSupplier(Supplier supplier);
-    boolean deleteSupplier(int supplierId);
+public interface SupplierDao extends CrudDao<SupplierEntity, Integer> {
 }

@@ -3,9 +3,12 @@ package service.custom.impl;
 import dao.Custom.SupplierDao;
 import dao.DaoFactory;
 import dto.Supplier;
+import entity.SupplierEntity;
+import org.modelmapper.ModelMapper;
 import service.custom.SupplierService;
 import util.DaoType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SupplierServiceImpl implements SupplierService {
@@ -22,22 +25,29 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public List<Supplier> getSuppliers() {
-        return supplierDao.getSuppliers();
+        List<SupplierEntity> supplierEntities = supplierDao.getAll();
+        List<Supplier> suppliersArray = new ArrayList<>();
+        supplierEntities.forEach(supplier -> {
+            suppliersArray.add(new ModelMapper().map(supplier, Supplier.class));
+        });
+        return suppliersArray;
     }
 
     @Override
     public boolean addSupplier(Supplier supplier) {
-        return supplierDao.addSupplier(supplier);
+        SupplierEntity supplierEntity = new ModelMapper().map(supplier, SupplierEntity.class);
+        return supplierDao.save(supplierEntity);
     }
 
     @Override
     public boolean updateSupplier(Supplier supplier) {
-        return supplierDao.updateSupplier(supplier);
+        SupplierEntity supplierEntity = new ModelMapper().map(supplier, SupplierEntity.class);
+        return supplierDao.update(supplierEntity);
     }
 
     @Override
     public boolean deleteSupplier(int supplierId) {
-        return supplierDao.deleteSupplier(supplierId);
+        return supplierDao.delete(supplierId);
     }
 
 }
