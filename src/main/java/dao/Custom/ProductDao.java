@@ -8,5 +8,5 @@ import entity.ProductEntity;
 import java.util.List;
 
 public interface ProductDao extends CrudDao<ProductEntity, Integer> {
-
+    boolean updateQuantity(List<ProductEntity> entities);
 }

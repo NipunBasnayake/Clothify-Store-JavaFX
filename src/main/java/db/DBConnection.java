@@ -13,7 +13,7 @@ public class DBConnection {
     private static DBConnection dbConnection;
 
     private  DBConnection() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/clothify_store";
+        String url = "jdbc:mysql://localhost:3306/ClothifyStore";
         final String user = "root";
         final String password = "1234";
         connection = DriverManager.getConnection(url, user, password);

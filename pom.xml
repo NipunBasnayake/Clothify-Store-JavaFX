@@ -85,9 +85,12 @@
             <version>3.2.2</version>
         </dependency>
 
-
-
-
+        <!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>7.0.1</version>
+        </dependency>
 
     </dependencies>
 

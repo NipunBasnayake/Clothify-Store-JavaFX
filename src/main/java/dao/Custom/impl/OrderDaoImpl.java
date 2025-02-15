@@ -2,13 +2,11 @@ package dao.Custom.impl;
 
 import dao.Custom.OrderDao;
 import db.DBConnection;
-import dto.Order;
 import entity.OrderEntity;
+import entity.OrderProductEntity;
+import entity.ProductEntity;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +20,10 @@ public class OrderDaoImpl implements OrderDao {
         return orderDaoImpl;
     }
 
+
     @Override
     public int getLastOrderId() {
-        String query = "SELECT OrderID FROM orders ORDER BY OrderID DESC LIMIT 1";
+        String query = "SELECT orderId FROM orders ORDER BY orderId DESC LIMIT 1";
         int lastOrderId = -1;
         try (Statement stmt = DBConnection.getInstance().getConnection().createStatement();
              ResultSet resultSet = stmt.executeQuery(query)) {
@@ -39,12 +38,59 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public boolean save(OrderEntity entity) {
-        return false;
+        System.out.println(entity.toString());
+        Connection connection = null;
+        try {
+            String query = "INSERT INTO orders (orderDate, totalAmount, paymentMethod, employeeId, customerId) VALUES (?, ?, ?, ?, ?)";
+            try {
+                connection = DBConnection.getInstance().getConnection();
+                connection.setAutoCommit(false);
+
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.setDate(1, entity.getOrderDate());
+                statement.setDouble(2, entity.getTotalPrice());
+                statement.setString(3, entity.getPaymentMethod());
+                statement.setInt(4, entity.getEmployeeId());
+                statement.setInt(5, entity.getCustomerId());
+                boolean isOrderSaved = statement.executeUpdate() > 0;
+
+                List<OrderProductEntity> orderProductEntities = new ArrayList<>();
+                List<ProductEntity> productEntities = new ArrayList<>();
+
+                for (ProductEntity productEntity : entity.getProductEntities()) {
+                    orderProductEntities.add(new OrderProductEntity(1, entity.getOrderId(), productEntity.getProductID(), productEntity.getProductQuantity()));
+                    productEntities.add(productEntity);
+                }
+
+                if (isOrderSaved) {
+                    OrderDetailsDaoImpl orderDetailsDaoImpl = new OrderDetailsDaoImpl();
+                    boolean isOrderProductSaved = orderDetailsDaoImpl.save(orderProductEntities);
+                    if (isOrderProductSaved) {
+                        ProductDaoImpl productDaoImpl = new ProductDaoImpl();
+                        productDaoImpl.updateQuantity(productEntities);
+                        if (isOrderProductSaved) {
+                            connection.commit();
+                            return true;
+                        }
+                    }
+                }
+                connection.rollback();
+                return false;
+            } catch (SQLException e) {
+                return false;
+            }
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override
     public OrderEntity search(String id) {
-        String query = "SELECT * FROM orders WHERE OrderID = ?";
+        String query = "SELECT * FROM orders WHERE orderId = ?";
         try {
             PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
             statement.setInt(1, Integer.parseInt(id));
@@ -57,7 +103,8 @@ public class OrderDaoImpl implements OrderDao {
                         resultSet.getDouble(3),
                         resultSet.getString(4),
                         resultSet.getInt(5),
-                        resultSet.getInt(6)
+                        resultSet.getInt(6),
+                        List.of()
                 );
             }
             return null;
@@ -78,7 +125,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<OrderEntity> getAll() {
-        String query = "SELECT OrderID, OrderDate, TotalCost, PaymentType, EmployeeID, customerId FROM orders;";
+        String query = "SELECT orderId, orderDate, totalAmount, paymentMethod, employeeId, customerId FROM orders;";
         List<OrderEntity> orders = new ArrayList<>();
         try {
             ResultSet resultSet = DBConnection.getInstance().getConnection().createStatement().executeQuery(query);
@@ -89,7 +136,8 @@ public class OrderDaoImpl implements OrderDao {
                         resultSet.getDouble(3),
                         resultSet.getString(4),
                         resultSet.getInt(5),
-                        resultSet.getInt(6)
+                        resultSet.getInt(6),
+                        List.of()
                 ));
             }
         } catch (SQLException e) {

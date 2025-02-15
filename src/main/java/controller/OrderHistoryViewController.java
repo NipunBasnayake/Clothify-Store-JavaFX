@@ -67,7 +67,7 @@ public class OrderHistoryViewController implements Initializable {
 
     private void populateTable() {
         List<Order> orders = orderService.getOrders();
-        List<OrderProduct> orderProducts = orderProductService.getOrderProducts();
+        List<OrderDetails> orderDetails = orderProductService.getOrderProducts();
 
        orderHistoryItems = FXCollections.observableArrayList();
 
@@ -75,7 +75,7 @@ public class OrderHistoryViewController implements Initializable {
             Customer customer = customerService.getCustomerById(order.getCustomerId());
             Employee employee = employeeService.getEmployeeById(order.getEmployeeId());
 
-            for (OrderProduct op : orderProducts) {
+            for (OrderDetails op : orderDetails) {
                 Product product = productService.getProductById(op.getProductId());
 
                 orderHistoryItems.add(new OrderHistory(

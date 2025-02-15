@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -11,5 +12,10 @@
             <Font name="Bodoni MT" size="48.0" />
          </font>
       </Label>
+      <JFXButton layoutX="241.0" layoutY="204.0" onAction="#btnCustomerReportsOnAction" prefHeight="76.0" prefWidth="208.0" text="Customer Reports">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </JFXButton>
    </children>
 </AnchorPane>

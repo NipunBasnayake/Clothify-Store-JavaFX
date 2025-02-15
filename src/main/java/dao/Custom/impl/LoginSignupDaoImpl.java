@@ -4,6 +4,7 @@ import dao.Custom.LoginSignUpDao;
 import db.DBConnection;
 import dto.User;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,31 +21,36 @@ public class LoginSignupDaoImpl implements LoginSignUpDao {
 
 
     @Override
-    public User login(String email, String password) {
-        try {
-            ResultSet resultSet = DBConnection.getInstance().getConnection().createStatement().executeQuery("SELECT * FROM user WHERE email ='" + email + "'");
-            if (resultSet.next()) {
-                if (resultSet.getString("password").equals(password)) {
-                    return new User(
-                            resultSet.getInt("UserID"),
-                            resultSet.getString("name"),
-                            resultSet.getString("Email"),
-                            resultSet.getString("Password"),
-                            resultSet.getString("Role"),
-                            resultSet.getString("RegDate")
-                    );
+        public User login(String email, String password) {
+            String query = "SELECT * FROM employee WHERE email = ? AND password = ?";
+            try {
+                PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+                statement.setString(1, email);
+                statement.setString(2, password);
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return new User(
+                                resultSet.getInt("userId"),
+                                resultSet.getString("name"),
+                                resultSet.getString("email"),
+                                resultSet.getString("password"),
+                                resultSet.getString("role"),
+                                resultSet.getString("registrationDate")
+                        );
+                    }
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Database error during login.");
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return null;
         }
-        return null;
-    }
 
     @Override
     public boolean updatePassword(String email, String password) {
-        System.out.println(email +" - "+ password);
-        try (PreparedStatement preparedStatement = DBConnection.getInstance().getConnection().prepareStatement("UPDATE user SET password = ? WHERE email = ?")) {
+        String query = "UPDATE user SET password = ? WHERE email = ?";
+        try (PreparedStatement preparedStatement = DBConnection.getInstance().getConnection().prepareStatement(query)) {
             preparedStatement.setString(1, password);
             preparedStatement.setString(2, email);
             return preparedStatement.executeUpdate() > 0;
@@ -53,4 +59,5 @@ public class LoginSignupDaoImpl implements LoginSignUpDao {
             return false;
         }
     }
+
 }

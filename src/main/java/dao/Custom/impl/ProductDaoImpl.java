@@ -5,6 +5,7 @@ import db.DBConnection;
 import dto.Product;
 import entity.ProductEntity;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +24,7 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public boolean save(ProductEntity entity) {
-        String query = "INSERT INTO product (ProductName, Category, Size, Price, Quantity, Image, SupplierID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO product (productName, category, size, price, quantity, imageUrl, supplierId) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
             statement.setString(1, entity.getProductName());
@@ -51,7 +52,7 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public boolean delete(Integer id) {
-        String query = "DELETE FROM product WHERE ProductID = ?";
+        String query = "DELETE FROM product WHERE productId = ?";
         try {
             PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
             statement.setInt(1, id);
@@ -63,7 +64,7 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public boolean update(ProductEntity entity) {
-        String query = "UPDATE product SET ProductName = ?, Category = ?, Size = ?, Price = ?, Quantity = ?, Image = ?, SupplierID = ? WHERE ProductID = ?";
+        String query = "UPDATE product SET productName = ?, category = ?, size = ?, price = ?, quantity = ?, imageUrl = ?, supplierId = ? WHERE productId = ?";
         try {
             PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
             statement.setString(1, entity.getProductName());
@@ -104,4 +105,11 @@ public class ProductDaoImpl implements ProductDao {
         }
         return products;
     }
+
+    @Override
+    public boolean updateQuantity(List<ProductEntity> entities) {
+
+        return false;
+    }
+
 }

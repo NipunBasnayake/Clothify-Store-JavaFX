@@ -24,7 +24,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public boolean save(EmployeeEntity entity) {
         try {
-            String query = "INSERT INTO employee (Name, Email, Role) VALUES (?,?,?)";
+            String query = "INSERT INTO employee (name, email, role) VALUES (?,?,?)";
             PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
             statement.setString(1, entity.getEmployeeName());
             statement.setString(2, entity.getEmployeeEmail());
@@ -47,7 +47,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public boolean delete(String id) {
-        String query = "DELETE FROM employee WHERE EmployeeID = ?";
+        String query = "DELETE FROM employee WHERE employeeId = ?";
         try {
             PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
             statement.setInt(1, Integer.parseInt(id));
@@ -59,7 +59,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public boolean update(EmployeeEntity entity) {
-        String query = "Update employee set Name = ?, Email = ?, Role = ? where EmployeeID = ?";
+        String query = "Update employee set name = ?, email = ?, role = ? where employeeId = ?";
         try {
             PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
             statement.setString(1, entity.getEmployeeName());

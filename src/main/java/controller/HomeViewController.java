@@ -29,7 +29,6 @@ public class HomeViewController implements Initializable {
 
     private void setUserButton(){
         btnUserName.setText(currentUser.getUserName());
-        System.out.println(currentUser.getUserName());
     }
 
     @FXML
@@ -171,7 +170,6 @@ public class HomeViewController implements Initializable {
     }
 
     public void btnSupplierManagementOnAction(ActionEvent actionEvent) {
-        System.out.println("Supplier Management");
         try {
             AnchorPane pane = new FXMLLoader().load(getClass().getResource("/view/supplier-management-view.fxml"));
             paneLoadFXML.getChildren().clear();

@@ -23,7 +23,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
     @Override
     public boolean save(CustomerEntity entity) {
-        String query = "INSERT INTO customers (name, MobileNumber, Address) VALUES (?,?,?)";
+        String query = "INSERT INTO customer (name, mobileNumber, address) VALUES (?,?,?)";
         try {
             PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
             statement.setString(1, entity.getCustomerName());
@@ -37,7 +37,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
     @Override
     public CustomerEntity search(String id) {
-        String query = "SELECT id, name, MobileNumber, Address FROM customers WHERE id = ?";
+        String query = "SELECT customerId, name, mobileNumber, address FROM customer WHERE customerId = ?";
         CustomerEntity customer = null;
 
         try (PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query)) {
@@ -60,7 +60,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
     @Override
     public boolean delete(String id) {
-        String query = "DELETE FROM customers WHERE id = ?";
+        String query = "DELETE FROM customer WHERE customerId = ?";
         try {
             PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
             statement.setInt(1, Integer.parseInt(id));
@@ -72,13 +72,12 @@ public class CustomerDaoImpl implements CustomerDao {
 
     @Override
     public boolean update(CustomerEntity entity) {
-        String query = "UPDATE customers SET name = ?, MobileNumber = ?, Address = ? WHERE id = ?";
+        String query = "UPDATE customer SET name = ?, mobileNumber = ?, address = ? WHERE customerId = ?";
         try (PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query)) {
             statement.setString(1, entity.getCustomerName());
             statement.setString(2, entity.getCustomerMobile());
             statement.setString(3, entity.getCustomerAddress());
             statement.setInt(4, entity.getCustomerId());
-
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             return false;
@@ -87,7 +86,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
     @Override
     public List<CustomerEntity> getAll() {
-        String query = "SELECT * FROM customers";
+        String query = "SELECT customerId, name, mobileNumber, address FROM customer";
         List<CustomerEntity> customers = new ArrayList<>();
         try {
             ResultSet resultSet = DBConnection.getInstance().getConnection().createStatement().executeQuery(query);

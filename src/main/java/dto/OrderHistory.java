@@ -15,9 +15,9 @@ public class OrderHistory {
     private int orderId;
     private Date orderDate;
     private String productName;
-    private Double unitPrice;
+    private double productPrice;
     private int quantity;
-    private Double totalAmount;
+    private double totalAmount;
     private String paymentMethod;
     private String customerName;
     private String employeeName;

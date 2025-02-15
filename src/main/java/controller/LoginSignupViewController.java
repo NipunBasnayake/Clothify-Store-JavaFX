@@ -86,6 +86,9 @@ public class LoginSignupViewController {
                     HomeViewController homeViewController = loader.getController();
                     homeViewController.setCurrentUser(loginUser);
 
+                    DashboardViewController dashboardViewController = new DashboardViewController();
+                    dashboardViewController.setCurrentUser(loginUser);
+
                     stage.show();
                 } catch (IOException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);

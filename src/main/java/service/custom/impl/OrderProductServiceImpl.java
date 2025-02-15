@@ -1,14 +1,11 @@
 package service.custom.impl;
 
-import dao.Custom.OrderProductDao;
+import dao.Custom.OrderDetailsDao;
 import dao.DaoFactory;
-import dto.OrderProduct;
-import entity.OrderProductEntity;
-import org.modelmapper.ModelMapper;
+import dto.OrderDetails;
 import service.custom.OrderProductService;
 import util.DaoType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class OrderProductServiceImpl implements OrderProductService {
@@ -22,16 +19,17 @@ public class OrderProductServiceImpl implements OrderProductService {
         return orderProductControllerImpl;
     }
 
-    OrderProductDao orderProductDao = DaoFactory.getInstance().getDao(DaoType.ORDERPRODUCT);
+    OrderDetailsDao orderDetailsDao = DaoFactory.getInstance().getDao(DaoType.ORDERPRODUCT);
 
     @Override
-    public List<OrderProduct> getOrderProducts() {
-        List<OrderProductEntity> orderProductEntities = orderProductDao.getAll();
-        List<OrderProduct> orderProducts = new ArrayList<>();
-        orderProductEntities.forEach(orderProductEntity -> {
-            orderProducts.add(new ModelMapper().map(orderProductEntity, OrderProduct.class));
-        });
-        return orderProducts;
+    public List<OrderDetails> getOrderProducts() {
+//        List<OrderProductEntity> orderProductEntities = orderDetailsDao.getAll();
+//        List<OrderProduct> orderProducts = new ArrayList<>();
+//        orderProductEntities.forEach(orderProductEntity -> {
+//            orderProducts.add(new ModelMapper().map(orderProductEntity, OrderProduct.class));
+//        });
+//        return orderProducts;
+        return null;
     }
 
 }

@@ -1,11 +1,14 @@
 package entity;
 
+import dto.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.Date;
+import java.sql.Date;
+import java.util.List;
+
 
 @Data
 @AllArgsConstructor
@@ -18,4 +21,5 @@ public class OrderEntity {
     private String paymentMethod;
     private int employeeId;
     private int customerId;
+    private List<ProductEntity> productEntities;
 }

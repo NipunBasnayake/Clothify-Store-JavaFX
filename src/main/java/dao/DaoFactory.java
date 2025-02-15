@@ -19,7 +19,7 @@ public class DaoFactory {
         switch (daoType) {
             case CUSTOMERS: return (T) CustomerDaoImpl.getInstance();
             case EMPLOYEE: return (T) EmployeeDaoImpl.getInstance();
-            case ORDERPRODUCT: return (T) OrderProductDaoImpl.getInstance();
+            case ORDERPRODUCT: return (T) OrderDetailsDaoImpl.getInstance();
             case ORDERS: return (T) OrderDaoImpl.getInstance();
             case PRODUCT: return (T) ProductDaoImpl.getInstance();
             case SUPPLIER: return (T) SupplierDaoImpl.getInstance();

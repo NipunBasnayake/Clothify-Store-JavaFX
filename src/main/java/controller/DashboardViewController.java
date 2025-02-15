@@ -8,6 +8,7 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
+import dto.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -31,9 +32,6 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import dto.Customer;
-import dto.Product;
-import dto.User;
 import service.ServiceFactory;
 import service.custom.CustomerService;
 import service.custom.OrderService;
@@ -47,11 +45,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -63,10 +62,6 @@ public class DashboardViewController implements Initializable {
     OrderService orderService = ServiceFactory.getInstance().getService(ServiceType.ORDERS);
 
     private static User currentUser;
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
 
     private List<Product> productList;
     private List<Product> cartList = new ArrayList<>();
@@ -106,11 +101,32 @@ public class DashboardViewController implements Initializable {
         loadProductPanes(productList);
         loadOrderId();
         loadDateAdnTime();
+
     }
 
     @FXML
     void btnPayBillOnAction(ActionEvent event) {
-        generateBillPdf();
+//        Order order = new Order(
+//                Integer.parseInt(lblLoadOrderId.getText()),
+//                convertDateFormat(lblDate.getText()),
+//                Double.parseDouble(txtTotalAmount.getText()),
+//                "Cash",
+////                currentUser.getUserID(),
+//                1,
+//                getCustomerIdByComboBox(cmbSelectCustomer.getSelectionModel().getSelectedItem().toString()),
+//                cartList
+//        );
+//        boolean isOrderPlaced = orderService.addOrder(order);
+//        if (isOrderPlaced) {
+//            generateBillPdf();
+//            loadOrderId();
+//            loadProductPanes(productService.getProducts());
+//        }else{
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setTitle("Order Place Failed");
+//            alert.setHeaderText("Failed to Place Order");
+//            alert.show();
+//        }
     }
 
 
@@ -382,8 +398,22 @@ public class DashboardViewController implements Initializable {
         return "N/A";
     }
 
+    public static Integer getCustomerIdByComboBox(String selectedValue) {
+        if (selectedValue == null || selectedValue.isEmpty()) {
+            return -1;
+        }
+        String pattern = "^(\\d+)\\s*-";
+        Pattern regex = Pattern.compile(pattern);
+        Matcher matcher = regex.matcher(selectedValue);
+
+        if (matcher.find()) {
+            return Integer.parseInt(matcher.group(1));
+        }
+        return -1;
+    }
+
     private void loadDateAdnTime() {
-        Date date = new Date();
+        Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         lblDate.setText(formatter.format(date));
 
@@ -466,5 +496,14 @@ public class DashboardViewController implements Initializable {
         }
     }
 
+    public static Date convertDateFormat(String inputDate) {
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate localDate = LocalDate.parse(inputDate, inputFormatter);
+        return Date.valueOf(localDate);
+    }
 
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 }
