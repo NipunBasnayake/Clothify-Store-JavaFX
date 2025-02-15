@@ -17,7 +17,7 @@ public class Order {
     private Date orderDate;
     private Double totalPrice;
     private String paymentMethod;
-    private int employeeId;
+    private int userId;
     private int customerId;
     private List<OrderDetails> orderDetailsList;
 }

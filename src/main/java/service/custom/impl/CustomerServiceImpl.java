@@ -12,48 +12,74 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerServiceImpl implements CustomerService {
-    private static CustomerServiceImpl customerControllerImpl;
+    private static CustomerServiceImpl customerServiceImpl;
+    private final CustomerDao dao;
+    private final ModelMapper modelMapper;
 
-    public static CustomerServiceImpl getInstance() {
-        if (customerControllerImpl == null) {
-            customerControllerImpl = new CustomerServiceImpl();
-        }
-        return customerControllerImpl;
+    private CustomerServiceImpl() {
+        dao = DaoFactory.getInstance().getDao(DaoType.CUSTOMERS);
+        modelMapper = new ModelMapper();
     }
 
-    CustomerDao dao = DaoFactory.getInstance().getDao(DaoType.CUSTOMERS);
+    public static CustomerServiceImpl getInstance() {
+        if (customerServiceImpl == null) {
+            customerServiceImpl = new CustomerServiceImpl();
+        }
+        return customerServiceImpl;
+    }
 
     @Override
     public List<Customer> getCustomers() {
         List<CustomerEntity> customerEntities = dao.getAll();
-        ArrayList<Customer> customersArray = new ArrayList<>();
-        customerEntities.forEach(customerEntity -> {
-            customersArray.add(new ModelMapper().map(customerEntity, Customer.class));
-        });
-        return customersArray;
+        List<Customer> customers = new ArrayList<>();
+        for (CustomerEntity entity : customerEntities) {
+            customers.add(modelMapper.map(entity, Customer.class));
+        }
+        return customers;
     }
 
     @Override
     public boolean addCustomer(Customer customer) {
-        CustomerEntity customerEntity = new ModelMapper().map(customer, CustomerEntity.class);
-        return dao.save(customerEntity);
+        try {
+            CustomerEntity customerEntity = modelMapper.map(customer, CustomerEntity.class);
+            return dao.save(customerEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public Customer getCustomerById(int id) {
-        CustomerEntity entity = dao.search(String.valueOf(id));
-        return new ModelMapper().map(entity, Customer.class);
+        try {
+            CustomerEntity entity = dao.search(String.valueOf(id));
+            if (entity != null) {
+                return modelMapper.map(entity, Customer.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public boolean updateCustomer(Customer customer) {
-        CustomerEntity customerEntity = new ModelMapper().map(customer, CustomerEntity.class);
-        return dao.update(customerEntity);
+        try {
+            CustomerEntity customerEntity = modelMapper.map(customer, CustomerEntity.class);
+            return dao.update(customerEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean deleteCustomer(int customerId) {
-        return dao.delete(String.valueOf(customerId));
+        try {
+            return dao.delete(String.valueOf(customerId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-
 }

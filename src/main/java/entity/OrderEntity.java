@@ -1,6 +1,5 @@
 package entity;
 
-import dto.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +18,7 @@ public class OrderEntity {
     private Date orderDate;
     private Double totalPrice;
     private String paymentMethod;
-    private int employeeId;
+    private int userId;
     private int customerId;
-    private List<ProductEntity> productEntities;
+    private List<OrderDetailEntity> orderDetailEntityList;
 }

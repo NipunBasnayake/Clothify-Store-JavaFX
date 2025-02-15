@@ -1,5 +1,6 @@
 package controller;
 
+import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
@@ -106,27 +107,42 @@ public class DashboardViewController implements Initializable {
 
     @FXML
     void btnPayBillOnAction(ActionEvent event) {
-//        Order order = new Order(
-//                Integer.parseInt(lblLoadOrderId.getText()),
-//                convertDateFormat(lblDate.getText()),
-//                Double.parseDouble(txtTotalAmount.getText()),
-//                "Cash",
-////                currentUser.getUserID(),
-//                1,
-//                getCustomerIdByComboBox(cmbSelectCustomer.getSelectionModel().getSelectedItem().toString()),
-//                cartList
-//        );
-//        boolean isOrderPlaced = orderService.addOrder(order);
-//        if (isOrderPlaced) {
-//            generateBillPdf();
-//            loadOrderId();
-//            loadProductPanes(productService.getProducts());
-//        }else{
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setTitle("Order Place Failed");
-//            alert.setHeaderText("Failed to Place Order");
-//            alert.show();
-//        }
+
+        List<OrderDetails> orderDetailsList = new ArrayList<>();
+        for (Product product : cartList) {
+            OrderDetails orderDetails = new OrderDetails(
+                    1,
+                    Integer.parseInt(lblLoadOrderId.getText()),
+                    product.getProductID(),
+                    product.getProductQuantity()
+            );
+            orderDetailsList.add(orderDetails);
+        }
+
+        Order order = new Order(
+                Integer.parseInt(lblLoadOrderId.getText()),
+                convertDateFormat(lblDate.getText()),
+                Double.parseDouble(txtTotalAmount.getText()),
+                "Cash",
+//                currentUser.getUserID(),
+                1,
+                getCustomerIdByComboBox(cmbSelectCustomer.getSelectionModel().getSelectedItem().toString()),
+                orderDetailsList
+        );
+
+        boolean isOrderPlace = orderService.addOrder(order);
+
+        if (isOrderPlace) {
+            loadProductPanes(productService.getProducts());
+            loadOrderId();
+            generateBillPdf();
+            cmbSelectCustomer.getSelectionModel().clearSelection();
+            cartList.clear();
+            loadCartPane();
+        } else {
+            System.out.println("Order Not Placed");
+        }
+
     }
 
 
@@ -436,7 +452,7 @@ public class DashboardViewController implements Initializable {
 
             PdfWriter writer = new PdfWriter(filePath);
             PdfDocument pdf = new PdfDocument(writer);
-            Document document = new Document(pdf, com.itextpdf.kernel.geom.PageSize.A5);
+            Document document = new Document(pdf, PageSize.A5);
             document.setMargins(36, 36, 36, 36);
 
             document.add(new Paragraph("Clothify Store").setFontSize(20).setTextAlignment(TextAlignment.CENTER));
@@ -444,8 +460,8 @@ public class DashboardViewController implements Initializable {
 
             Table dateTimeTable = new Table(new float[]{1, 1});
             dateTimeTable.setWidth(UnitValue.createPercentValue(100));
-            dateTimeTable.addCell(new Cell().add(new Paragraph("Date: " + lblDate.getText()).setFontSize(10)).setBorder(com.itextpdf.layout.borders.Border.NO_BORDER));
-            dateTimeTable.addCell(new Cell().add(new Paragraph("Time: " + lblTime.getText()).setFontSize(10).setTextAlignment(TextAlignment.RIGHT)).setBorder(com.itextpdf.layout.borders.Border.NO_BORDER));
+            dateTimeTable.addCell(new Cell().add(new Paragraph("Date: " + lblDate.getText()).setFontSize(10)).setBorder(Border.NO_BORDER));
+            dateTimeTable.addCell(new Cell().add(new Paragraph("Time: " + lblTime.getText()).setFontSize(10).setTextAlignment(TextAlignment.RIGHT)).setBorder(Border.NO_BORDER));
             document.add(dateTimeTable);
 
             document.add(new Paragraph("Customer: " + getCustomerNameByComboBox()).setFontSize(10).setMarginBottom(10));
@@ -476,8 +492,8 @@ public class DashboardViewController implements Initializable {
 
             Table summaryTable = new Table(new float[]{3, 2});
             summaryTable.setWidth(UnitValue.createPercentValue(100));
-            summaryTable.addCell(new Cell().add(new Paragraph("Total Amount:").setFontSize(10)).setBorder(com.itextpdf.layout.borders.Border.NO_BORDER));
-            summaryTable.addCell(new Cell().add(new Paragraph("LKR " + String.format("%.2f", totalAmount)).setFontSize(10)).setBorder(com.itextpdf.layout.borders.Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
+            summaryTable.addCell(new Cell().add(new Paragraph("Total Amount:").setFontSize(10)).setBorder(Border.NO_BORDER));
+            summaryTable.addCell(new Cell().add(new Paragraph("LKR " + String.format("%.2f", totalAmount)).setFontSize(10)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
             summaryTable.addCell(new Cell().add(new Paragraph("Final Amount:").setFontSize(12)).setBorder(Border.NO_BORDER));
             summaryTable.addCell(new Cell().add(new Paragraph("LKR " + String.format("%.2f", totalAmount)).setFontSize(12)).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
 

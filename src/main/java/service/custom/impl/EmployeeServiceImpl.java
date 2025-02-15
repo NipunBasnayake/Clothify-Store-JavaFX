@@ -12,47 +12,74 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeServiceImpl implements EmployeeService {
-    private static EmployeeService employeeService;
+    private static EmployeeServiceImpl employeeServiceImpl;
+    private final EmployeeDao employeeDao;
+    private final ModelMapper modelMapper;
 
-    public static EmployeeService getInstance() {
-        if (employeeService == null) {
-            employeeService = new EmployeeServiceImpl();
-        }
-        return employeeService;
+    private EmployeeServiceImpl() {
+        employeeDao = DaoFactory.getInstance().getDao(DaoType.EMPLOYEE);
+        modelMapper = new ModelMapper();
     }
 
-    EmployeeDao employeeDao = DaoFactory.getInstance().getDao(DaoType.EMPLOYEE);
+    public static EmployeeServiceImpl getInstance() {
+        if (employeeServiceImpl == null) {
+            employeeServiceImpl = new EmployeeServiceImpl();
+        }
+        return employeeServiceImpl;
+    }
 
     @Override
     public boolean addEmployee(Employee employee) {
-        EmployeeEntity employeeEntity = new ModelMapper().map(employee, EmployeeEntity.class);
-        return employeeDao.save(employeeEntity);
+        try {
+            EmployeeEntity employeeEntity = modelMapper.map(employee, EmployeeEntity.class);
+            return employeeDao.save(employeeEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean updateEmployee(Employee employee) {
-        EmployeeEntity employeeEntity = new ModelMapper().map(employee, EmployeeEntity.class);
-        return employeeDao.update(employeeEntity);
+        try {
+            EmployeeEntity employeeEntity = modelMapper.map(employee, EmployeeEntity.class);
+            return employeeDao.update(employeeEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public List<Employee> getEmployees() {
         List<EmployeeEntity> employeeEntities = employeeDao.getAll();
-        ArrayList<Employee> employees = new ArrayList<>();
-        employeeEntities.forEach(employee -> {
-            employees.add(new ModelMapper().map(employee, Employee.class));
-        });
+        List<Employee> employees = new ArrayList<>();
+        for (EmployeeEntity entity : employeeEntities) {
+            employees.add(modelMapper.map(entity, Employee.class));
+        }
         return employees;
     }
 
     @Override
     public boolean deleteEmployee(int employeeId) {
-        return employeeDao.delete(String.valueOf(employeeId));
+        try {
+            return employeeDao.delete(String.valueOf(employeeId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public Employee getEmployeeById(int employeeId) {
-        EmployeeEntity employeeEntity = employeeDao.search(String.valueOf(employeeId));
-        return new ModelMapper().map(employeeEntity, Employee.class);
+        try {
+            EmployeeEntity employeeEntity = employeeDao.search(String.valueOf(employeeId));
+            if (employeeEntity != null) {
+                return modelMapper.map(employeeEntity, Employee.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

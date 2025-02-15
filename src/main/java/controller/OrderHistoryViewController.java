@@ -19,36 +19,37 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class OrderHistoryViewController implements Initializable {
-    OrderService orderService = ServiceFactory.getInstance().getService(ServiceType.ORDERS);
-    OrderProductService orderProductService = ServiceFactory.getInstance().getService(ServiceType.ORDERPRODUCT);
-    ProductService productService = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
-    CustomerService customerService = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
-    EmployeeService employeeService = ServiceFactory.getInstance().getService(ServiceType.EMPLOYEE);
+
+    private final OrderService orderService = ServiceFactory.getInstance().getService(ServiceType.ORDERS);
+    private final OrderProductService orderProductService = ServiceFactory.getInstance().getService(ServiceType.ORDERPRODUCT);
+    private final ProductService productService = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
+    private final CustomerService customerService = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
+    private final EmployeeService employeeService = ServiceFactory.getInstance().getService(ServiceType.EMPLOYEE);
 
     @FXML
-    public TableColumn colOrderId;
+    public TableColumn<OrderHistory, Integer> colOrderId;
     @FXML
-    public TableColumn colOrderDate;
+    public TableColumn<OrderHistory, String> colOrderDate;
     @FXML
-    public TableColumn colProductName;
+    public TableColumn<OrderHistory, String> colProductName;
     @FXML
-    public TableColumn colUnitPrice;
+    public TableColumn<OrderHistory, Double> colUnitPrice;
     @FXML
-    public TableColumn colQuantity;
+    public TableColumn<OrderHistory, Integer> colQuantity;
     @FXML
-    public TableColumn colTotalAmount;
+    public TableColumn<OrderHistory, Double> colTotalAmount;
     @FXML
-    public TableColumn colPaymentType;
+    public TableColumn<OrderHistory, String> colPaymentType;
     @FXML
-    public TableColumn colCustomerName;
+    public TableColumn<OrderHistory, String> colCustomerName;
     @FXML
-    public TableColumn colEmployeeName;
+    public TableColumn<OrderHistory, String> colEmployeeName;
     @FXML
     public TextField txtSearchOrder;
     @FXML
     private TableView<OrderHistory> tblOrderHistory;
 
-    ObservableList<OrderHistory> orderHistoryItems;
+    private ObservableList<OrderHistory> orderHistoryItems;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -66,56 +67,71 @@ public class OrderHistoryViewController implements Initializable {
     }
 
     private void populateTable() {
-        List<Order> orders = orderService.getOrders();
-        List<OrderDetails> orderDetails = orderProductService.getOrderProducts();
+        try {
+            List<Order> orders = orderService.getOrders();
+            List<OrderDetails> orderDetails = orderProductService.getOrderProducts();
 
-       orderHistoryItems = FXCollections.observableArrayList();
+            orderHistoryItems = FXCollections.observableArrayList();
 
-        for (Order order : orders) {
-            Customer customer = customerService.getCustomerById(order.getCustomerId());
-            Employee employee = employeeService.getEmployeeById(order.getEmployeeId());
+            for (Order order : orders) {
+                Customer customer = customerService.getCustomerById(order.getCustomerId());
+                Employee employee = employeeService.getEmployeeById(order.getUserId());
 
-            for (OrderDetails op : orderDetails) {
-                Product product = productService.getProductById(op.getProductId());
+                if (customer == null || employee == null) {
+                    continue;
+                }
 
-                orderHistoryItems.add(new OrderHistory(
-                        order.getOrderId(),
-                        order.getOrderDate(),
-                        product.getProductName(),
-                        product.getProductPrice(),
-                        op.getQuantity(),
-                        product.getProductPrice() * op.getQuantity(),
-                        order.getPaymentMethod(),
-                        customer.getCustomerName(),
-                        employee.getEmployeeName()
-                ));
+                for (OrderDetails detail : orderDetails) {
+                    if (detail.getOrderId() == order.getOrderId()) {
+                        Product product = productService.getProductById(detail.getProductId());
+                        if (product != null) {
+                            orderHistoryItems.add(new OrderHistory(
+                                    order.getOrderId(),
+                                    order.getOrderDate(),
+                                    product.getProductName(),
+                                    product.getProductPrice(),
+                                    detail.getQuantity(),
+                                    product.getProductPrice() * detail.getQuantity(),
+                                    order.getPaymentMethod(),
+                                    customer.getCustomerName(),
+                                    employee.getEmployeeName()
+                            ));
+                        }
+                    }
+                }
             }
+
+            tblOrderHistory.setItems(orderHistoryItems);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        tblOrderHistory.setItems(orderHistoryItems);
     }
 
     public void btnSearchOrderHistory(ActionEvent actionEvent) {
         String searchText = txtSearchOrder.getText().toLowerCase();
 
         if (searchText.isEmpty()) {
-            tblOrderHistory.setItems(orderHistoryItems); // Reset to full list if empty
+            tblOrderHistory.setItems(orderHistoryItems);
             return;
         }
 
         ObservableList<OrderHistory> filteredList = FXCollections.observableArrayList();
 
         for (OrderHistory order : orderHistoryItems) {
-            if (String.valueOf(order.getOrderId()).contains(searchText) ||
-                    order.getOrderDate().toString().contains(searchText) ||
-                    order.getProductName().toLowerCase().contains(searchText) ||
-                    order.getCustomerName().toLowerCase().contains(searchText) ||
-                    order.getEmployeeName().toLowerCase().contains(searchText) ||
-                    order.getPaymentMethod().toLowerCase().contains(searchText))
-            {
+            if (matchesSearch(order, searchText)) {
                 filteredList.add(order);
             }
         }
+
         tblOrderHistory.setItems(filteredList);
     }
 
+    private boolean matchesSearch(OrderHistory order, String searchText) {
+        return String.valueOf(order.getOrderId()).contains(searchText) ||
+                order.getOrderDate().toString().contains(searchText) ||
+                order.getProductName().toLowerCase().contains(searchText) ||
+                order.getCustomerName().toLowerCase().contains(searchText) ||
+                order.getEmployeeName().toLowerCase().contains(searchText) ||
+                order.getPaymentMethod().toLowerCase().contains(searchText);
+    }
 }

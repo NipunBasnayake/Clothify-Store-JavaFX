@@ -3,8 +3,6 @@ package dao.Custom.impl;
 import dao.Custom.OrderDao;
 import db.DBConnection;
 import entity.OrderEntity;
-import entity.OrderProductEntity;
-import entity.ProductEntity;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,55 +18,50 @@ public class OrderDaoImpl implements OrderDao {
         return orderDaoImpl;
     }
 
-
     @Override
     public int getLastOrderId() {
         String query = "SELECT orderId FROM orders ORDER BY orderId DESC LIMIT 1";
-        int lastOrderId = -1;
-        try (Statement stmt = DBConnection.getInstance().getConnection().createStatement();
+        try (
+                Statement stmt = DBConnection.getInstance().getConnection().createStatement();
              ResultSet resultSet = stmt.executeQuery(query)) {
             if (resultSet.next()) {
-                lastOrderId = resultSet.getInt("OrderID");
+                return resultSet.getInt("orderId");
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error fetching last OrderID", e);
         }
-        return lastOrderId;
+        return -1;
     }
 
     @Override
     public boolean save(OrderEntity entity) {
-        System.out.println(entity.toString());
+        String query = "INSERT INTO orders (orderDate, totalAmount, paymentMethod, employeeId, customerId) VALUES (?, ?, ?, ?, ?)";
         Connection connection = null;
-        try {
-            String query = "INSERT INTO orders (orderDate, totalAmount, paymentMethod, employeeId, customerId) VALUES (?, ?, ?, ?, ?)";
+        try{
+            PreparedStatement statement = null;
+
             try {
                 connection = DBConnection.getInstance().getConnection();
                 connection.setAutoCommit(false);
 
-                PreparedStatement statement = connection.prepareStatement(query);
+                statement = connection.prepareStatement(query);
                 statement.setDate(1, entity.getOrderDate());
                 statement.setDouble(2, entity.getTotalPrice());
                 statement.setString(3, entity.getPaymentMethod());
-                statement.setInt(4, entity.getEmployeeId());
+                statement.setInt(4, entity.getUserId());
                 statement.setInt(5, entity.getCustomerId());
                 boolean isOrderSaved = statement.executeUpdate() > 0;
 
-                List<OrderProductEntity> orderProductEntities = new ArrayList<>();
-                List<ProductEntity> productEntities = new ArrayList<>();
-
-                for (ProductEntity productEntity : entity.getProductEntities()) {
-                    orderProductEntities.add(new OrderProductEntity(1, entity.getOrderId(), productEntity.getProductID(), productEntity.getProductQuantity()));
-                    productEntities.add(productEntity);
-                }
-
                 if (isOrderSaved) {
-                    OrderDetailsDaoImpl orderDetailsDaoImpl = new OrderDetailsDaoImpl();
-                    boolean isOrderProductSaved = orderDetailsDaoImpl.save(orderProductEntities);
-                    if (isOrderProductSaved) {
-                        ProductDaoImpl productDaoImpl = new ProductDaoImpl();
-                        productDaoImpl.updateQuantity(productEntities);
-                        if (isOrderProductSaved) {
+                    System.out.println("Table Order Saved Successfully");
+                    boolean isSavedToOrderDetails = OrderDetailsDaoImpl.getInstance().save(entity.getOrderDetailEntityList());
+
+                    if (isSavedToOrderDetails) {
+                        System.out.println("Table Order Details Saved Successfully");
+                        boolean isProductTableUpdated = ProductDaoImpl.getInstance().updateQuantity(entity.getOrderDetailEntityList());
+
+                        if (isProductTableUpdated) {
+                            System.out.println("Table Order Details Updated Successfully");
                             connection.commit();
                             return true;
                         }
@@ -79,7 +72,8 @@ public class OrderDaoImpl implements OrderDao {
             } catch (SQLException e) {
                 return false;
             }
-        } finally {
+        }
+        finally {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
@@ -88,61 +82,74 @@ public class OrderDaoImpl implements OrderDao {
         }
     }
 
+
     @Override
     public OrderEntity search(String id) {
         String query = "SELECT * FROM orders WHERE orderId = ?";
-        try {
-            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+        try (PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query)) {
             statement.setInt(1, Integer.parseInt(id));
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                return new OrderEntity(
-                        resultSet.getInt(1),
-                        resultSet.getDate(2),
-                        resultSet.getDouble(3),
-                        resultSet.getString(4),
-                        resultSet.getInt(5),
-                        resultSet.getInt(6),
-                        List.of()
-                );
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return mapResultSetToOrderEntity(resultSet);
+                }
             }
-            return null;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error searching order", e);
         }
+        return null;
     }
 
     @Override
-    public boolean delete(String s) {
-        return false;
+    public boolean delete(String id) {
+        String query = "DELETE FROM orders WHERE orderId = ?";
+        try (PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query)) {
+            statement.setInt(1, Integer.parseInt(id));
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting order", e);
+        }
     }
 
     @Override
     public boolean update(OrderEntity entity) {
-        return false;
+        String query = "UPDATE orders SET orderDate = ?, totalAmount = ?, paymentMethod = ?, employeeId = ?, customerId = ? WHERE orderId = ?";
+        try (PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query)) {
+            statement.setDate(1, entity.getOrderDate());
+            statement.setDouble(2, entity.getTotalPrice());
+            statement.setString(3, entity.getPaymentMethod());
+            statement.setInt(4, entity.getUserId());
+            statement.setInt(5, entity.getCustomerId());
+            statement.setInt(6, entity.getOrderId());
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating order", e);
+        }
     }
 
     @Override
     public List<OrderEntity> getAll() {
-        String query = "SELECT orderId, orderDate, totalAmount, paymentMethod, employeeId, customerId FROM orders;";
+        String query = "SELECT orderId, orderDate, totalAmount, paymentMethod, employeeId, customerId FROM orders";
         List<OrderEntity> orders = new ArrayList<>();
-        try {
-            ResultSet resultSet = DBConnection.getInstance().getConnection().createStatement().executeQuery(query);
+        try (Statement stmt = DBConnection.getInstance().getConnection().createStatement();
+             ResultSet resultSet = stmt.executeQuery(query)) {
             while (resultSet.next()) {
-                orders.add(new OrderEntity(
-                        resultSet.getInt(1),
-                        resultSet.getDate(2),
-                        resultSet.getDouble(3),
-                        resultSet.getString(4),
-                        resultSet.getInt(5),
-                        resultSet.getInt(6),
-                        List.of()
-                ));
+                orders.add(mapResultSetToOrderEntity(resultSet));
             }
         } catch (SQLException e) {
-            return null;
+            throw new RuntimeException("Error fetching all orders", e);
         }
         return orders;
+    }
+
+    private OrderEntity mapResultSetToOrderEntity(ResultSet resultSet) throws SQLException {
+        return new OrderEntity(
+                resultSet.getInt("orderId"),
+                resultSet.getDate("orderDate"),
+                resultSet.getDouble("totalAmount"),
+                resultSet.getString("paymentMethod"),
+                resultSet.getInt("employeeId"),
+                resultSet.getInt("customerId"),
+                List.of()
+        );
     }
 }

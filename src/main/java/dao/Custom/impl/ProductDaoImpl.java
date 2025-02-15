@@ -2,7 +2,9 @@ package dao.Custom.impl;
 
 import dao.Custom.ProductDao;
 import db.DBConnection;
+import dto.OrderDetails;
 import dto.Product;
+import entity.OrderDetailEntity;
 import entity.ProductEntity;
 
 import java.sql.Connection;
@@ -107,9 +109,29 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public boolean updateQuantity(List<ProductEntity> entities) {
-
-        return false;
+    public boolean updateQuantity(List<OrderDetailEntity> entities) {
+        for (OrderDetailEntity entity : entities) {
+            boolean isUpdate = minusQuantity(entity);
+            if (!isUpdate) {
+                return false;
+            }
+        }
+        return true;
     }
+
+    public boolean minusQuantity(OrderDetailEntity entity) {
+        String query = "UPDATE product SET quantity = quantity-? WHERE productId = ?";
+        Connection connection = null;
+        try {
+            connection = DBConnection.getInstance().getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, entity.getQuantity());
+            statement.setInt(2, entity.getProductId());
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }

@@ -5,6 +5,9 @@ import dao.Custom.OrderDetailsDao;
 import dao.Custom.ProductDao;
 import dao.DaoFactory;
 import dto.Order;
+import dto.OrderDetails;
+import dto.Product;
+import entity.OrderDetailEntity;
 import entity.OrderEntity;
 import entity.ProductEntity;
 import org.modelmapper.ModelMapper;
@@ -15,62 +18,92 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
-    private static OrderServiceImpl orderControllerImpl;
+    private static OrderServiceImpl orderServiceImpl;
+    private final OrderDao orderDao;
+    private final OrderDetailsDao orderDetailsDao;
+    private final ProductDao productDao;
+    private final ModelMapper modelMapper;
 
-    public static OrderServiceImpl getInstance() {
-        if (orderControllerImpl == null) {
-            orderControllerImpl = new OrderServiceImpl();
-        }
-        return orderControllerImpl;
+    private OrderServiceImpl() {
+        orderDao = DaoFactory.getInstance().getDao(DaoType.ORDERS);
+        orderDetailsDao = DaoFactory.getInstance().getDao(DaoType.ORDERPRODUCT);
+        productDao = DaoFactory.getInstance().getDao(DaoType.PRODUCT);
+        modelMapper = new ModelMapper();
     }
 
-    OrderDao orderDao = DaoFactory.getInstance().getDao(DaoType.ORDERS);
-    OrderDetailsDao orderDetailsDao = DaoFactory.getInstance().getDao(DaoType.ORDERPRODUCT);
-    ProductDao productDao = DaoFactory.getInstance().getDao(DaoType.PRODUCT);
+    public static OrderServiceImpl getInstance() {
+        if (orderServiceImpl == null) {
+            orderServiceImpl = new OrderServiceImpl();
+        }
+        return orderServiceImpl;
+    }
 
     @Override
     public int getLastOrderId() {
-        return orderDao.getLastOrderId();
+        try {
+            return orderDao.getLastOrderId();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1; // Indicate failure
+        }
     }
 
     @Override
     public List<Order> getOrders() {
-        List<OrderEntity> orderEntities = orderDao.getAll();
         List<Order> orders = new ArrayList<>();
-        orderEntities.forEach(orderEntity -> {
-            orders.add(new ModelMapper().map(orderEntity, Order.class));
-        });
+        try {
+            List<OrderEntity> orderEntities = orderDao.getAll();
+            for (OrderEntity entity : orderEntities) {
+                orders.add(modelMapper.map(entity, Order.class));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return orders;
     }
 
     @Override
     public Order getOrder(int orderId) {
-        OrderEntity orderEntity = orderDao.search(String.valueOf(orderId));
-        return new ModelMapper().map(orderEntity, Order.class);
+        try {
+            OrderEntity orderEntity = orderDao.search(String.valueOf(orderId));
+            if (orderEntity != null) {
+                return modelMapper.map(orderEntity, Order.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public boolean addOrder(Order order) {
-        System.out.println(order.toString());
+        try {
+            List<OrderDetailEntity> orderDetailEntities = new ArrayList<>();
+            for(OrderDetails orderDetails : order.getOrderDetailsList()){
+                orderDetailEntities.add(modelMapper.map(orderDetails, OrderDetailEntity.class));
+            }
 
-        List<ProductEntity> productEntities = new ArrayList<>();
-        order.getOrderDetailsList().forEach(product -> {
-            productEntities.add(new ModelMapper().map(product, ProductEntity.class));
-        });
-        OrderEntity orderEntity = new OrderEntity(
-                order.getOrderId(),
-                order.getOrderDate(),
-                order.getTotalPrice(),
-                order.getPaymentMethod(),
-                order.getEmployeeId(),
-                order.getCustomerId(),
-                productEntities
-        );
-        return orderDao.save(orderEntity);
+            OrderEntity orderEntity = new OrderEntity(
+                    order.getOrderId(),
+                    order.getOrderDate(),
+                    order.getTotalPrice(),
+                    order.getPaymentMethod(),
+                    order.getUserId(),
+                    order.getCustomerId(),
+                    orderDetailEntities
+            );
+//            System.out.println(orderEntity.toString());
+
+            boolean isOrderSaved = orderDao.save(orderEntity);
+            if (isOrderSaved) {
+                System.out.println("Order Added Successfully - 3 Databases Executed");
+                return true;
+            }
+            return false;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-
-
-
-
-
 }

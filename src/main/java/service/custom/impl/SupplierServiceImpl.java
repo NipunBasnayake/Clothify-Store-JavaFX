@@ -12,42 +12,65 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SupplierServiceImpl implements SupplierService {
-    private static SupplierServiceImpl supplierController;
+    private static SupplierServiceImpl supplierServiceImpl;
+    private final SupplierDao supplierDao;
+    private final ModelMapper modelMapper;
 
-    public static SupplierServiceImpl getInstance() {
-        if (supplierController == null) {
-            supplierController = new SupplierServiceImpl();
-        }
-        return supplierController;
+    private SupplierServiceImpl() {
+        supplierDao = DaoFactory.getInstance().getDao(DaoType.SUPPLIER);
+        modelMapper = new ModelMapper();
     }
 
-    SupplierDao supplierDao = DaoFactory.getInstance().getDao(DaoType.SUPPLIER);
+    public static SupplierServiceImpl getInstance() {
+        if (supplierServiceImpl == null) {
+            supplierServiceImpl = new SupplierServiceImpl();
+        }
+        return supplierServiceImpl;
+    }
 
     @Override
     public List<Supplier> getSuppliers() {
-        List<SupplierEntity> supplierEntities = supplierDao.getAll();
-        List<Supplier> suppliersArray = new ArrayList<>();
-        supplierEntities.forEach(supplier -> {
-            suppliersArray.add(new ModelMapper().map(supplier, Supplier.class));
-        });
-        return suppliersArray;
+        List<Supplier> suppliers = new ArrayList<>();
+        try {
+            List<SupplierEntity> supplierEntities = supplierDao.getAll();
+            for (SupplierEntity entity : supplierEntities) {
+                suppliers.add(modelMapper.map(entity, Supplier.class));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return suppliers;
     }
 
     @Override
     public boolean addSupplier(Supplier supplier) {
-        SupplierEntity supplierEntity = new ModelMapper().map(supplier, SupplierEntity.class);
-        return supplierDao.save(supplierEntity);
+        try {
+            SupplierEntity supplierEntity = modelMapper.map(supplier, SupplierEntity.class);
+            return supplierDao.save(supplierEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean updateSupplier(Supplier supplier) {
-        SupplierEntity supplierEntity = new ModelMapper().map(supplier, SupplierEntity.class);
-        return supplierDao.update(supplierEntity);
+        try {
+            SupplierEntity supplierEntity = modelMapper.map(supplier, SupplierEntity.class);
+            return supplierDao.update(supplierEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean deleteSupplier(int supplierId) {
-        return supplierDao.delete(supplierId);
+        try {
+            return supplierDao.delete(supplierId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-
 }

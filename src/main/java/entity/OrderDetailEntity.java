@@ -9,8 +9,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class OrderProductEntity {
-    private int orderProductId;
+public class OrderDetailEntity {
+    private int orderDetailId;
     private int orderId;
     private int productId;
     private int quantity;

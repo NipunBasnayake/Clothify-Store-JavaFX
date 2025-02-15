@@ -7,25 +7,41 @@ import service.custom.LoginSignupService;
 import util.DaoType;
 
 public class LoginSignUpServiceImpl implements LoginSignupService {
-    private static LoginSignUpServiceImpl loginSignUpController;
+    private static LoginSignUpServiceImpl loginSignUpServiceImpl;
+    private final LoginSignUpDao loginSignUpDao;
 
-    public static LoginSignUpServiceImpl getInstance() {
-        if (loginSignUpController == null) {
-            loginSignUpController = new LoginSignUpServiceImpl();
-        }
-        return loginSignUpController;
+    private LoginSignUpServiceImpl() {
+        loginSignUpDao = DaoFactory.getInstance().getDao(DaoType.USER);
     }
 
-    LoginSignUpDao loginSignUpDao = DaoFactory.getInstance().getDao(DaoType.USER);
+    public static LoginSignUpServiceImpl getInstance() {
+        if (loginSignUpServiceImpl == null) {
+            loginSignUpServiceImpl = new LoginSignUpServiceImpl();
+        }
+        return loginSignUpServiceImpl;
+    }
 
     @Override
     public User login(String email, String password) {
-        return loginSignUpDao.login(email, password);
+        try {
+            User user = loginSignUpDao.login(email, password);
+            if (user != null) {
+                return user;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public boolean updatePassword(String email, String password) {
-        return loginSignUpDao.updatePassword(email, password);
+        try {
+            // Consider hashing the password before updating it in the database
+            return loginSignUpDao.updatePassword(email, password);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-
 }

@@ -12,47 +12,78 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductServiceImpl implements ProductService {
-    private static ProductServiceImpl productControllerImpl;
+    private static ProductServiceImpl productServiceImpl;
+    private final ProductDao dao;
+    private final ModelMapper modelMapper;
 
-    public static ProductServiceImpl getInstance() {
-        if (productControllerImpl == null) {
-            productControllerImpl = new ProductServiceImpl();
-        }
-        return productControllerImpl;
+    private ProductServiceImpl() {
+        dao = DaoFactory.getInstance().getDao(DaoType.PRODUCT);
+        modelMapper = new ModelMapper();
     }
 
-    ProductDao dao = DaoFactory.getInstance().getDao(DaoType.PRODUCT);
+    public static ProductServiceImpl getInstance() {
+        if (productServiceImpl == null) {
+            productServiceImpl = new ProductServiceImpl();
+        }
+        return productServiceImpl;
+    }
 
     @Override
     public List<Product> getProducts() {
-        List<ProductEntity> productEntities = dao.getAll();
-        List<Product> productsArray = new ArrayList<>();
-        productEntities.forEach(productEntity -> {
-            productsArray.add(new ModelMapper().map(productEntity, Product.class));
-        });
-        return productsArray;
+        List<Product> products = new ArrayList<>();
+        try {
+            List<ProductEntity> productEntities = dao.getAll();
+            for (ProductEntity entity : productEntities) {
+                products.add(modelMapper.map(entity, Product.class));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return products;
     }
 
     @Override
     public boolean addProduct(Product product) {
-        ProductEntity productEntity = new ModelMapper().map(product, ProductEntity.class);
-        return dao.save(productEntity);
+        try {
+            ProductEntity productEntity = modelMapper.map(product, ProductEntity.class);
+            return dao.save(productEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean updateProduct(Product product) {
-        ProductEntity productEntity = new ModelMapper().map(product, ProductEntity.class);
-        return dao.update(productEntity);
+        try {
+            ProductEntity productEntity = modelMapper.map(product, ProductEntity.class);
+            return dao.update(productEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean deleteProduct(Integer productId) {
-        return dao.delete(productId);
+        try {
+            return dao.delete(productId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public Product getProductById(Integer productId) {
-        ProductEntity productEntity = dao.search(productId);
-        return new ModelMapper().map(productEntity, Product.class);
+        try {
+            ProductEntity productEntity = dao.search(productId);
+            if (productEntity != null) {
+                return modelMapper.map(productEntity, Product.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

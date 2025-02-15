@@ -19,7 +19,7 @@ public class ServiceFactory {
         switch (serviceType) {
             case CUSTOMERS: return (T) CustomerServiceImpl.getInstance();
             case EMPLOYEE: return (T) EmployeeServiceImpl.getInstance();
-            case ORDERPRODUCT: return (T) OrderProductServiceImpl.getInstance();
+            case ORDERPRODUCT: return (T) OrderDetailsServiceImpl.getInstance();
             case ORDERS: return (T) OrderServiceImpl.getInstance();
             case PRODUCT: return (T) ProductServiceImpl.getInstance();
             case SUPPLIER: return (T) SupplierServiceImpl.getInstance();

@@ -2,7 +2,7 @@ package dao.Custom.impl;
 
 import dao.Custom.OrderDetailsDao;
 import db.DBConnection;
-import entity.OrderProductEntity;
+import entity.OrderDetailEntity;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,52 +21,45 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
         return orderDetailsDaoImpl;
     }
 
-    public List<OrderProductEntity> getAll() {
-        String query = "select OrderProductID, OrderID, ProductID, Quantity from orderproduct";
-        List<OrderProductEntity> orderProducts = new ArrayList<>();
-        try {
-            ResultSet resultSet = DBConnection.getInstance().getConnection().createStatement().executeQuery(query);
+    public List<OrderDetailEntity> getAll() {
+        String query = "SELECT orderDetailsId, orderId, productId, quantity FROM orderdetails";
+        List<OrderDetailEntity> orderProducts = new ArrayList<>();
+        try (Connection connection = DBConnection.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
             while (resultSet.next()) {
-                orderProducts.add(new OrderProductEntity(
-                        resultSet.getInt(1),
-                        resultSet.getInt(2),
-                        resultSet.getInt(3),
-                        resultSet.getInt(4)
+                orderProducts.add(new OrderDetailEntity(
+                        resultSet.getInt("orderDetailsId"),
+                        resultSet.getInt("orderId"),
+                        resultSet.getInt("productId"),
+                        resultSet.getInt("quantity")
                 ));
             }
         } catch (SQLException e) {
-            return null;
+            throw new RuntimeException("Error fetching order details", e);
         }
         return orderProducts;
     }
 
     @Override
-    public boolean save(List<OrderProductEntity> orderProductEntities) {
-        System.out.println("Start Save OrderProduct");
-        String query = "INSERT INTO orderProduct (OrderID, ProductID, Quantity) VALUES (?, ?, ?)";
-
-        try (Connection connection = DBConnection.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            for (OrderProductEntity entity : orderProductEntities) {
+    public boolean save(List<OrderDetailEntity> orderProductEntities) {
+        String query = "INSERT INTO orderdetails (orderId, productId, quantity) VALUES (?, ?, ?)";
+        try {
+            Connection connection = DBConnection.getInstance().getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+            for (OrderDetailEntity entity : orderProductEntities) {
                 statement.setInt(1, entity.getOrderId());
                 statement.setInt(2, entity.getProductId());
                 statement.setInt(3, entity.getQuantity());
 
-                int rowsAffected = statement.executeUpdate();
-                if (rowsAffected <= 0) {
-                    System.err.println("Failed to add order product for OrderID: " + entity.getOrderId() + ", ProductID: " + entity.getProductId());
+                if (statement.executeUpdate() <= 0) {
                     return false;
                 }
             }
-            System.out.println("All order products added successfully");
             return true;
-
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error saving order details", e);
         }
-        return false;
     }
-
-
 }
