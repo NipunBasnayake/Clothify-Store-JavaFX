@@ -76,16 +76,20 @@ public class UpdateProductViewController {
     void btnAddProductImageOnAction(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Product Image");
+
+        File initialDirectory = new File("E:\\05 JavaFX\\#Final Coursework\\Clothify\\src\\main\\resources\\images\\products");
+        fileChooser.setInitialDirectory(initialDirectory);
+
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
         );
-
         File selectedFile = fileChooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
 
         if (selectedFile != null) {
             txtUpdateProductImagePath.setText(selectedFile.getAbsolutePath());
         }
     }
+
 
     @FXML
     void btnAddSupplierOnAction(ActionEvent event) {

@@ -67,12 +67,16 @@ public class AddProductViewController implements Initializable {
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
         );
 
+        File initialDirectory = new File("E:\\05 JavaFX\\#Final Coursework\\Clothify\\src\\main\\resources\\images\\products");
+        fileChooser.setInitialDirectory(initialDirectory);
+
         File selectedFile = fileChooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
 
         if (selectedFile != null) {
             txtAddProductImagePath.setText(selectedFile.getAbsolutePath());
         }
     }
+
 
 
     @FXML
