@@ -76,14 +76,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getProductById(Integer productId) {
-        try {
-            ProductEntity productEntity = dao.search(productId);
-            if (productEntity != null) {
-                return modelMapper.map(productEntity, Product.class);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        ProductEntity productEntity = dao.search(productId);
+        return modelMapper.map(productEntity, Product.class);
+
     }
 }

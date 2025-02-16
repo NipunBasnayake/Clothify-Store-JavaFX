@@ -20,9 +20,11 @@ public class UpdateSupplierViewController {
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
 
-        cmbSupplyItem.getItems().add("Shirts");
-        cmbSupplyItem.getItems().add("Sarees");
-        cmbSupplyItem.getItems().add("Jeans");
+        cmbSupplyItem.getItems().add("Gents");
+        cmbSupplyItem.getItems().add("Ladies");
+        cmbSupplyItem.getItems().add("Kids");
+        cmbSupplyItem.getItems().add("Accessories");
+        cmbSupplyItem.getItems().add("Footwear");
 
         txtSupplierName.setText(supplier.getSupplierName());
         txtSupplierEmail.setText(supplier.getSupplierEmail());

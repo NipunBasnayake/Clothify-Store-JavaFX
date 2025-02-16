@@ -24,7 +24,8 @@ public class OrderHistoryViewController implements Initializable {
     private final OrderProductService orderProductService = ServiceFactory.getInstance().getService(ServiceType.ORDERPRODUCT);
     private final ProductService productService = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
     private final CustomerService customerService = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
-    private final EmployeeService employeeService = ServiceFactory.getInstance().getService(ServiceType.EMPLOYEE);
+    private final LoginSignupService loginSignupService = ServiceFactory.getInstance().getService(ServiceType.USER);
+
 
     @FXML
     public TableColumn<OrderHistory, Integer> colOrderId;
@@ -49,7 +50,7 @@ public class OrderHistoryViewController implements Initializable {
     @FXML
     private TableView<OrderHistory> tblOrderHistory;
 
-    private ObservableList<OrderHistory> orderHistoryItems;
+    private ObservableList<OrderHistory> orderHistoryItems = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -61,43 +62,37 @@ public class OrderHistoryViewController implements Initializable {
         colTotalAmount.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
         colPaymentType.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
         colCustomerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
-        colEmployeeName.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
+        colEmployeeName.setCellValueFactory(new PropertyValueFactory<>("userName"));
 
         populateTable();
     }
 
     private void populateTable() {
+
         try {
             List<Order> orders = orderService.getOrders();
             List<OrderDetails> orderDetails = orderProductService.getOrderProducts();
 
-            orderHistoryItems = FXCollections.observableArrayList();
 
             for (Order order : orders) {
-                Customer customer = customerService.getCustomerById(order.getCustomerId());
-                Employee employee = employeeService.getEmployeeById(order.getUserId());
+                for (OrderDetails orderDetail : orderDetails) {
 
-                if (customer == null || employee == null) {
-                    continue;
-                }
+                    Product product = productService.getProductById(orderDetail.getProductId());
+                    Customer customer = customerService.getCustomerById(order.getCustomerId());
+                    User  user = loginSignupService.getUserById(order.getUserId());
 
-                for (OrderDetails detail : orderDetails) {
-                    if (detail.getOrderId() == order.getOrderId()) {
-                        Product product = productService.getProductById(detail.getProductId());
-                        if (product != null) {
-                            orderHistoryItems.add(new OrderHistory(
-                                    order.getOrderId(),
-                                    order.getOrderDate(),
-                                    product.getProductName(),
-                                    product.getProductPrice(),
-                                    detail.getQuantity(),
-                                    product.getProductPrice() * detail.getQuantity(),
-                                    order.getPaymentMethod(),
-                                    customer.getCustomerName(),
-                                    employee.getEmployeeName()
-                            ));
-                        }
-                    }
+                    OrderHistory orderHistory = new OrderHistory(
+                            order.getOrderId(),
+                            order.getOrderDate(),
+                            product.getProductName(),
+                            product.getProductPrice(),
+                            product.getProductQuantity(),
+                            product.getProductPrice() * product.getProductQuantity(),
+                            "Cash",
+                            customer.getCustomerName(),
+                            user.getUserName()
+                    );
+                    orderHistoryItems.add(orderHistory);
                 }
             }
 
@@ -108,30 +103,22 @@ public class OrderHistoryViewController implements Initializable {
     }
 
     public void btnSearchOrderHistory(ActionEvent actionEvent) {
-        String searchText = txtSearchOrder.getText().toLowerCase();
-
+        String searchText = txtSearchOrder.getText().trim().toLowerCase();
         if (searchText.isEmpty()) {
             tblOrderHistory.setItems(orderHistoryItems);
             return;
         }
-
-        ObservableList<OrderHistory> filteredList = FXCollections.observableArrayList();
-
-        for (OrderHistory order : orderHistoryItems) {
-            if (matchesSearch(order, searchText)) {
-                filteredList.add(order);
-            }
-        }
-
+        ObservableList<OrderHistory> filteredList = orderHistoryItems.filtered(order -> matchesSearch(order, searchText));
         tblOrderHistory.setItems(filteredList);
     }
 
     private boolean matchesSearch(OrderHistory order, String searchText) {
         return String.valueOf(order.getOrderId()).contains(searchText) ||
-                order.getOrderDate().toString().contains(searchText) ||
-                order.getProductName().toLowerCase().contains(searchText) ||
-                order.getCustomerName().toLowerCase().contains(searchText) ||
-                order.getEmployeeName().toLowerCase().contains(searchText) ||
-                order.getPaymentMethod().toLowerCase().contains(searchText);
+                (order.getOrderDate() != null && order.getOrderDate().toString().toLowerCase().contains(searchText)) ||
+                (order.getProductName() != null && order.getProductName().toLowerCase().contains(searchText)) ||
+                (order.getCustomerName() != null && order.getCustomerName().toLowerCase().contains(searchText)) ||
+                (order.getUserName() != null && order.getUserName().toLowerCase().contains(searchText)) ||
+                (order.getPaymentMethod() != null && order.getPaymentMethod().toLowerCase().contains(searchText));
     }
+
 }

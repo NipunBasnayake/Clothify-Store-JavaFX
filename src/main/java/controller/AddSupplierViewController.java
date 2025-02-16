@@ -55,8 +55,10 @@ public class AddSupplierViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        cmbSupplyItem.getItems().add("Shirts");
-        cmbSupplyItem.getItems().add("Sarees");
-        cmbSupplyItem.getItems().add("Jeans");
+        cmbSupplyItem.getItems().add("Gents");
+        cmbSupplyItem.getItems().add("Ladies");
+        cmbSupplyItem.getItems().add("Kids");
+        cmbSupplyItem.getItems().add("Accessories");
+        cmbSupplyItem.getItems().add("Footwear");
     }
 }

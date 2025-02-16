@@ -3,6 +3,8 @@ package service.custom.impl;
 import dao.Custom.LoginSignUpDao;
 import dao.DaoFactory;
 import dto.User;
+import entity.UserEntity;
+import org.modelmapper.ModelMapper;
 import service.custom.LoginSignupService;
 import util.DaoType;
 
@@ -37,11 +39,19 @@ public class LoginSignUpServiceImpl implements LoginSignupService {
     @Override
     public boolean updatePassword(String email, String password) {
         try {
-            // Consider hashing the password before updating it in the database
             return loginSignUpDao.updatePassword(email, password);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public User getUserById(int id) {
+        UserEntity userEntity = loginSignUpDao.getUserById(id);
+        if (userEntity != null) {
+            return new ModelMapper().map(userEntity, User.class);
+        }
+        return null;
     }
 }

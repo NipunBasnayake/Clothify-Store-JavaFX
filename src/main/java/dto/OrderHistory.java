@@ -20,5 +20,5 @@ public class OrderHistory {
     private double totalAmount;
     private String paymentMethod;
     private String customerName;
-    private String employeeName;
+    private String userName;
 }

@@ -44,10 +44,26 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public ProductEntity search(Integer id) {
-        for (ProductEntity product : getAll()) {
-            if (product.getProductID() == id) {
+        try {
+            String query = "SELECT * FROM product WHERE productId = ?";
+            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                ProductEntity product = new ProductEntity(
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getDouble(5),
+                        resultSet.getInt(6),
+                        resultSet.getString(7),
+                        resultSet.getInt(8)
+                );
                 return product;
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return null;
     }

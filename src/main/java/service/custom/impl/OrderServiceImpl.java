@@ -44,23 +44,33 @@ public class OrderServiceImpl implements OrderService {
             return orderDao.getLastOrderId();
         } catch (Exception e) {
             e.printStackTrace();
-            return -1; // Indicate failure
+            return -1;
         }
     }
 
     @Override
     public List<Order> getOrders() {
+        List<OrderDetails> orderDetailsList = new ArrayList<>();
+        for (OrderDetailEntity entity : orderDetailsDao.getAll()) {
+            orderDetailsList.add(modelMapper.map(entity, OrderDetails.class));
+        }
+
         List<Order> orders = new ArrayList<>();
-        try {
-            List<OrderEntity> orderEntities = orderDao.getAll();
-            for (OrderEntity entity : orderEntities) {
-                orders.add(modelMapper.map(entity, Order.class));
+        for (OrderEntity entity : orderDao.getAll()) {
+            Order order = modelMapper.map(entity, Order.class);
+
+            List<OrderDetails> matchedDetails = new ArrayList<>();
+            for (OrderDetails details : orderDetailsList) {
+                if (details.getOrderId() == order.getOrderId()) {
+                    matchedDetails.add(details);
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            order.setOrderDetailsList(matchedDetails);
+            orders.add(order);
         }
         return orders;
     }
+
 
     @Override
     public Order getOrder(int orderId) {

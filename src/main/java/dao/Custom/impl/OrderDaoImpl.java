@@ -130,16 +130,23 @@ public class OrderDaoImpl implements OrderDao {
     public List<OrderEntity> getAll() {
         String query = "SELECT orderId, orderDate, totalAmount, paymentMethod, employeeId, customerId FROM orders";
         List<OrderEntity> orders = new ArrayList<>();
-        try (Statement stmt = DBConnection.getInstance().getConnection().createStatement();
-             ResultSet resultSet = stmt.executeQuery(query)) {
+
+        try {
+            Connection conn = DBConnection.getInstance().getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet resultSet = stmt.executeQuery(query);
+
             while (resultSet.next()) {
                 orders.add(mapResultSetToOrderEntity(resultSet));
             }
+
         } catch (SQLException e) {
-            throw new RuntimeException("Error fetching all orders", e);
+            System.err.println("Error fetching orders: " + e.getMessage());
         }
+
         return orders;
     }
+
 
     private OrderEntity mapResultSetToOrderEntity(ResultSet resultSet) throws SQLException {
         return new OrderEntity(

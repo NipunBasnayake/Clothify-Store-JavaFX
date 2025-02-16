@@ -24,10 +24,10 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
     public List<OrderDetailEntity> getAll() {
         String query = "SELECT orderDetailsId, orderId, productId, quantity FROM orderdetails";
         List<OrderDetailEntity> orderProducts = new ArrayList<>();
-        try (Connection connection = DBConnection.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
-
+        try {
+            Connection connection = DBConnection.getInstance().getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 orderProducts.add(new OrderDetailEntity(
                         resultSet.getInt("orderDetailsId"),

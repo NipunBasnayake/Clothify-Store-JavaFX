@@ -3,7 +3,6 @@
     -fx-background-radius: 20px;
 }
 
-/* Text Field Styles */
 .text-field {
     -fx-font-family: "Arial";
     -fx-font-size: 14px;
@@ -22,7 +21,6 @@
     -fx-effect: dropshadow(three-pass-box, rgba(150, 0, 0, 0.2), 5, 0, 0, 0);
 }
 
-/* Button Styles */
 .button {
     -fx-font-family: "Arial";
     -fx-font-size: 14px;
@@ -65,7 +63,6 @@
     -fx-background-color: #5a0000;
 }
 
-/* Table View Styles */
 .table-view {
     -fx-font-family: "Arial";
     -fx-font-size: 14px;
@@ -77,7 +74,6 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 4);
 }
 
-/* Table Column */
 .table-column {
     -fx-font-family: "Arial";
     -fx-font-size: 14px;
@@ -86,7 +82,6 @@
     -fx-alignment: CENTER;
 }
 
-/* Table Cell */
 .table-cell {
     -fx-font-family: "Arial";
     -fx-font-size: 14px;
@@ -94,19 +89,15 @@
     -fx-padding: 5;
 }
 
-/* Selected Row */
 .table-row:selected {
-    -fx-background-color: #e67878; /* Soft light blue for selected row */
-    -fx-text-fill: #000000; /* Text color stays black */
+    -fx-background-color: #e67878;
+    -fx-text-fill: #000000;
 }
 
-/* Focused Row */
 .table-row:focused {
-    -fx-background-color: #e67878; /* A slightly darker blue for focus */
+    -fx-background-color: #e67878;
 }
 
-
-/* ComboBox Styles */
 .combo-box {
     -fx-font-family: "Arial";
     -fx-font-size: 14px;
@@ -130,7 +121,6 @@
     -fx-padding: 10;
 }
 
-/* ComboBox Drop-down List */
 .combo-box-popup {
     -fx-background-color: #ffffff;
     -fx-border-color: #ccc;
@@ -140,8 +130,99 @@
     -fx-text-fill: #000000;
 }
 
-
 .combo-box .arrow {
     -fx-background-color: #000000;
 }
 
+.chart {
+    -fx-background-color: white;
+}
+
+.chart-title {
+    -fx-text-fill: maroon;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.axis {
+    -fx-tick-label-fill: black;
+    -fx-label-padding: 5px;
+}
+
+.axis-label {
+    -fx-text-fill: maroon;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.chart-bar {
+    -fx-bar-fill: maroon;
+}
+
+.chart-bar:hover {
+    -fx-bar-fill: black;
+}
+
+.chart-legend {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+.chart-plot-background {
+    -fx-background-color: white;
+}
+
+.chart-horizontal-grid-lines,
+.chart-vertical-grid-lines {
+    -fx-stroke: #cccccc;
+}
+
+.area-chart {
+    -fx-background-color: white;
+}
+
+.area-chart .chart-title {
+    -fx-text-fill: #800000;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.area-chart .axis-label {
+    -fx-text-fill: #800000;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.area-chart .chart-area {
+    -fx-background-color: #ffffff;
+}
+
+.area-chart .chart-series-line {
+    -fx-stroke: #800000;
+    -fx-stroke-width: 2;
+}
+
+.area-chart .chart-series-line:hover {
+    -fx-stroke: #000000;
+    -fx-stroke-width: 2;
+}
+
+.area-chart .chart-bar {
+    -fx-bar-fill: #800000;
+}
+
+.area-chart .chart-bar:hover {
+    -fx-bar-fill: #000000;
+}
+
+.area-chart .axis .tick-label {
+    -fx-text-fill: black;
+}
+
+.area-chart .chart-plot-background {
+    -fx-background-color: white;
+}
+
+.area-chart .chart-plot-background {
+    -fx-background-color: #f6f6f6;
+}
