@@ -25,15 +25,8 @@ public class LoginSignUpServiceImpl implements LoginSignupService {
 
     @Override
     public User login(String email, String password) {
-        try {
-            User user = loginSignUpDao.login(email, password);
-            if (user != null) {
-                return user;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        UserEntity userEntity = loginSignUpDao.login(email, password);
+        return new ModelMapper().map(userEntity, User.class);
     }
 
     @Override

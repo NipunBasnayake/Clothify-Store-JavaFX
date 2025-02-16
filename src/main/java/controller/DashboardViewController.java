@@ -107,7 +107,6 @@ public class DashboardViewController implements Initializable {
 
     @FXML
     void btnPayBillOnAction(ActionEvent event) {
-
         List<OrderDetails> orderDetailsList = new ArrayList<>();
         for (Product product : cartList) {
             OrderDetails orderDetails = new OrderDetails(
@@ -124,9 +123,10 @@ public class DashboardViewController implements Initializable {
                 convertDateFormat(lblDate.getText()),
                 Double.parseDouble(txtTotalAmount.getText()),
                 "Cash",
-//                currentUser.getUserID(),
-                1,
-                getCustomerIdByComboBox(cmbSelectCustomer.getSelectionModel().getSelectedItem().toString()),
+                currentUser.getUserID(),
+                cmbSelectCustomer.getSelectionModel().getSelectedItem() != null
+                        ? getCustomerIdByComboBox(cmbSelectCustomer.getSelectionModel().getSelectedItem().toString())
+                        : 0,
                 orderDetailsList
         );
 
@@ -140,7 +140,10 @@ public class DashboardViewController implements Initializable {
             cartList.clear();
             loadCartPane();
         } else {
-            System.out.println("Order Not Placed");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Order Not Placed");
+            alert.setHeaderText("Order Not Placed");
+            alert.show();
         }
 
     }

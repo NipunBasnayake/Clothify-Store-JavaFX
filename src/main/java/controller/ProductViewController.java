@@ -1,5 +1,8 @@
 package controller;
 
+import com.jfoenix.controls.JFXRadioButton;
+import dto.Product;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -16,8 +20,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import lombok.Setter;
-import dto.Product;
 import service.ServiceFactory;
 import service.custom.ProductService;
 import util.ServiceType;
@@ -29,10 +31,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-@Setter
 public class ProductViewController implements Initializable {
-    ProductService service = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
 
+    private final ProductService service = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
     private List<Product> productList;
 
     @FXML
@@ -44,10 +45,183 @@ public class ProductViewController implements Initializable {
     @FXML
     private TextField txtSearchProduct;
 
+    @FXML
+    public TableView<Product> tableProducts;
+
+    @FXML
+    public AnchorPane paneListView;
+
+    @FXML
+    public ScrollPane paneCardView;
+
+    @FXML
+    public JFXRadioButton radioListView;
+
+    @FXML
+    public JFXRadioButton radioCardView;
+
+    @FXML
+    public TableColumn<Product, String> colId;
+
+    @FXML
+    public TableColumn<Product, String> colName;
+
+    @FXML
+    public TableColumn<Product, String> colImage;
+
+    @FXML
+    public TableColumn<Product, String> colCategory;
+
+    @FXML
+    public TableColumn<Product, String> colSize;
+
+    @FXML
+    public TableColumn<Product, Double> colPrice;
+
+    @FXML
+    public TableColumn<Product, Integer> colQty;
+
+    @FXML
+    public TableColumn<Product, String> colSupplierId;
+
+    @FXML
+    public TableColumn<Product, Void> colUpdateAction;
+
+    @FXML
+    public TableColumn<Product, Void> colDeleteAction;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        ToggleGroup viewToggleGroup = new ToggleGroup();
+        radioListView.setToggleGroup(viewToggleGroup);
+        radioCardView.setToggleGroup(viewToggleGroup);
+
+        colId.setCellValueFactory(new PropertyValueFactory<>("productID"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        colCategory.setCellValueFactory(new PropertyValueFactory<>("productCategory"));
+        colSize.setCellValueFactory(new PropertyValueFactory<>("productSize"));
+        colPrice.setCellValueFactory(new PropertyValueFactory<>("productPrice"));
+        colQty.setCellValueFactory(new PropertyValueFactory<>("productQuantity"));
+        colSupplierId.setCellValueFactory(new PropertyValueFactory<>("supplierID"));
+        colImage.setCellValueFactory(new PropertyValueFactory<>("productImage"));
+        colImage.setCellFactory(column -> new TableCell<>() {
+            private final ImageView imageView = new ImageView();
+
+            @Override
+            protected void updateItem(String imageUrl, boolean empty) {
+                super.updateItem(imageUrl, empty);
+
+                if (empty || imageUrl == null || imageUrl.isEmpty()) {
+                    setGraphic(null);
+                } else {
+                    try {
+                        Image image = new Image("file:" + imageUrl);
+                        imageView.setImage(image);
+                        imageView.setFitWidth(80);
+                        imageView.setFitHeight(60);
+                        setGraphic(imageView);
+                    } catch (Exception e) {
+                        System.err.println("Failed to load image: " + imageUrl);
+                        setGraphic(null);
+                    }
+                }
+            }
+        });
+
+        colUpdateAction.setCellFactory(column -> new TableCell<>() {
+            private final Button updateButton = new Button("Update");
+
+            {
+                updateButton.setStyle("-fx-background-color: #495057; -fx-text-fill: white;");
+                updateButton.setOnMouseEntered(e -> updateButton.setStyle("-fx-background-color: #363b3e; -fx-text-fill: white;"));
+                updateButton.setOnMouseExited(e -> updateButton.setStyle("-fx-background-color: #495057; -fx-text-fill: white;"));
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(updateButton);
+                    updateButton.setOnAction(event -> {
+                        Product product = getTableView().getItems().get(getIndex());
+                        updateProduct(product);
+                    });
+                }
+            }
+        });
+
+        colDeleteAction.setCellFactory(column -> new TableCell<>() {
+            private final Button deleteButton = new Button("Delete");
+
+            {
+                deleteButton.setStyle("-fx-background-color: #6e0000; -fx-text-fill: white;");
+                deleteButton.setOnMouseEntered(e -> deleteButton.setStyle("-fx-background-color: #4c0000; -fx-text-fill: white;"));
+                deleteButton.setOnMouseExited(e -> deleteButton.setStyle("-fx-background-color: #6e0000; -fx-text-fill: white;"));
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(deleteButton);
+
+                    deleteButton.setOnAction(event -> {
+                        Product product = getTableView().getItems().get(getIndex());
+                        deleteProduct(product);
+                    });
+                }
+            }
+        });
+
         productList = service.getProducts();
         loadProductPanes(productList);
+        populateTable(productList);
+
+        radioCardView.setSelected(true);
+    }
+
+    private void updateProduct(Product product) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/update-product-view.fxml"));
+            Parent root = loader.load();
+
+            UpdateProductViewController controller = loader.getController();
+            controller.setProduct(product);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Update Product");
+            stage.setResizable(false);
+            stage.show();
+            stage.setOnHidden(e -> Platform.runLater(() -> loadProductPanes(service.getProducts())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteProduct(Product product) {
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Delete Product");
+        confirmationAlert.setHeaderText("Are you sure you want to delete this product?");
+        confirmationAlert.setContentText("This action cannot be undone.");
+
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            boolean isProductDeleted = service.deleteProduct(product.getProductID());
+
+            Alert alert = new Alert(isProductDeleted ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
+            alert.setTitle(isProductDeleted ? "Product Deleted" : "Delete Product Error");
+            alert.setHeaderText(isProductDeleted ? "Product successfully deleted." : "Product not deleted.");
+            alert.show();
+            Platform.runLater(() -> loadProductPanes(service.getProducts()));
+        }
     }
 
     @FXML
@@ -58,7 +232,7 @@ public class ProductViewController implements Initializable {
             stage.setScene(new Scene(root));
             stage.setTitle("Add Product");
             stage.show();
-            stage.setOnHidden(e -> loadProductPanes(service.getProducts()));
+            stage.setOnHidden(e -> Platform.runLater(() -> loadProductPanes(service.getProducts())));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -84,31 +258,37 @@ public class ProductViewController implements Initializable {
     @FXML
     void btnSortAllProductsOnAction(ActionEvent event) {
         loadProductPanes(productList);
+        populateTable(productList);
     }
 
     @FXML
     void btnSortGentsOnAction(ActionEvent event) {
         loadProductPanes(sortProductsByCategory("Gents"));
+        populateTable(sortProductsByCategory("Gents"));
     }
 
     @FXML
     void btnSortLadiesOnAction(ActionEvent event) {
         loadProductPanes(sortProductsByCategory("Ladies"));
+        populateTable(sortProductsByCategory("Ladies"));
     }
 
     @FXML
     void btnSortKidsOnAction(ActionEvent event) {
         loadProductPanes(sortProductsByCategory("Kids"));
+        populateTable(sortProductsByCategory("Kids"));
     }
 
     @FXML
     void btnSortAccessoriesOnAction(ActionEvent event) {
         loadProductPanes(sortProductsByCategory("Accessories"));
+        populateTable(sortProductsByCategory("Accessories"));
     }
 
     @FXML
     void btnSortFootwareOnAction(ActionEvent event) {
         loadProductPanes(sortProductsByCategory("Footwear"));
+        populateTable(sortProductsByCategory("Footwear"));
     }
 
     private List<Product> sortProductsByCategory(String category) {
@@ -122,6 +302,9 @@ public class ProductViewController implements Initializable {
     }
 
     private void loadProductPanes(List<Product> products) {
+        if (products == null) {
+            return;
+        }
         flowPaneProductsManagement.getChildren().clear();
         flowPaneProductsManagement.setHgap(15);
         flowPaneProductsManagement.setVgap(15);
@@ -186,42 +369,18 @@ public class ProductViewController implements Initializable {
         return productCard;
     }
 
-    private void updateProduct(Product product) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/update-product-view.fxml"));
-            Parent root = loader.load();
-
-            UpdateProductViewController controller = loader.getController();
-            controller.setProduct(product);
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Update Product");
-            stage.setResizable(false);
-            stage.show();
-            stage.setOnHidden(e -> loadProductPanes(service.getProducts()));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void populateTable(List<Product> products) {
+        tableProducts.getItems().clear();
+        tableProducts.getItems().addAll(products);
     }
 
-    private void deleteProduct(Product product) {
-        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationAlert.setTitle("Delete Product");
-        confirmationAlert.setHeaderText("Are you sure you want to delete this product?");
-        confirmationAlert.setContentText("This action cannot be undone.");
+    @FXML
+    void radioListViewOnAction(ActionEvent actionEvent) {
+        paneListView.toFront();
+    }
 
-        Optional<ButtonType> result = confirmationAlert.showAndWait();
-
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isProductDeleted = service.deleteProduct(product.getProductID());
-
-            Alert alert = new Alert(isProductDeleted ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
-            alert.setTitle(isProductDeleted ? "Product Deleted" : "Delete Product Error");
-            alert.setHeaderText(isProductDeleted ? "Product successfully deleted." : "Product not deleted.");
-            alert.show();
-            loadProductPanes(service.getProducts());
-        }
+    @FXML
+    void radioCardViewOnAction(ActionEvent actionEvent) {
+        paneCardView.toFront();
     }
 }

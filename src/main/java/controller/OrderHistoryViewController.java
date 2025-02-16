@@ -26,7 +26,6 @@ public class OrderHistoryViewController implements Initializable {
     private final CustomerService customerService = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
     private final LoginSignupService loginSignupService = ServiceFactory.getInstance().getService(ServiceType.USER);
 
-
     @FXML
     public TableColumn<OrderHistory, Integer> colOrderId;
     @FXML
@@ -57,7 +56,7 @@ public class OrderHistoryViewController implements Initializable {
         colOrderId.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         colOrderDate.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
         colProductName.setCellValueFactory(new PropertyValueFactory<>("productName"));
-        colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("productPrice"));
         colQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         colTotalAmount.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
         colPaymentType.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
@@ -68,31 +67,34 @@ public class OrderHistoryViewController implements Initializable {
     }
 
     private void populateTable() {
-
         try {
             List<Order> orders = orderService.getOrders();
             List<OrderDetails> orderDetails = orderProductService.getOrderProducts();
 
-
             for (Order order : orders) {
+
                 for (OrderDetails orderDetail : orderDetails) {
 
-                    Product product = productService.getProductById(orderDetail.getProductId());
-                    Customer customer = customerService.getCustomerById(order.getCustomerId());
-                    User  user = loginSignupService.getUserById(order.getUserId());
+                    if (orderDetail.getOrderId() == order.getOrderId()) {
+                        Customer customer = customerService.getCustomerById(order.getCustomerId());
+                        if (customer == null) {
+                            continue;
+                        }
+                        Product product = productService.getProductById(orderDetail.getProductId());
 
-                    OrderHistory orderHistory = new OrderHistory(
-                            order.getOrderId(),
-                            order.getOrderDate(),
-                            product.getProductName(),
-                            product.getProductPrice(),
-                            product.getProductQuantity(),
-                            product.getProductPrice() * product.getProductQuantity(),
-                            "Cash",
-                            customer.getCustomerName(),
-                            user.getUserName()
-                    );
-                    orderHistoryItems.add(orderHistory);
+                        OrderHistory orderHistory = new OrderHistory(
+                                order.getOrderId(),
+                                order.getOrderDate(),
+                                product.getProductName(),
+                                product.getProductPrice(),
+                                orderDetail.getQuantity(),
+                                product.getProductPrice() * orderDetail.getQuantity(),
+                                order.getPaymentMethod(),
+                                customer.getCustomerName(),
+                                loginSignupService.getUserById(order.getUserId()).getUserName()
+                        );
+                        orderHistoryItems.add(orderHistory);
+                    }
                 }
             }
 
@@ -120,5 +122,4 @@ public class OrderHistoryViewController implements Initializable {
                 (order.getUserName() != null && order.getUserName().toLowerCase().contains(searchText)) ||
                 (order.getPaymentMethod() != null && order.getPaymentMethod().toLowerCase().contains(searchText));
     }
-
 }

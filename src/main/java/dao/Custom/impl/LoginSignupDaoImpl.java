@@ -22,28 +22,34 @@ public class LoginSignupDaoImpl implements LoginSignUpDao {
 
 
     @Override
-    public User login(String email, String password) {
-        String query = "SELECT * FROM employee WHERE email = ? AND password = ?";
+    public UserEntity login(String email, String password) {
+        String query = "SELECT * FROM user WHERE email = ? AND password = ?";
+
         try {
-            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+            Connection connection = DBConnection.getInstance().getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+            if (connection == null) {
+                throw new SQLException("Database connection is null");
+            }
+
             statement.setString(1, email);
             statement.setString(2, password);
 
-            try (ResultSet resultSet = statement.executeQuery()) {
+                ResultSet resultSet = statement.executeQuery();
                 if (resultSet.next()) {
-                    return new User(
+                    return new UserEntity(
                             resultSet.getInt("userId"),
                             resultSet.getString("name"),
                             resultSet.getString("email"),
-                            resultSet.getString("password"),
+                            "xxxxx",
                             resultSet.getString("role"),
                             resultSet.getString("registrationDate")
                     );
                 }
-            }
+
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Database error during login.");
+            throw new RuntimeException("Failed to login", e);
         }
         return null;
     }
@@ -72,7 +78,6 @@ public class LoginSignupDaoImpl implements LoginSignUpDao {
 
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                System.out.println("Result comes from DB");
                 return new UserEntity(
                         resultSet.getInt("userId"),
                         resultSet.getString("name"),

@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="1002.0" prefWidth="1601.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProductViewController">
@@ -60,11 +65,49 @@
                   <Font size="18.0" />
                </font>
             </JFXButton>
-            <ScrollPane fitToHeight="false" fitToWidth="true" layoutX="18.0" layoutY="279.0" pannable="true" prefHeight="700.0" prefWidth="1579.0" style="-fx-background-color: #e0e0e0;">
+            <AnchorPane fx:id="paneListView" layoutX="14.0" layoutY="278.0" prefHeight="715.0" prefWidth="1584.0" style="-fx-background-color: #e0e0e0;">
+               <children>
+                  <TableView fx:id="tableProducts" layoutX="4.0" layoutY="2.0" prefHeight="707.0" prefWidth="1565.0">
+                    <columns>
+                      <TableColumn fx:id="colId" prefWidth="84.0" text="Product Id" />
+                        <TableColumn fx:id="colImage" prefWidth="154.0" text="Image" />
+                      <TableColumn fx:id="colName" prefWidth="316.0" text="Product Name" />
+                        <TableColumn fx:id="colCategory" prefWidth="174.0" text="Product Category" />
+                        <TableColumn fx:id="colSize" prefWidth="157.0" text="Size" />
+                        <TableColumn fx:id="colPrice" prefWidth="149.0" text="Price" />
+                        <TableColumn fx:id="colQty" prefWidth="108.0" text="Quantity" />
+                        <TableColumn fx:id="colSupplierId" prefWidth="115.0" text="Supplier Id" />
+                        <TableColumn fx:id="colUpdateAction" prefWidth="162.0" text="Update Action" />
+                        <TableColumn fx:id="colDeleteAction" prefWidth="144.0" text="Delete Action" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+            <ScrollPane fx:id="paneCardView" fitToHeight="false" fitToWidth="true" layoutX="18.0" layoutY="279.0" pannable="true" prefHeight="715.0" prefWidth="1578.0" style="-fx-background-color: #e0e0e0;">
                <content>
                   <FlowPane fx:id="flowPaneProductsManagement" hgap="15" prefWidth="1562.0" style="-fx-background-color: #e0e0e0;" vgap="15" />
                </content>
             </ScrollPane>
+            <Group layoutX="1476.0" layoutY="208.0">
+               <children>
+                  <JFXRadioButton fx:id="radioCardView" layoutX="-109.0" layoutY="39.0" onAction="#radioCardViewOnAction" text="Card View">
+                     <selectedColor>
+                        <Color red="0.6100000143051147" green="0.061000000685453415" blue="0.061000000685453415" />
+                     </selectedColor>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </JFXRadioButton>
+                  <JFXRadioButton fx:id="radioListView" layoutY="39.0" onAction="#radioListViewOnAction" text="List View">
+                     <selectedColor>
+                        <Color red="0.6100000143051147" green="0.061000000685453415" blue="0.061000000685453415" />
+                     </selectedColor>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </JFXRadioButton>
+               </children>
+            </Group>
          </children>
       </AnchorPane>
    </children>

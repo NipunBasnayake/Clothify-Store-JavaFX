@@ -102,11 +102,9 @@ public class OrderServiceImpl implements OrderService {
                     order.getCustomerId(),
                     orderDetailEntities
             );
-//            System.out.println(orderEntity.toString());
 
             boolean isOrderSaved = orderDao.save(orderEntity);
             if (isOrderSaved) {
-                System.out.println("Order Added Successfully - 3 Databases Executed");
                 return true;
             }
             return false;

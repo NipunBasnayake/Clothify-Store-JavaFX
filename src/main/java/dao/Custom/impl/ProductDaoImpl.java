@@ -50,7 +50,7 @@ public class ProductDaoImpl implements ProductDao {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                ProductEntity product = new ProductEntity(
+                return new ProductEntity(
                         resultSet.getInt(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
@@ -60,7 +60,6 @@ public class ProductDaoImpl implements ProductDao {
                         resultSet.getString(7),
                         resultSet.getInt(8)
                 );
-                return product;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

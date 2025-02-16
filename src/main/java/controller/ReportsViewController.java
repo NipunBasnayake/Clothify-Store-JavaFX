@@ -96,7 +96,7 @@ public class ReportsViewController implements Initializable {
 
     @FXML
     public void btnSupplierReportsOnAction(ActionEvent actionEvent) {
-
+        generateReport("Supplier_Report.jrxml");
     }
 
     public void cmbProductCategoriesOnAction(ActionEvent actionEvent) {

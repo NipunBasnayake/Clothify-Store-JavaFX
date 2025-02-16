@@ -49,19 +49,16 @@ public class OrderDaoImpl implements OrderDao {
                 statement.setDouble(2, entity.getTotalPrice());
                 statement.setString(3, entity.getPaymentMethod());
                 statement.setInt(4, entity.getUserId());
-                statement.setInt(5, entity.getCustomerId());
+                statement.setObject(5, entity.getCustomerId() != 0 ? entity.getCustomerId() : null);
                 boolean isOrderSaved = statement.executeUpdate() > 0;
 
                 if (isOrderSaved) {
-                    System.out.println("Table Order Saved Successfully");
                     boolean isSavedToOrderDetails = OrderDetailsDaoImpl.getInstance().save(entity.getOrderDetailEntityList());
 
                     if (isSavedToOrderDetails) {
-                        System.out.println("Table Order Details Saved Successfully");
                         boolean isProductTableUpdated = ProductDaoImpl.getInstance().updateQuantity(entity.getOrderDetailEntityList());
 
                         if (isProductTableUpdated) {
-                            System.out.println("Table Order Details Updated Successfully");
                             connection.commit();
                             return true;
                         }
