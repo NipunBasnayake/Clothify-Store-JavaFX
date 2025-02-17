@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import dto.Supplier;
+import javafx.stage.Stage;
 import service.ServiceFactory;
 import service.custom.SupplierService;
 import util.ServiceType;
@@ -42,15 +43,14 @@ public class AddSupplierViewController implements Initializable {
         ));
         Alert alert;
         if (isSupplierAdded) {
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Supplier Added");
-            alert.setHeaderText("Supplier Added");
+            Stage stage = (Stage) txtSupplierCompany.getScene().getWindow();
+            stage.close();
         }else {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Supplier Not Added");
             alert.setHeaderText("Supplier Not Added");
+            alert.show();
         }
-        alert.show();
     }
 
     @Override

@@ -107,6 +107,14 @@ public class DashboardViewController implements Initializable {
 
     @FXML
     void btnPayBillOnAction(ActionEvent event) {
+        if (cartList.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Order Error");
+            alert.setHeaderText("Please select a product first");
+            alert.show();
+            return;
+        }
+
         List<OrderDetails> orderDetailsList = new ArrayList<>();
         for (Product product : cartList) {
             OrderDetails orderDetails = new OrderDetails(
@@ -251,7 +259,11 @@ public class DashboardViewController implements Initializable {
         productCard.setPrefHeight(265);
         productCard.setAlignment(Pos.CENTER);
 
-        ImageView productImage = new ImageView(new Image("file:" + product.getProductImage()));
+        ImageView productImage = new ImageView();
+        File imageFile = new File(product.getProductImage());
+        if (imageFile.exists()) {
+            productImage.setImage(new Image(imageFile.toURI().toString()));
+        }
         productImage.setFitWidth(177);
         productImage.setFitHeight(130);
 
@@ -289,6 +301,7 @@ public class DashboardViewController implements Initializable {
             dialog.showAndWait().ifPresent(input -> {
                 try {
                     int quantity = Integer.parseInt(input);
+                    boolean isProductAvailable = productService.getProductById(product.getProductID()).getProductQuantity() > quantity;
 
                     boolean found = false;
                     for (Product listProduct : cartList) {
@@ -300,16 +313,23 @@ public class DashboardViewController implements Initializable {
                     }
 
                     if (!found) {
-                        cartList.add(new Product(product.getProductID(),
-                                product.getProductName(),
-                                product.getProductCategory(),
-                                product.getProductSize(),
-                                product.getProductPrice(),
-                                quantity,
-                                product.getProductImage(),
-                                product.getSupplierID()));
+                        if (isProductAvailable) {
+                            cartList.add(new Product(product.getProductID(),
+                                    product.getProductName(),
+                                    product.getProductCategory(),
+                                    product.getProductSize(),
+                                    product.getProductPrice(),
+                                    quantity,
+                                    product.getProductImage(),
+                                    product.getSupplierID()
+                            ));
+                        }else {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Stock Error");
+                            alert.setHeaderText("Stock not enough to add product");
+                            alert.show();
+                        }
                     }
-
                     loadCartPane();
                 } catch (NumberFormatException e) {
                     new Alert(Alert.AlertType.ERROR, "Invalid quantity! Please enter a valid number.").show();
@@ -392,6 +412,7 @@ public class DashboardViewController implements Initializable {
         txtTotalAmount.setText(String.valueOf(totalAmount));
         flowPaneCart.getChildren().setAll(cartContainer);
     }
+
 
     private void updateTotalAmount() {
         double newTotal = cartList.stream().mapToDouble(p -> p.getProductPrice() * p.getProductQuantity()).sum();

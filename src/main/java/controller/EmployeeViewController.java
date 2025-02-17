@@ -1,5 +1,7 @@
 package controller;
 
+import dto.Customer;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +20,7 @@ import util.ServiceType;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -27,22 +30,18 @@ import java.util.logging.Logger;
 public class EmployeeViewController implements Initializable {
 
     EmployeeService employeeService = ServiceFactory.getInstance().getService(ServiceType.EMPLOYEE);
+    ObservableList<Employee> employeeObservableList = FXCollections.observableList(employeeService.getEmployees());
 
-    private static final Logger LOGGER = Logger.getLogger(EmployeeViewController.class.getName());
+    @FXML
     public AnchorPane paneProductManagement;
-
     @FXML
     private TableColumn<Employee, Integer> colEmployeeId;
-
     @FXML
     private TableColumn<Employee, String> colEmployeeName, colEmployeeEmail, colEmployeeRole;
-
     @FXML
     private TableColumn<Employee, Void> colEmployeeUpdateAction, colEmployeeDeleteAction;
-
     @FXML
     private TableView<Employee> tblEmployeeDetails;
-
     @FXML
     private TextField txtSearchEmployee;
 
@@ -64,7 +63,7 @@ public class EmployeeViewController implements Initializable {
                 updateButton.setOnAction(event -> {
                     Employee employee = getTableRow() != null ? getTableRow().getItem() : null;
                     if (employee != null) {
-                        openUpdateEmployeeView(employee);
+                        updateEmployee(employee);
                     }
                 });
             }
@@ -103,23 +102,8 @@ public class EmployeeViewController implements Initializable {
     }
 
     @FXML
-    void btnAddEmployeeOnAction(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/add-employee-view.fxml"));
-            Stage stage = new Stage();
-            stage.setScene(new Scene(loader.load()));
-            stage.setTitle("Add Employee");
-            stage.setResizable(false);
-            stage.show();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Failed to load add-employee-view.fxml", e);
-        }
-    }
-
-    @FXML
     void btnSearchEmployeeOnAction(ActionEvent event) {
         if (txtSearchEmployee == null || tblEmployeeDetails == null) {
-            LOGGER.log(Level.WARNING, "Search field or table is null.");
             return;
         }
 
@@ -135,62 +119,76 @@ public class EmployeeViewController implements Initializable {
                 filteredList.add(emp);
             }
         }
-
         tblEmployeeDetails.setItems(filteredList);
     }
 
-    private void populateTable() {
-        List<Employee> employees = employeeService.getEmployees();
-        tblEmployeeDetails.setItems(FXCollections.observableList(employees));
+    @FXML
+    void btnAddEmployeeOnAction(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/add-employee-view.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Add Employee");
+            stage.setResizable(false);
+            stage.show();
+
+            stage.setOnHidden(e -> Platform.runLater(() -> populateTable()));
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private void openUpdateEmployeeView(Employee employee) {
-        if (employee == null) return;
-
+    private void updateEmployee(Employee employee) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/update-employee-view.fxml"));
             Stage stage = new Stage();
             stage.setScene(new Scene(loader.load()));
+            UpdateEmployeeViewController controller = loader.getController();
+            controller.setEmployee(employee);
             stage.setTitle("Update Employee");
             stage.setResizable(false);
-            UpdateEmployeeViewController controller = loader.getController();
-
-            if (controller != null) {
-                controller.setEmployee(employee);
-            } else {
-                LOGGER.log(Level.SEVERE, "Failed to retrieve controller from update-employee-view.fxml");
-            }
-
             stage.show();
+
+            stage.setOnHidden(e -> Platform.runLater(() -> populateTable()));
+
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Failed to open update employee view", e);
+            throw new RuntimeException(e);
         }
     }
 
     private void deleteEmployee(Employee employee) {
         if (employee == null) return;
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete Confirmation");
-        alert.setHeaderText("Are you sure you want to delete this employee?");
-        alert.setContentText("This action cannot be undone.");
+        Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        deleteAlert.setTitle("Delete Employee");
+        deleteAlert.setHeaderText("Do you want to delete employee: " + employee.getEmployeeName() + "?");
+        deleteAlert.setContentText("Click 'Delete' to confirm, or 'Cancel' to abort.");
 
-        Optional<ButtonType> result = alert.showAndWait();
+        Optional<ButtonType> result = deleteAlert.showAndWait();
+
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isEmployeeDeleted = employeeService.deleteEmployee(employee.getEmployeeId());
-            if (isEmployeeDeleted) {
-                Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
-                alert1.setTitle("Delete Confirmation");
-                alert1.setHeaderText("Delete Confirmation");
-                alert1.show();
-                populateTable();
-            } else {
-                Alert alert1 = new Alert(Alert.AlertType.ERROR);
-                alert1.setTitle("Delete Error");
-                alert1.setHeaderText("Delete Error");
-                alert1.show();
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Confirm Deletion");
+            confirmationAlert.setHeaderText("Are you sure you want to delete the employee: " + employee.getEmployeeName() + "?");
+            confirmationAlert.setContentText("This action cannot be undone.");
+
+            Optional<ButtonType> confirmationResult = confirmationAlert.showAndWait();
+
+            if (confirmationResult.isPresent() && confirmationResult.get() == ButtonType.OK) {
+                boolean isEmployeeDeleted = employeeService.deleteEmployee(employee.getEmployeeId());
+
+                if (isEmployeeDeleted) {
+                    Platform.runLater(() -> populateTable());
+                }
             }
         }
+    }
+
+    private void populateTable() {
+        employeeObservableList.clear();
+        employeeObservableList = FXCollections.observableList(employeeService.getEmployees());
+        tblEmployeeDetails.setItems(employeeObservableList);
     }
 
 }

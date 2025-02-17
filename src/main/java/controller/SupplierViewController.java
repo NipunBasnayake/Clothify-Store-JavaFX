@@ -1,6 +1,9 @@
 package controller;
 
+import dto.Employee;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 public class SupplierViewController implements Initializable {
 
     SupplierService supplierService = ServiceFactory.getInstance().getService(ServiceType.SUPPLIER);
+    ObservableList<Supplier> employeeObservableList = FXCollections.observableList(supplierService.getSuppliers());
 
     @FXML
     private TableView<Supplier> tblSupplier;
@@ -82,7 +86,17 @@ public class SupplierViewController implements Initializable {
 
     @FXML
     void btnAddSupplierOnAction(ActionEvent event) {
-        openWindow("/view/add-Supplier-view.fxml", "Add Supplier");
+        try {
+            Stage stage = new Stage();
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/add-Supplier-view.fxml"))));
+            stage.setTitle("Add Supplier");
+            stage.setResizable(false);
+            stage.show();
+
+            stage.setOnHidden(e -> Platform.runLater(() -> populateTable()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -97,7 +111,9 @@ public class SupplierViewController implements Initializable {
     }
 
     private void populateTable() {
-        tblSupplier.setItems(FXCollections.observableArrayList(supplierService.getSuppliers()));
+        employeeObservableList.clear();
+        employeeObservableList = FXCollections.observableList(supplierService.getSuppliers());
+        tblSupplier.setItems(employeeObservableList);
     }
 
     private void openUpdateSupplierView(Supplier supplier) {
@@ -114,38 +130,40 @@ public class SupplierViewController implements Initializable {
             stage.setOnHidden(event -> populateTable());
             stage.show();
 
+            stage.setOnHidden(e -> Platform.runLater(() -> populateTable()));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void deleteSupplier(Supplier supplier) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this supplier? This action cannot be undone.", ButtonType.YES, ButtonType.NO);
-        Optional<ButtonType> result = alert.showAndWait();
+        if (supplier == null) return;
 
-        if (result.isPresent() && result.get() == ButtonType.YES) {
-            boolean isDeletedSupplier = supplierService.deleteSupplier(supplier.getSupplierId());
+        Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        deleteAlert.setTitle("Delete Supplier");
+        deleteAlert.setHeaderText("Do you want to delete supplier: " + supplier.getSupplierName() + "?");
+        deleteAlert.setContentText("Click 'Delete' to confirm, or 'Cancel' to abort.");
 
-            if (isDeletedSupplier) {
-                Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "Supplier deleted successfully.", ButtonType.OK);
-                successAlert.showAndWait();
-                populateTable();
-            } else {
-                Alert failureAlert = new Alert(Alert.AlertType.ERROR, "Failed to delete the supplier. Please try again.", ButtonType.OK);
-                failureAlert.showAndWait();
+        Optional<ButtonType> result = deleteAlert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Confirm Deletion");
+            confirmationAlert.setHeaderText("Are you sure you want to delete the supplier: " + supplier.getSupplierName() + "?");
+            confirmationAlert.setContentText("This action cannot be undone.");
+
+            Optional<ButtonType> confirmationResult = confirmationAlert.showAndWait();
+
+            if (confirmationResult.isPresent() && confirmationResult.get() == ButtonType.OK) {
+                boolean isSupplierDeleted = supplierService.deleteSupplier(supplier.getSupplierId());
+
+                if (isSupplierDeleted) {
+                    Platform.runLater(() -> populateTable());
+                }
             }
         }
     }
 
-    private void openWindow(String resource, String title) {
-        try {
-            Stage stage = new Stage();
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource(resource))));
-            stage.setTitle(title);
-            stage.setResizable(false);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 }

@@ -77,8 +77,6 @@ public class AddProductViewController implements Initializable {
         }
     }
 
-
-
     @FXML
     void btnAddSupplierOnAction(ActionEvent event) {
         Stage stage = new Stage();
@@ -93,6 +91,20 @@ public class AddProductViewController implements Initializable {
 
     @FXML
     void btnSaveProductOnAction(ActionEvent event) {
+        if (txtAddProductImagePath.getText().trim().isEmpty() ||
+                txtAddProductName.getText().trim().isEmpty() ||
+                txtAddProductPrice.getText().trim().isEmpty() ||
+                txtAddProductQuantityOnHand.getText().trim().isEmpty() ||
+                cmbAddProductCategory.getValue() == null ||
+                cmbAddProductSize.getValue() == null ||
+                cmbAddProcutSupplierId.getValue() == null) {
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Fields Can't be Empty");
+            alert.show();
+            return;
+        }
         boolean isProductAdded = service.addProduct(new Product(
                 1,
                 txtAddProductName.getText(),
@@ -103,11 +115,10 @@ public class AddProductViewController implements Initializable {
                 txtAddProductImagePath.getText(),
                 Integer.parseInt(cmbAddProcutSupplierId.getSelectionModel().getSelectedItem().toString().split(" - ")[0])
         ));
+
         if (isProductAdded) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Product Adding Success");
-            alert.setHeaderText("Product Successfully Added");
-            alert.show();
+            Stage stage = (Stage) txtAddProductImagePath.getScene().getWindow();
+            stage.close();
         }else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Product Adding Failed");

@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import dto.Employee;
+import javafx.stage.Stage;
 import service.ServiceFactory;
 import service.custom.EmployeeService;
 import util.ServiceType;
@@ -37,15 +38,14 @@ public class AddEmployeeViewController implements Initializable {
         ));
         Alert alert;
         if (isEmployeeAdded) {
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Employee Added");
-            alert.setHeaderText("Employee Added");
+            Stage stage = (Stage) txtAddEmployeeEmail.getScene().getWindow();
+            stage.close();
         }else {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Employee Not Added");
             alert.setHeaderText("Employee Not Added");
+            alert.show();
         }
-        alert.show();
     }
 
     @Override

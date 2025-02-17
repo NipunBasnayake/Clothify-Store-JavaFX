@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import dto.Customer;
+import javafx.stage.Stage;
 import service.ServiceFactory;
 import service.custom.CustomerService;
 import util.ServiceType;
@@ -39,10 +40,8 @@ public class UpdateCustomerViewController {
                 txtUpdateCustomerAddress.getText()
         ));
         if (isUpdatedCustomer) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Customer Updated");
-            alert.setHeaderText("Customer Updated");
-            alert.show();
+            Stage stage = (Stage) txtUpdateCustomerAddress.getScene().getWindow();
+            stage.close();
         }else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Customer Not Updated");

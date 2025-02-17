@@ -59,10 +59,13 @@ public class UpdateSupplierViewController {
         boolean isSupplierUpdated = supplierService.updateSupplier(supplier);
 
         if (isSupplierUpdated) {
-            showAlert(Alert.AlertType.INFORMATION, "Update Supplier", "Supplier Updated Successfully.");
-            ((Stage) txtSupplierName.getScene().getWindow()).close();
+            Stage stage = (Stage) txtSupplierCompany.getScene().getWindow();
+            stage.close();
         } else {
-            showAlert(Alert.AlertType.ERROR, "Update Supplier", "Supplier Update Failed.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Update Error");
+            alert.setHeaderText("Supplier Updated Error");
+            alert.show();
         }
     }
 

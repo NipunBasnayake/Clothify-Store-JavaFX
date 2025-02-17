@@ -117,37 +117,32 @@ public class UpdateProductViewController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Fields Can't be Empty");
-            alert.setContentText("Please Fill All Fields");
             alert.show();
             return;
         }
 
-        try {
-            int supplierID = Integer.parseInt(cmbUpdateProcutSupplierId.getSelectionModel().getSelectedItem().toString().split(" - ")[0]);
+        int supplierID = Integer.parseInt(cmbUpdateProcutSupplierId.getSelectionModel().getSelectedItem().toString().split(" - ")[0]);
 
-            Product updatedProduct = new Product(
-                    product.getProductID(),
-                    txtUpdateProductName.getText(),
-                    cmbUpdateProductCategory.getSelectionModel().getSelectedItem().toString(),
-                    cmbUpdateProductSize.getSelectionModel().getSelectedItem().toString(),
-                    Double.parseDouble(txtUpdateProductPrice.getText()),
-                    Integer.parseInt(txtUpdateProductQuantityOnHand.getText()),
-                    txtUpdateProductImagePath.getText(),
-                    supplierID
-            );
+        Product updatedProduct = new Product(
+                product.getProductID(),
+                txtUpdateProductName.getText(),
+                cmbUpdateProductCategory.getSelectionModel().getSelectedItem().toString(),
+                cmbUpdateProductSize.getSelectionModel().getSelectedItem().toString(),
+                Double.parseDouble(txtUpdateProductPrice.getText()),
+                Integer.parseInt(txtUpdateProductQuantityOnHand.getText()),
+                txtUpdateProductImagePath.getText(),
+                supplierID
+        );
 
-            boolean isProductUpdated = productService.updateProduct(updatedProduct);
+        boolean isProductUpdated = productService.updateProduct(updatedProduct);
 
-            Alert alert = new Alert(isProductUpdated ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
-            alert.setTitle(isProductUpdated ? "Successfully Updated" : "Update Error");
-            alert.setHeaderText(isProductUpdated ? "Product Updated" : "Product Not Updated");
-            alert.show();
-
-        } catch (NumberFormatException e) {
+        if (isProductUpdated) {
+            Stage stage = (Stage) txtUpdateProductImagePath.getScene().getWindow();
+            stage.close();
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Invalid Input");
-            alert.setHeaderText("Error in Supplier ID");
-            alert.setContentText("Please select a valid supplier.");
+            alert.setTitle("Update Error");
+            alert.setHeaderText("Error occurred while updating product");
             alert.show();
         }
     }

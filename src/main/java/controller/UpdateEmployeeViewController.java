@@ -6,6 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import dto.Employee;
+import javafx.stage.Stage;
 import service.ServiceFactory;
 import service.custom.EmployeeService;
 import util.ServiceType;
@@ -45,10 +46,15 @@ public class UpdateEmployeeViewController {
 
             boolean isEmployeeUpdated = employeeService.updateEmployee(employee);
 
-            Alert alert = new Alert(isEmployeeUpdated ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
-            alert.setTitle("Update Employee");
-            alert.setHeaderText(isEmployeeUpdated ? "Employee Updated Successfully" : "Employee Update Failed");
-            alert.show();
+            if (isEmployeeUpdated) {
+                Stage stage = (Stage) txtUpdateEmployeeEmail.getScene().getWindow();
+                stage.close();
+            }else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Update Error");
+                alert.setHeaderText("Employee Not Updated");
+                alert.show();
+            }
         }
     }
 }

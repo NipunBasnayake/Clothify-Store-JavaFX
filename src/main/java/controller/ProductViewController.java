@@ -24,8 +24,10 @@ import service.ServiceFactory;
 import service.custom.ProductService;
 import util.ServiceType;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -115,7 +117,7 @@ public class ProductViewController implements Initializable {
                     setGraphic(null);
                 } else {
                     try {
-                        Image image = new Image("file:" + imageUrl);
+                        Image image = new Image(imageUrl);
                         imageView.setImage(image);
                         imageView.setFitWidth(80);
                         imageView.setFitHeight(60);
@@ -199,30 +201,53 @@ public class ProductViewController implements Initializable {
             stage.setTitle("Update Product");
             stage.setResizable(false);
             stage.show();
-            stage.setOnHidden(e -> Platform.runLater(() -> loadProductPanes(service.getProducts())));
+
+            stage.setOnHidden(e -> Platform.runLater(() -> {
+                        productList.clear();
+                        productList.addAll(service.getProducts());
+                        loadProductPanes(productList);
+                        populateTable(productList);
+                    })
+            );
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void deleteProduct(Product product) {
-        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationAlert.setTitle("Delete Product");
-        confirmationAlert.setHeaderText("Are you sure you want to delete this product?");
-        confirmationAlert.setContentText("This action cannot be undone.");
+        Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        deleteAlert.setTitle("Delete Product");
+        deleteAlert.setHeaderText("Do you want to delete product: " + product.getProductName() + "?");
+        deleteAlert.setContentText("Click 'Ok' to confirm, or 'Cancel' to abort.");
 
-        Optional<ButtonType> result = confirmationAlert.showAndWait();
+        Optional<ButtonType> result = deleteAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean isProductDeleted = service.deleteProduct(product.getProductID());
 
-            Alert alert = new Alert(isProductDeleted ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
-            alert.setTitle(isProductDeleted ? "Product Deleted" : "Delete Product Error");
-            alert.setHeaderText(isProductDeleted ? "Product successfully deleted." : "Product not deleted.");
-            alert.show();
-            Platform.runLater(() -> loadProductPanes(service.getProducts()));
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Confirm Deletion");
+            confirmationAlert.setHeaderText("Are you sure you want to delete the product: " + product.getProductName() + "?");
+            confirmationAlert.setContentText("This action cannot be undone.");
+
+            Optional<ButtonType> confirmationResult = confirmationAlert.showAndWait();
+
+            if (confirmationResult.isPresent() && confirmationResult.get() == ButtonType.OK) {
+
+                boolean isProductDeleted = service.deleteProduct(product.getProductID());
+
+                if (isProductDeleted) {
+                    Platform.runLater(() -> {
+                        productList.clear();
+                        productList.addAll(service.getProducts());
+                        loadProductPanes(productList);
+                        populateTable(productList);
+                    });
+                }
+            }
         }
     }
+
 
     @FXML
     void btnAddProductOnAction(ActionEvent event) {
@@ -232,7 +257,14 @@ public class ProductViewController implements Initializable {
             stage.setScene(new Scene(root));
             stage.setTitle("Add Product");
             stage.show();
-            stage.setOnHidden(e -> Platform.runLater(() -> loadProductPanes(service.getProducts())));
+
+            stage.setOnHidden(e -> Platform.runLater(() -> {
+                        productList.clear();
+                        productList.addAll(service.getProducts());
+                        loadProductPanes(productList);
+                        populateTable(productList);
+                    })
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -253,6 +285,7 @@ public class ProductViewController implements Initializable {
             filteredList = productList;
         }
         loadProductPanes(filteredList);
+        populateTable(filteredList);
     }
 
     @FXML
@@ -325,7 +358,14 @@ public class ProductViewController implements Initializable {
         productCard.setPrefHeight(300);
         productCard.setAlignment(Pos.CENTER);
 
-        ImageView productImage = new ImageView(new Image("file:" + product.getProductImage()));
+        ImageView productImage = new ImageView();
+        File imageFile = new File(product.getProductImage());
+        if (imageFile.exists()) {
+            productImage.setImage(new Image(imageFile.toURI().toString()));
+        } else {
+            System.out.println("Image file not found: " + product.getProductImage());
+        }
+
         productImage.setFitWidth(182);
         productImage.setFitHeight(130);
 
@@ -368,6 +408,7 @@ public class ProductViewController implements Initializable {
 
         return productCard;
     }
+
 
     private void populateTable(List<Product> products) {
         tableProducts.getItems().clear();

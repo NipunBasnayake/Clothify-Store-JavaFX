@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import dto.Customer;
+import javafx.stage.Stage;
 import service.ServiceFactory;
 import service.custom.CustomerService;
 import util.ServiceType;
@@ -31,10 +32,8 @@ public class AddCustomerViewController {
                 txtAddCustomerAddress.getText()
         ));
         if (isCustomerAdded) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Customer Added");
-            alert.setHeaderText("Customer Successfully Added");
-            alert.show();
+            Stage stage = (Stage) txtAddCustomerAddress.getScene().getWindow();
+            stage.close();
         }else{
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Customer Not Added");
