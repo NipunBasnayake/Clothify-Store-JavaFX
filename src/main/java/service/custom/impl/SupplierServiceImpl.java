@@ -1,5 +1,6 @@
 package service.custom.impl;
 
+import com.google.inject.Inject;
 import dao.Custom.SupplierDao;
 import dao.DaoFactory;
 import dto.Supplier;
@@ -12,21 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SupplierServiceImpl implements SupplierService {
-    private static SupplierServiceImpl supplierServiceImpl;
-    private final SupplierDao supplierDao;
-    private final ModelMapper modelMapper;
 
-    private SupplierServiceImpl() {
-        supplierDao = DaoFactory.getInstance().getDao(DaoType.SUPPLIER);
-        modelMapper = new ModelMapper();
-    }
+    ModelMapper modelMapper = new ModelMapper();
 
-    public static SupplierServiceImpl getInstance() {
-        if (supplierServiceImpl == null) {
-            supplierServiceImpl = new SupplierServiceImpl();
-        }
-        return supplierServiceImpl;
-    }
+    @Inject
+    SupplierDao supplierDao;
 
     @Override
     public List<Supplier> getSuppliers() {

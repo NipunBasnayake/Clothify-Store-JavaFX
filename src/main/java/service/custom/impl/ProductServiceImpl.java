@@ -1,5 +1,6 @@
 package service.custom.impl;
 
+import com.google.inject.Inject;
 import dao.Custom.ProductDao;
 import dao.DaoFactory;
 import dto.Product;
@@ -12,21 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductServiceImpl implements ProductService {
-    private static ProductServiceImpl productServiceImpl;
-    private final ProductDao dao;
-    private final ModelMapper modelMapper;
 
-    private ProductServiceImpl() {
-        dao = DaoFactory.getInstance().getDao(DaoType.PRODUCT);
-        modelMapper = new ModelMapper();
-    }
+    ModelMapper modelMapper = new ModelMapper();
 
-    public static ProductServiceImpl getInstance() {
-        if (productServiceImpl == null) {
-            productServiceImpl = new ProductServiceImpl();
-        }
-        return productServiceImpl;
-    }
+    @Inject
+    ProductDao dao;
 
     @Override
     public List<Product> getProducts() {
@@ -78,6 +69,5 @@ public class ProductServiceImpl implements ProductService {
     public Product getProductById(Integer productId) {
         ProductEntity productEntity = dao.search(productId);
         return modelMapper.map(productEntity, Product.class);
-
     }
 }

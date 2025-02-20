@@ -1,27 +1,17 @@
 package service.custom.impl;
 
+import com.google.inject.Inject;
 import dao.Custom.LoginSignUpDao;
-import dao.DaoFactory;
 import dto.User;
 import entity.UserEntity;
 import org.modelmapper.ModelMapper;
+import service.custom.CustomerService;
 import service.custom.LoginSignupService;
-import util.DaoType;
 
 public class LoginSignUpServiceImpl implements LoginSignupService {
-    private static LoginSignUpServiceImpl loginSignUpServiceImpl;
-    private final LoginSignUpDao loginSignUpDao;
 
-    private LoginSignUpServiceImpl() {
-        loginSignUpDao = DaoFactory.getInstance().getDao(DaoType.USER);
-    }
-
-    public static LoginSignUpServiceImpl getInstance() {
-        if (loginSignUpServiceImpl == null) {
-            loginSignUpServiceImpl = new LoginSignUpServiceImpl();
-        }
-        return loginSignUpServiceImpl;
-    }
+    @Inject
+    LoginSignUpDao loginSignUpDao;
 
     @Override
     public User login(String email, String password) {

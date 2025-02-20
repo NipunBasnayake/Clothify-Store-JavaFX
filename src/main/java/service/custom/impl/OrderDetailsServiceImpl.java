@@ -1,32 +1,23 @@
 package service.custom.impl;
 
+import com.google.inject.Inject;
 import dao.Custom.OrderDetailsDao;
 import dao.DaoFactory;
 import dto.OrderDetails;
 import entity.OrderDetailEntity;
 import org.modelmapper.ModelMapper;
-import service.custom.OrderProductService;
+import service.custom.OrderDetailsService;
 import util.DaoType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDetailsServiceImpl implements OrderProductService {
-    private static OrderDetailsServiceImpl orderDetailsServiceImpl;
-    private final OrderDetailsDao orderDetailsDao;
-    private final ModelMapper modelMapper;
+public class OrderDetailsServiceImpl implements OrderDetailsService {
 
-    private OrderDetailsServiceImpl() {
-        orderDetailsDao = DaoFactory.getInstance().getDao(DaoType.ORDERPRODUCT);
-        modelMapper = new ModelMapper();
-    }
+    ModelMapper modelMapper = new ModelMapper();
 
-    public static OrderDetailsServiceImpl getInstance() {
-        if (orderDetailsServiceImpl == null) {
-            orderDetailsServiceImpl = new OrderDetailsServiceImpl();
-        }
-        return orderDetailsServiceImpl;
-    }
+    @Inject
+    OrderDetailsDao orderDetailsDao;
 
     @Override
     public List<OrderDetails> getOrderProducts() {

@@ -1,5 +1,6 @@
 package controller;
 
+import com.google.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,21 +11,23 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import dto.*;
-import service.ServiceFactory;
 import service.custom.*;
-import util.ServiceType;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class OrderHistoryViewController implements Initializable {
-
-    private final OrderService orderService = ServiceFactory.getInstance().getService(ServiceType.ORDERS);
-    private final OrderProductService orderProductService = ServiceFactory.getInstance().getService(ServiceType.ORDERPRODUCT);
-    private final ProductService productService = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
-    private final CustomerService customerService = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
-    private final LoginSignupService loginSignupService = ServiceFactory.getInstance().getService(ServiceType.USER);
+    @Inject
+    OrderService orderService;
+    @Inject
+    OrderDetailsService orderDetailsService;
+    @Inject
+    ProductService productService;
+    @Inject
+    CustomerService customerService;
+    @Inject
+    LoginSignupService loginSignupService;
 
     @FXML
     public TableColumn<OrderHistory, Integer> colOrderId;
@@ -69,7 +72,7 @@ public class OrderHistoryViewController implements Initializable {
     private void populateTable() {
         try {
             List<Order> orders = orderService.getOrders();
-            List<OrderDetails> orderDetails = orderProductService.getOrderProducts();
+            List<OrderDetails> orderDetails = orderDetailsService.getOrderProducts();
 
             for (Order order : orders) {
 

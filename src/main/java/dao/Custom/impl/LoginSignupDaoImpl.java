@@ -2,7 +2,6 @@ package dao.Custom.impl;
 
 import dao.Custom.LoginSignUpDao;
 import db.DBConnection;
-import dto.User;
 import entity.UserEntity;
 
 import java.sql.Connection;
@@ -11,15 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LoginSignupDaoImpl implements LoginSignUpDao {
-    private static LoginSignupDaoImpl loginSignUpDaoImpl;
-
-    public static LoginSignupDaoImpl getInstance() {
-        if (loginSignUpDaoImpl == null) {
-            loginSignUpDaoImpl = new LoginSignupDaoImpl();
-        }
-        return loginSignUpDaoImpl;
-    }
-
 
     @Override
     public UserEntity login(String email, String password) {

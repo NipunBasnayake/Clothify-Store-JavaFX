@@ -1,5 +1,6 @@
 package controller;
 
+import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,7 +18,8 @@ import java.util.ResourceBundle;
 
 public class AddSupplierViewController implements Initializable {
 
-    SupplierService supplierService = ServiceFactory.getInstance().getService(ServiceType.SUPPLIER);
+    @Inject
+    SupplierService supplierService;
 
     @FXML
     private ComboBox cmbSupplyItem;

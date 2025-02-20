@@ -11,14 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDaoImpl implements EmployeeDao {
-    private static EmployeeDaoImpl employeeDao;
-
-    public static EmployeeDao getInstance() {
-        if (employeeDao == null) {
-            employeeDao = new EmployeeDaoImpl();
-        }
-        return employeeDao;
-    }
 
     @Override
     public boolean save(EmployeeEntity entity) {

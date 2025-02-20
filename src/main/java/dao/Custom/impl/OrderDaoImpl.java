@@ -1,6 +1,9 @@
 package dao.Custom.impl;
 
+import com.google.inject.Inject;
 import dao.Custom.OrderDao;
+import dao.Custom.OrderDetailsDao;
+import dao.Custom.ProductDao;
 import db.DBConnection;
 import entity.OrderEntity;
 
@@ -9,14 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDaoImpl implements OrderDao {
-    private static OrderDaoImpl orderDaoImpl;
+    @Inject
+    OrderDetailsDao orderDetailsDao;
 
-    public static OrderDaoImpl getInstance() {
-        if (orderDaoImpl == null) {
-            orderDaoImpl = new OrderDaoImpl();
-        }
-        return orderDaoImpl;
-    }
+    @Inject
+    ProductDao productDao;
 
     @Override
     public int getLastOrderId() {
@@ -53,10 +53,10 @@ public class OrderDaoImpl implements OrderDao {
                 boolean isOrderSaved = statement.executeUpdate() > 0;
 
                 if (isOrderSaved) {
-                    boolean isSavedToOrderDetails = OrderDetailsDaoImpl.getInstance().save(entity.getOrderDetailEntityList());
+                    boolean isSavedToOrderDetails = orderDetailsDao.save(entity.getOrderDetailEntityList());
 
                     if (isSavedToOrderDetails) {
-                        boolean isProductTableUpdated = ProductDaoImpl.getInstance().updateQuantity(entity.getOrderDetailEntityList());
+                        boolean isProductTableUpdated = productDao.updateQuantity(entity.getOrderDetailEntityList());
 
                         if (isProductTableUpdated) {
                             connection.commit();

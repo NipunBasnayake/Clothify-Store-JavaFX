@@ -1,10 +1,15 @@
 package controller;
 
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.jfoenix.controls.JFXButton;
+import config.AppModule;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -12,24 +17,34 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import dto.User;
+import service.custom.CustomerService;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class HomeViewController implements Initializable {
+
     private static User currentUser;
-    public JFXButton btnUserName;
-    public Label lbl;
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
         setUserButton();
     }
 
-    private void setUserButton(){
-        btnUserName.setText(currentUser.getUserName());
+    private void setUserButton() {
+        if (currentUser.getRole().equals("Admin")) {
+            btnUserName.setText("Admin - " + currentUser.getUserName());
+        } else {
+            btnUserName.setText(currentUser.getUserName());
+        }
     }
+
+    @FXML
+    public Label lbl;
+
+    @FXML
+    public JFXButton btnUserName;
 
     @FXML
     private JFXButton btnAdmin;
@@ -58,13 +73,14 @@ public class HomeViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        AnchorPane pane = null;
         try {
-            pane = new FXMLLoader().load(getClass().getResource("/view/dahboard-view.fxml"));
-            paneLoadFXML.getChildren().clear();
-            DashboardViewController dashboardViewController = new DashboardViewController();
-            dashboardViewController.setCurrentUser(currentUser);
-            paneLoadFXML.getChildren().add(pane);
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/view/dahboard-view.fxml"));
+            Injector injector = Guice.createInjector(new AppModule());
+            fxmlLoader.setControllerFactory(injector::getInstance);
+            AnchorPane anchorPane = fxmlLoader.load();
+            paneLoadFXML.getChildren().add(anchorPane);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -72,11 +88,13 @@ public class HomeViewController implements Initializable {
 
     @FXML
     void btnCustomerManagementOnAction(ActionEvent event) {
-        AnchorPane pane = null;
         try {
-            pane = new FXMLLoader().load(getClass().getResource("/view/customer-management-view.fxml"));
-            paneLoadFXML.getChildren().clear();
-            paneLoadFXML.getChildren().add(pane);
+            Injector injector = Guice.createInjector(new AppModule());
+            FXMLLoader loader =new FXMLLoader(this.getClass().getResource("/view/customer-management-view.fxml"));
+            loader.setControllerFactory(injector::getInstance);
+            this.paneLoadFXML.getChildren().clear();
+            this.paneLoadFXML.getChildren().add(loader.load());
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -84,11 +102,13 @@ public class HomeViewController implements Initializable {
 
     @FXML
     void btnDashboardOnAction(ActionEvent event) {
-        AnchorPane pane = null;
         try {
-            pane = new FXMLLoader().load(getClass().getResource("/view/dahboard-view.fxml"));
-            paneLoadFXML.getChildren().clear();
-            paneLoadFXML.getChildren().add(pane);
+            Injector injector = Guice.createInjector(new AppModule());
+            FXMLLoader loader =new FXMLLoader(this.getClass().getResource("/view/dahboard-view.fxml"));
+            loader.setControllerFactory(injector::getInstance);
+            this.paneLoadFXML.getChildren().clear();
+            this.paneLoadFXML.getChildren().add(loader.load());
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -125,11 +145,13 @@ public class HomeViewController implements Initializable {
 
     @FXML
     void btnOrderManagementOnAction(ActionEvent event) {
-        AnchorPane pane = null;
         try {
-            pane = new FXMLLoader().load(getClass().getResource("/view/order-history-view.fxml"));
-            paneLoadFXML.getChildren().clear();
-            paneLoadFXML.getChildren().add(pane);
+            Injector injector = Guice.createInjector(new AppModule());
+            FXMLLoader loader =new FXMLLoader(this.getClass().getResource("/view/order-history-view.fxml"));
+            loader.setControllerFactory(injector::getInstance);
+            this.paneLoadFXML.getChildren().clear();
+            this.paneLoadFXML.getChildren().add(loader.load());
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -137,33 +159,40 @@ public class HomeViewController implements Initializable {
 
     @FXML
     void btnProcustManagementOnAction(ActionEvent event) {
-        AnchorPane pane = null;
         try {
-            pane = new FXMLLoader().load(getClass().getResource("/view/product-management-view.fxml"));
-            paneLoadFXML.getChildren().clear();
-            paneLoadFXML.getChildren().add(pane);
+            Injector injector = Guice.createInjector(new AppModule());
+            FXMLLoader loader =new FXMLLoader(this.getClass().getResource("/view/product-management-view.fxml"));
+            loader.setControllerFactory(injector::getInstance);
+            this.paneLoadFXML.getChildren().clear();
+            this.paneLoadFXML.getChildren().add(loader.load());
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void btnEmployeeManagementOnAction(ActionEvent actionEvent) {
-        AnchorPane pane = null;
         try {
-            pane = new FXMLLoader().load(getClass().getResource("/view/employee-management-view.fxml"));
-            paneLoadFXML.getChildren().clear();
-            paneLoadFXML.getChildren().add(pane);
+            Injector injector = Guice.createInjector(new AppModule());
+            FXMLLoader loader =new FXMLLoader(this.getClass().getResource("/view/employee-management-view.fxml"));
+            loader.setControllerFactory(injector::getInstance);
+            this.paneLoadFXML.getChildren().clear();
+            this.paneLoadFXML.getChildren().add(loader.load());
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void btnReportsOnAction(ActionEvent actionEvent) {
-        AnchorPane pane = null;
         try {
-            pane = new FXMLLoader().load(getClass().getResource("/view/reports-view.fxml"));
-            paneLoadFXML.getChildren().clear();
-            paneLoadFXML.getChildren().add(pane);
+            Injector injector = Guice.createInjector(new AppModule());
+            FXMLLoader loader =new FXMLLoader(this.getClass().getResource("/view/reports-view.fxml"));
+            loader.setControllerFactory(injector::getInstance);
+            this.paneLoadFXML.getChildren().clear();
+            this.paneLoadFXML.getChildren().add(loader.load());
+
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -171,11 +200,17 @@ public class HomeViewController implements Initializable {
 
     public void btnSupplierManagementOnAction(ActionEvent actionEvent) {
         try {
-            AnchorPane pane = new FXMLLoader().load(getClass().getResource("/view/supplier-management-view.fxml"));
-            paneLoadFXML.getChildren().clear();
-            paneLoadFXML.getChildren().add(pane);
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/view/supplier-management-view.fxml"));
+            AnchorPane anchorPane = fxmlLoader.load();
+            paneLoadFXML.getChildren().add(anchorPane);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void btnAddNewUserOnAction(ActionEvent actionEvent) {
+
     }
 }

@@ -1,5 +1,6 @@
 package controller;
 
+import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -13,7 +14,8 @@ import util.ServiceType;
 
 public class UpdateEmployeeViewController {
 
-    EmployeeService employeeService = ServiceFactory.getInstance().getService(ServiceType.EMPLOYEE);
+    @Inject
+    EmployeeService employeeService;
 
     private Employee employee;
 
@@ -44,6 +46,7 @@ public class UpdateEmployeeViewController {
             employee.setEmployeeEmail(txtUpdateEmployeeEmail.getText());
             employee.setEmployeeRole(cmbUpdateEmployeeRole.getValue());
 
+            System.out.println(employeeService);
             boolean isEmployeeUpdated = employeeService.updateEmployee(employee);
 
             if (isEmployeeUpdated) {

@@ -1,5 +1,6 @@
 package controller;
 
+import com.google.inject.Inject;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -58,26 +59,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DashboardViewController implements Initializable {
-    CustomerService customerService = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
-    ProductService productService = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
-    OrderService orderService = ServiceFactory.getInstance().getService(ServiceType.ORDERS);
+    @Inject
+    CustomerService customerService;
+    @Inject
+    ProductService productService;
+    @Inject
+    OrderService orderService;
 
     private static User currentUser;
-
     private List<Product> productList;
     private List<Product> cartList = new ArrayList<>();
 
     @FXML
-    public Label lblLoadOrderId;
+    public Label lblLoadOrderId, txtTotalAmount, lblDate, lblTime;
 
     @FXML
-    public Label txtTotalAmount;
-
-    @FXML
-    public FlowPane flowPaneCart;
-
-    @FXML
-    private FlowPane flowPaneProducts;
+    public FlowPane flowPaneCart, flowPaneProducts;
 
     @FXML
     private ComboBox<String> cmbSelectCustomer;
@@ -86,17 +83,12 @@ public class DashboardViewController implements Initializable {
     private TextField txtSearchProductText;
 
     @FXML
-    public Label lblDate;
-
-    @FXML
-    public Label lblTime;
-
-    @FXML
     public AnchorPane paneDashboard;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         loadCustomersComboBox();
         productList = productService.getProducts();
         loadProductPanes(productList);

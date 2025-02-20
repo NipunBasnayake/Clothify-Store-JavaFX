@@ -1,5 +1,6 @@
 package controller;
 
+import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -11,7 +12,9 @@ import service.custom.CustomerService;
 import util.ServiceType;
 
 public class UpdateCustomerViewController {
-    CustomerService service = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
+
+    @Inject
+    CustomerService service;
 
     private Customer customer;
 

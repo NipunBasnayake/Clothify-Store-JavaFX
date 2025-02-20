@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="673.0" prefWidth="600.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddEmployeeViewController">
+   <children>
+      <Label layoutX="90.0" layoutY="27.0" prefHeight="60.0" prefWidth="421.0" text="Create User Account">
+         <font>
+            <Font name="Bodoni MT" size="48.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtName" layoutX="90.0" layoutY="135.0" prefHeight="48.0" prefWidth="421.0" />
+      <JFXButton layoutX="205.0" layoutY="583.0" onAction="#btnSaveEmployeeOnAction" prefHeight="48.0" prefWidth="191.0" text="Create Account" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXButton>
+      <Label layoutX="90.0" layoutY="113.0" text="User Name" />
+      <Label layoutX="91.0" layoutY="294.0" text="Email" />
+      <TextField fx:id="txtEmail" layoutX="90.0" layoutY="318.0" prefHeight="48.0" prefWidth="421.0" />
+      <Label layoutX="90.0" layoutY="201.0" text="User Role" />
+      <ComboBox fx:id="cmbRole" layoutX="90.0" layoutY="224.0" prefHeight="48.0" prefWidth="421.0" />
+      <PasswordField fx:id="txtPassword" layoutX="90.0" layoutY="408.0" prefHeight="48.0" prefWidth="421.0" />
+      <Label layoutX="91.0" layoutY="384.0" text="Password" />
+      <PasswordField fx:id="txtConfirmPassword" layoutX="90.0" layoutY="498.0" prefHeight="48.0" prefWidth="421.0" />
+      <Label layoutX="91.0" layoutY="474.0" text="Confirm Password" />
+   </children>
+</AnchorPane>

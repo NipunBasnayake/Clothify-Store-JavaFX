@@ -1,32 +1,21 @@
 package service.custom.impl;
 
+import com.google.inject.Inject;
 import dao.Custom.CustomerDao;
-import dao.DaoFactory;
 import dto.Customer;
 import entity.CustomerEntity;
 import org.modelmapper.ModelMapper;
 import service.custom.CustomerService;
-import util.DaoType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerServiceImpl implements CustomerService {
-    private static CustomerServiceImpl customerServiceImpl;
-    private final CustomerDao dao;
-    private final ModelMapper modelMapper;
 
-    private CustomerServiceImpl() {
-        dao = DaoFactory.getInstance().getDao(DaoType.CUSTOMERS);
-        modelMapper = new ModelMapper();
-    }
+    ModelMapper modelMapper = new ModelMapper();
 
-    public static CustomerServiceImpl getInstance() {
-        if (customerServiceImpl == null) {
-            customerServiceImpl = new CustomerServiceImpl();
-        }
-        return customerServiceImpl;
-    }
+    @Inject
+    CustomerDao dao;
 
     @Override
     public List<Customer> getCustomers() {

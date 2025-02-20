@@ -1,5 +1,9 @@
 package controller;
 
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import config.AppModule;
 import dto.Employee;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -19,6 +23,7 @@ import util.ServiceType;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -26,8 +31,10 @@ import java.util.stream.Collectors;
 
 public class SupplierViewController implements Initializable {
 
-    SupplierService supplierService = ServiceFactory.getInstance().getService(ServiceType.SUPPLIER);
-    ObservableList<Supplier> employeeObservableList = FXCollections.observableList(supplierService.getSuppliers());
+    @Inject
+    SupplierService supplierService;
+
+    List<Supplier> supplierList = new ArrayList<>();
 
     @FXML
     private TableView<Supplier> tblSupplier;
@@ -111,23 +118,24 @@ public class SupplierViewController implements Initializable {
     }
 
     private void populateTable() {
-        employeeObservableList.clear();
-        employeeObservableList = FXCollections.observableList(supplierService.getSuppliers());
-        tblSupplier.setItems(employeeObservableList);
+        supplierList.clear();
+        supplierList.addAll(supplierService.getSuppliers());
+        tblSupplier.setItems(FXCollections.observableArrayList(supplierList));
     }
 
     private void openUpdateSupplierView(Supplier supplier) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/update-supplier-view.fxml"));
         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/update-Supplier-view.fxml"));
             Stage stage = new Stage();
+            Injector injector = Guice.createInjector(new AppModule());
+            loader.setControllerFactory(injector::getInstance);
             stage.setScene(new Scene(loader.load()));
-            stage.setTitle("Update Supplier");
-            stage.setResizable(false);
 
             UpdateSupplierViewController controller = loader.getController();
             controller.setSupplier(supplier);
 
-            stage.setOnHidden(event -> populateTable());
+            stage.setTitle("Update Customer");
+            stage.setResizable(false);
             stage.show();
 
             stage.setOnHidden(e -> Platform.runLater(() -> populateTable()));

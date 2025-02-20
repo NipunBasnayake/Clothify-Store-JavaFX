@@ -1,5 +1,6 @@
 package controller;
 
+import com.google.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,8 +27,12 @@ import java.util.List;
 
 
 public class UpdateProductViewController {
-    ProductService productService = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
-    SupplierService supplierService = ServiceFactory.getInstance().getService(ServiceType.SUPPLIER);
+
+    @Inject
+    ProductService productService;
+
+    @Inject
+    SupplierService supplierService;
 
     private Product product;
 
