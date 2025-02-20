@@ -24,6 +24,21 @@ import java.util.*;
 
 public class ReportsViewController implements Initializable {
 
+    @Inject
+    private CustomerService customerService;
+
+    @Inject
+    private OrderService orderService;
+
+    @Inject
+    private ProductService productService;
+
+    @Inject
+    private OrderDetailsService orderDetailsService;
+
+    @Inject
+    private SupplierService supplierService;
+
     @FXML
     public ComboBox cmbSaleSortTime;
 
@@ -48,20 +63,6 @@ public class ReportsViewController implements Initializable {
     @FXML
     public ComboBox cmbProductCategories;
 
-    @Inject
-    private CustomerService customerService;
-
-    @Inject
-    private OrderService orderService;
-
-    @Inject
-    private ProductService productService;
-
-    @Inject
-    private OrderDetailsService orderDetailsService;
-
-    @Inject
-    private SupplierService supplierService;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -230,6 +231,7 @@ public class ReportsViewController implements Initializable {
     }
 
     private void adjustYAxis(Chart chart, Collection<Integer> dataValues) {
+        if (dataValues.isEmpty()) return;
         NumberAxis yAxis = (NumberAxis) ((XYChart<String, Number>) chart).getYAxis();
         yAxis.setTickUnit(1);
         yAxis.setMinorTickCount(0);
@@ -237,6 +239,7 @@ public class ReportsViewController implements Initializable {
         yAxis.setLowerBound(0);
         yAxis.setUpperBound(Collections.max(dataValues) + 5);
     }
+
 
     private void generateReport(String reportFileName) {
         try {

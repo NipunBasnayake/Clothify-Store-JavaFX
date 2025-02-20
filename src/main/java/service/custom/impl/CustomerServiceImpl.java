@@ -2,6 +2,7 @@ package service.custom.impl;
 
 import com.google.inject.Inject;
 import dao.Custom.CustomerDao;
+import dao.Custom.impl.CustomerDaoImpl;
 import dto.Customer;
 import entity.CustomerEntity;
 import org.modelmapper.ModelMapper;
@@ -14,8 +15,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     ModelMapper modelMapper = new ModelMapper();
 
-    @Inject
-    CustomerDao dao;
+    CustomerDao dao = new CustomerDaoImpl();
 
     @Override
     public List<Customer> getCustomers() {

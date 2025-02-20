@@ -4,10 +4,8 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import config.AppModule;
-import dto.Employee;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,9 +15,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import dto.Supplier;
-import service.ServiceFactory;
 import service.custom.SupplierService;
-import util.ServiceType;
+import service.custom.impl.SupplierServiceImpl;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,8 +28,7 @@ import java.util.stream.Collectors;
 
 public class SupplierViewController implements Initializable {
 
-    @Inject
-    SupplierService supplierService;
+    SupplierService supplierService = new SupplierServiceImpl();
 
     List<Supplier> supplierList = new ArrayList<>();
 
@@ -95,7 +91,12 @@ public class SupplierViewController implements Initializable {
     void btnAddSupplierOnAction(ActionEvent event) {
         try {
             Stage stage = new Stage();
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/add-Supplier-view.fxml"))));
+            Injector injector = Guice.createInjector(new AppModule());
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/add-Supplier-view.fxml"));
+
+            fxmlLoader.setControllerFactory(injector::getInstance);
+            stage.setScene(new Scene(fxmlLoader.load()));
+
             stage.setTitle("Add Supplier");
             stage.setResizable(false);
             stage.show();

@@ -2,6 +2,7 @@ package service.custom.impl;
 
 import com.google.inject.Inject;
 import dao.Custom.SupplierDao;
+import dao.Custom.impl.SupplierDaoImpl;
 import dao.DaoFactory;
 import dto.Supplier;
 import entity.SupplierEntity;
@@ -16,8 +17,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     ModelMapper modelMapper = new ModelMapper();
 
-    @Inject
-    SupplierDao supplierDao;
+    SupplierDao supplierDao = new SupplierDaoImpl();
 
     @Override
     public List<Supplier> getSuppliers() {

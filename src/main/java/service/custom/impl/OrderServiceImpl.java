@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import dao.Custom.OrderDao;
 import dao.Custom.OrderDetailsDao;
 import dao.Custom.ProductDao;
+import dao.Custom.impl.OrderDaoImpl;
+import dao.Custom.impl.OrderDetailsDaoImpl;
 import dao.DaoFactory;
 import dto.Order;
 import dto.OrderDetails;
@@ -22,11 +24,10 @@ public class OrderServiceImpl implements OrderService {
 
     ModelMapper modelMapper = new ModelMapper();
 
-    @Inject
-    OrderDao orderDao;
+    OrderDao orderDao = new OrderDaoImpl();
 
     @Inject
-    OrderDetailsDao orderDetailsDao;
+    OrderDetailsDao orderDetailsDao = new OrderDetailsDaoImpl();
 
     @Override
     public int getLastOrderId() {

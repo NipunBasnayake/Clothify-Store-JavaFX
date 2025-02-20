@@ -2,6 +2,7 @@ package service.custom.impl;
 
 import com.google.inject.Inject;
 import dao.Custom.ProductDao;
+import dao.Custom.impl.ProductDaoImpl;
 import dao.DaoFactory;
 import dto.Product;
 import entity.ProductEntity;
@@ -16,8 +17,7 @@ public class ProductServiceImpl implements ProductService {
 
     ModelMapper modelMapper = new ModelMapper();
 
-    @Inject
-    ProductDao dao;
+    ProductDao dao = new ProductDaoImpl();
 
     @Override
     public List<Product> getProducts() {
