@@ -10,6 +10,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.checkerframework.checker.units.qual.A;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.util.password.BasicPasswordEncryptor;
+import org.jasypt.util.text.BasicTextEncryptor;
 import service.custom.LoginSignupService;
 
 import java.net.URL;
@@ -42,32 +46,60 @@ public class CreateUserAccountController implements Initializable {
 
     @FXML
     void btnSaveEmployeeOnAction(ActionEvent event) {
-        if (txtName.getText().isEmpty() || cmbRole.getSelectionModel().getSelectedItem().toString().trim() == null || txtEmail.getText().isEmpty() || txtPassword.getText().isEmpty() || txtConfirmPassword.getText().isEmpty()) {
+        if (txtName.getText().trim().isEmpty() ||
+                txtEmail.getText().trim().isEmpty() ||
+                txtPassword.getText().trim().isEmpty() ||
+                txtConfirmPassword.getText().trim().isEmpty() ||
+                cmbRole.getSelectionModel().getSelectedItem() == null) {
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error Create User");
-            alert.setHeaderText("Fields cannot be empty");
+            alert.setTitle("Error: Create User");
+            alert.setHeaderText("All fields must be filled!");
             alert.show();
+            return; // Stop further execution
+        }
+
+        if (!txtPassword.getText().equals(txtConfirmPassword.getText())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error: Password Mismatch");
+            alert.setHeaderText("Passwords do not match!");
+            alert.show();
+            return;
+        }
+
+        BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+        textEncryptor.setPassword("ClothifySecureKey");
+        String encryptedPassword = textEncryptor.encrypt(txtPassword.getText().trim());
+
+//        // Decrypting the password
+//        String decryptedPassword = textEncryptor.decrypt(encryptedPassword);
+//        System.out.println("Decrypted Password: " + decryptedPassword);
+
+        User newUser = new User(
+                0,
+                txtName.getText().trim(),
+                txtEmail.getText().trim(),
+                encryptedPassword,
+                cmbRole.getSelectionModel().getSelectedItem().toString().trim(),
+                "nullDate"
+        );
+
+        boolean isUserSaved = loginSignupService.addNewUser(newUser);
+        if (isUserSaved) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("User Created Successfully");
+            alert.setHeaderText("New user has been created successfully!");
+            alert.show();
+
+            // Close window after success
+            Stage stage = (Stage) txtName.getScene().getWindow();
+            stage.close();
         } else {
-            if (txtPassword.getText().equals(txtConfirmPassword.getText())) {
-                User newUser = new User(
-                        0,
-                        txtName.getText().trim(),
-                        txtEmail.getText().trim(),
-                        txtPassword.getText().trim(),
-                        cmbRole.getSelectionModel().getSelectedItem().toString().trim(),
-                        "nullDate"
-                );
-                boolean isUserSaved = loginSignupService.addNewUser(newUser);
-                if (isUserSaved) {
-                    Stage stage = (Stage) txtName.getScene().getWindow();
-                    stage.close();
-                }else{
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error Create User");
-                    alert.setHeaderText("Error Creating User");
-                    alert.show();
-                }
-            }
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error: Create User");
+            alert.setHeaderText("An error occurred while creating the user.");
+            alert.show();
         }
     }
+
 }

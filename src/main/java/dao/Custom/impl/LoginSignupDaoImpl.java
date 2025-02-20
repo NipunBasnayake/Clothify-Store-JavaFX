@@ -3,6 +3,7 @@ package dao.Custom.impl;
 import dao.Custom.LoginSignUpDao;
 import db.DBConnection;
 import entity.UserEntity;
+import org.jasypt.util.text.BasicTextEncryptor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,34 +14,46 @@ public class LoginSignupDaoImpl implements LoginSignUpDao {
 
     @Override
     public UserEntity login(String email, String password) {
-        String query = "SELECT * FROM user WHERE email = ? AND password = ?";
-
+        String sql = "SELECT password FROM user WHERE email = ?";
         try {
-            Connection connection = DBConnection.getInstance().getConnection();
-            PreparedStatement statement = connection.prepareStatement(query);
-            if (connection == null) {
-                throw new SQLException("Database connection is null");
+            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(sql);
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+                textEncryptor.setPassword("ClothifySecureKey");
+
+                String passwordFromDB = resultSet.getString("password");
+                String decryptedPassword = textEncryptor.decrypt(passwordFromDB);
+
+                if (password.trim().equals(decryptedPassword)) {
+                    String query = "SELECT * FROM user WHERE email = ?";
+                    PreparedStatement statement2 = DBConnection.getInstance().getConnection().prepareStatement(query);
+                    statement2.setString(1, email);
+
+                    ResultSet resultSet2 = statement2.executeQuery();
+                    if (resultSet2.next()) {
+                        return new UserEntity(
+                                resultSet2.getInt("userId"),
+                                resultSet2.getString("name"),
+                                resultSet2.getString("email"),
+                                "xxxxx",
+                                resultSet2.getString("role"),
+                                resultSet2.getString("registrationDate")
+                        );
+                    }
+                } else {
+                    System.out.println("Invalid password!");
+                }
+            } else {
+                System.out.println("Email not found!");
             }
 
-            statement.setString(1, email);
-            statement.setString(2, password);
-
-                ResultSet resultSet = statement.executeQuery();
-                if (resultSet.next()) {
-                    return new UserEntity(
-                            resultSet.getInt("userId"),
-                            resultSet.getString("name"),
-                            resultSet.getString("email"),
-                            "xxxxx",
-                            resultSet.getString("role"),
-                            resultSet.getString("registrationDate")
-                    );
-                }
-
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to login", e);
+            throw new RuntimeException(e);
         }
+
         return null;
     }
 
