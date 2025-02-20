@@ -35,8 +35,7 @@ import java.util.Random;
 public class LoginSignupViewController {
     static String otp;
 
-    @Inject
-    LoginSignupService loginSignupService;
+    LoginSignupService loginSignupService = ServiceFactory.getInstance().getService(ServiceType.USER);
 
     @Inject
     CustomerService customerService;

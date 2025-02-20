@@ -2,16 +2,15 @@ package service.custom.impl;
 
 import com.google.inject.Inject;
 import dao.Custom.LoginSignUpDao;
+import dao.Custom.impl.LoginSignupDaoImpl;
 import dto.User;
 import entity.UserEntity;
 import org.modelmapper.ModelMapper;
-import service.custom.CustomerService;
 import service.custom.LoginSignupService;
 
 public class LoginSignUpServiceImpl implements LoginSignupService {
 
-    @Inject
-    LoginSignUpDao loginSignUpDao;
+    LoginSignUpDao loginSignUpDao = new LoginSignupDaoImpl();
 
     @Override
     public User login(String email, String password) {
@@ -39,5 +38,10 @@ public class LoginSignUpServiceImpl implements LoginSignupService {
             return new ModelMapper().map(userEntity, User.class);
         }
         return null;
+    }
+
+    @Override
+    public boolean addNewUser(User newUser) {
+        return loginSignUpDao.addNewUser(new ModelMapper().map(newUser, UserEntity.class));
     }
 }

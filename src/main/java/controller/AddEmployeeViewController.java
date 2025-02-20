@@ -53,7 +53,7 @@ public class AddEmployeeViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        cmbAddEmployeeRole.getItems().add("Sales Assistant");
-        cmbAddEmployeeRole.getItems().add("Cashier");
+        cmbAddEmployeeRole.getItems().addAll("Sales Assistant", "Cashier");
+
     }
 }

@@ -41,6 +41,9 @@ public class HomeViewController implements Initializable {
     }
 
     @FXML
+    public JFXButton btnAddNewUser;
+
+    @FXML
     public Label lbl;
 
     @FXML
@@ -81,8 +84,19 @@ public class HomeViewController implements Initializable {
             AnchorPane anchorPane = fxmlLoader.load();
             paneLoadFXML.getChildren().add(anchorPane);
 
+            newUserAction();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void newUserAction() {
+        if (currentUser != null) {
+            if (currentUser.getUserName().toLowerCase().equals("admin")) {
+                btnAddNewUser.setVisible(true);
+            }else{
+                btnAddNewUser.setVisible(false);
+            }
         }
     }
 
@@ -211,6 +225,17 @@ public class HomeViewController implements Initializable {
     }
 
     public void btnAddNewUserOnAction(ActionEvent actionEvent) {
-
+        try {
+            Stage stage = new Stage();
+            Injector injector = Guice.createInjector(new AppModule());
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/create-user-account-view.fxml"));
+            fxmlLoader.setControllerFactory(injector::getInstance);
+            stage.setScene(new Scene(fxmlLoader.load()));
+            stage.setTitle("Create New User");
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

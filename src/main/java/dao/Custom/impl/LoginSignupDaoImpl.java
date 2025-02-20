@@ -84,4 +84,19 @@ public class LoginSignupDaoImpl implements LoginSignUpDao {
         return null;
     }
 
+    @Override
+    public boolean addNewUser(UserEntity map) {
+        String query = "INSERT INTO user (name, email, password, role) VALUES ( ?, ?, ?, ?)";
+        try {
+            PreparedStatement statement = DBConnection.getInstance().getConnection().prepareStatement(query);
+            statement.setString(1, map.getUserName());
+            statement.setString(2, map.getEmail());
+            statement.setString(3, map.getPassword());
+            statement.setString(4, map.getRole());
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
