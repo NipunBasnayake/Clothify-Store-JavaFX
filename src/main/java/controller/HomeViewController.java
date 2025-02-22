@@ -23,6 +23,10 @@ public class HomeViewController implements Initializable {
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
         setUserButton();
+
+        if (currentUser.getRole().toLowerCase().equals("admin")) {
+            btnCreateUserAccount.setVisible(true);
+        }
     }
 
     private void setUserButton() {
@@ -65,9 +69,8 @@ public class HomeViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        AnchorPane pane = null;
         try {
-            pane = new FXMLLoader().load(getClass().getResource("/view/dahboard-view.fxml"));
+            AnchorPane pane = new FXMLLoader().load(getClass().getResource("/view/dahboard-view.fxml"));
             paneLoadFXML.getChildren().clear();
             DashboardViewController dashboardViewController = new DashboardViewController();
             dashboardViewController.setCurrentUser(currentUser);
@@ -75,13 +78,14 @@ public class HomeViewController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        btnCreateUserAccount.setVisible(false);
     }
 
     @FXML
     void btnCustomerManagementOnAction(ActionEvent event) {
-        AnchorPane pane = null;
         try {
-            pane = new FXMLLoader().load(getClass().getResource("/view/customer-management-view.fxml"));
+            AnchorPane pane = new FXMLLoader().load(getClass().getResource("/view/customer-management-view.fxml"));
             paneLoadFXML.getChildren().clear();
             paneLoadFXML.getChildren().add(pane);
         } catch (IOException e) {
@@ -91,9 +95,8 @@ public class HomeViewController implements Initializable {
 
     @FXML
     void btnDashboardOnAction(ActionEvent event) {
-        AnchorPane pane = null;
         try {
-            pane = new FXMLLoader().load(getClass().getResource("/view/dahboard-view.fxml"));
+            AnchorPane pane = new FXMLLoader().load(getClass().getResource("/view/dahboard-view.fxml"));
             paneLoadFXML.getChildren().clear();
             paneLoadFXML.getChildren().add(pane);
         } catch (IOException e) {
