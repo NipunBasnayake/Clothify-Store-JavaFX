@@ -12,6 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDetailsDaoImpl implements OrderDetailsDao {
+    private static OrderDetailsDaoImpl orderDetailsDaoImpl;
+
+    public static OrderDetailsDaoImpl getInstance() {
+        if (orderDetailsDaoImpl == null) {
+            orderDetailsDaoImpl = new OrderDetailsDaoImpl();
+        }
+        return orderDetailsDaoImpl;
+    }
 
     public List<OrderDetailEntity> getAll() {
         String query = "SELECT orderDetailsId, orderId, productId, quantity FROM orderdetails";

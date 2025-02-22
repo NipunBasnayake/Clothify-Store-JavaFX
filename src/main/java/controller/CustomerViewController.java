@@ -1,9 +1,5 @@
 package controller;
 
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import config.AppModule;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,7 +12,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import dto.Customer;
+import service.ServiceFactory;
 import service.custom.CustomerService;
+import util.ServiceType;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,9 +25,7 @@ import java.util.ResourceBundle;
 
 public class CustomerViewController implements Initializable {
 
-    @Inject
-    CustomerService customerService;
-
+    CustomerService customerService = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
     List<Customer> customerList = new ArrayList<>();
 
     @Override
@@ -122,14 +118,9 @@ public class CustomerViewController implements Initializable {
 
     @FXML
     void btnAddCustomerOnAction(ActionEvent event) {
+        Stage stage = new Stage();
         try {
-            Stage stage = new Stage();
-            Injector injector = Guice.createInjector(new AppModule());
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/add-customer-view.fxml"));
-
-            fxmlLoader.setControllerFactory(injector::getInstance);
-            stage.setScene(new Scene(fxmlLoader.load()));
-
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/add-customer-view.fxml"))));
             stage.setTitle("Add Customer");
             stage.setResizable(false);
             stage.show();
@@ -169,13 +160,9 @@ public class CustomerViewController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/update-customer-view.fxml"));
             Stage stage = new Stage();
-            Injector injector = Guice.createInjector(new AppModule());
-            loader.setControllerFactory(injector::getInstance);
             stage.setScene(new Scene(loader.load()));
-
             UpdateCustomerViewController controller = loader.getController();
             controller.setCustomer(customer);
-
             stage.setTitle("Update Customer");
             stage.setResizable(false);
             stage.show();

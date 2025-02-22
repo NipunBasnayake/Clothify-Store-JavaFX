@@ -1,6 +1,5 @@
 package controller;
 
-import com.google.inject.Inject;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -59,22 +58,25 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DashboardViewController implements Initializable {
-    @Inject
-    CustomerService customerService;
-    @Inject
-    ProductService productService;
-    @Inject
-    OrderService orderService;
+    CustomerService customerService = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
+    ProductService productService = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
+    OrderService orderService = ServiceFactory.getInstance().getService(ServiceType.ORDERS);
 
     private static User currentUser;
-    private List<Product> productList;
+    private List<Product> productList = new ArrayList<>();
     private List<Product> cartList = new ArrayList<>();
 
     @FXML
-    public Label lblLoadOrderId, txtTotalAmount, lblDate, lblTime;
+    public Label lblLoadOrderId;
 
     @FXML
-    public FlowPane flowPaneCart, flowPaneProducts;
+    public Label txtTotalAmount;
+
+    @FXML
+    public FlowPane flowPaneCart;
+
+    @FXML
+    private FlowPane flowPaneProducts;
 
     @FXML
     private ComboBox<String> cmbSelectCustomer;
@@ -83,12 +85,17 @@ public class DashboardViewController implements Initializable {
     private TextField txtSearchProductText;
 
     @FXML
+    public Label lblDate;
+
+    @FXML
+    public Label lblTime;
+
+    @FXML
     public AnchorPane paneDashboard;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         loadCustomersComboBox();
         productList = productService.getProducts();
         loadProductPanes(productList);
@@ -405,7 +412,6 @@ public class DashboardViewController implements Initializable {
         flowPaneCart.getChildren().setAll(cartContainer);
     }
 
-
     private void updateTotalAmount() {
         double newTotal = cartList.stream().mapToDouble(p -> p.getProductPrice() * p.getProductQuantity()).sum();
         txtTotalAmount.setText(String.valueOf(newTotal));
@@ -534,15 +540,7 @@ public class DashboardViewController implements Initializable {
         return Date.valueOf(localDate);
     }
 
-
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
 }
-
-
-
-
-
-
-

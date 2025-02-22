@@ -1,6 +1,5 @@
 package controller;
 
-import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -13,8 +12,7 @@ import util.ServiceType;
 
 public class AddCustomerViewController {
 
-    @Inject
-    CustomerService service;
+    CustomerService service = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
 
     @FXML
     private TextField txtAddCustomerAddress;

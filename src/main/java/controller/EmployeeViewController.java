@@ -1,9 +1,5 @@
 package controller;
 
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import config.AppModule;
 import dto.Customer;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -31,14 +27,10 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static java.util.Collections.addAll;
-
 public class EmployeeViewController implements Initializable {
 
-    @Inject
-    EmployeeService employeeService;
-
-    List<Employee> employeeList = new ArrayList<>();
+    EmployeeService employeeService = ServiceFactory.getInstance().getService(ServiceType.EMPLOYEE);
+    ObservableList<Employee> employeeObservableList = FXCollections.observableList(employeeService.getEmployees());
 
     @FXML
     public AnchorPane paneProductManagement;
@@ -133,13 +125,9 @@ public class EmployeeViewController implements Initializable {
     @FXML
     void btnAddEmployeeOnAction(ActionEvent event) {
         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/add-employee-view.fxml"));
             Stage stage = new Stage();
-            Injector injector = Guice.createInjector(new AppModule());
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/add-employee-view.fxml"));
-
-            fxmlLoader.setControllerFactory(injector::getInstance);
-            stage.setScene(new Scene(fxmlLoader.load()));
-
+            stage.setScene(new Scene(loader.load()));
             stage.setTitle("Add Employee");
             stage.setResizable(false);
             stage.show();
@@ -155,14 +143,10 @@ public class EmployeeViewController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/update-employee-view.fxml"));
             Stage stage = new Stage();
-            Injector injector = Guice.createInjector(new AppModule());
-            loader.setControllerFactory(injector::getInstance);
             stage.setScene(new Scene(loader.load()));
-
             UpdateEmployeeViewController controller = loader.getController();
             controller.setEmployee(employee);
-
-            stage.setTitle("Update Customer");
+            stage.setTitle("Update Employee");
             stage.setResizable(false);
             stage.show();
 
@@ -202,8 +186,9 @@ public class EmployeeViewController implements Initializable {
     }
 
     private void populateTable() {
-        employeeList.clear();
-        employeeList.addAll(employeeService.getEmployees());
-        tblEmployeeDetails.setItems(FXCollections.observableList(employeeList));
+        employeeObservableList.clear();
+        employeeObservableList = FXCollections.observableList(employeeService.getEmployees());
+        tblEmployeeDetails.setItems(employeeObservableList);
     }
+
 }

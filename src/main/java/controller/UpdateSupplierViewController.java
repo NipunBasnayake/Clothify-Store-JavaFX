@@ -1,6 +1,5 @@
 package controller;
 
-import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -14,8 +13,7 @@ import util.ServiceType;
 
 public class UpdateSupplierViewController {
 
-    @Inject
-    SupplierService supplierService;
+    SupplierService supplierService = ServiceFactory.getInstance().getService(ServiceType.SUPPLIER);
 
     private Supplier supplier;
 

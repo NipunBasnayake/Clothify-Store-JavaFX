@@ -6,8 +6,6 @@ import util.ServiceType;
 public class ServiceFactory {
     private static ServiceFactory serviceFactory;
 
-    private ServiceFactory() {}
-
     public static ServiceFactory getInstance() {
         if (serviceFactory == null) {
             serviceFactory = new ServiceFactory();
@@ -15,15 +13,17 @@ public class ServiceFactory {
         return serviceFactory;
     }
 
+    private ServiceFactory() {}
+
     public <T extends SuperService> T getService(ServiceType serviceType) {
         switch (serviceType) {
-            case CUSTOMERS: return (T) new CustomerServiceImpl();
-            case EMPLOYEE: return (T) new EmployeeServiceImpl();
-            case ORDERPRODUCT: return (T) new OrderDetailsServiceImpl();
-            case ORDERS: return (T) new OrderServiceImpl();
-            case PRODUCT: return (T) new ProductServiceImpl();
-            case SUPPLIER: return (T) new SupplierServiceImpl();
-            case USER: return (T) new LoginSignUpServiceImpl();
+            case CUSTOMERS: return (T) CustomerServiceImpl.getInstance();
+            case EMPLOYEE: return (T) EmployeeServiceImpl.getInstance();
+            case ORDERPRODUCT: return (T) OrderDetailsServiceImpl.getInstance();
+            case ORDERS: return (T) OrderServiceImpl.getInstance();
+            case PRODUCT: return (T) ProductServiceImpl.getInstance();
+            case SUPPLIER: return (T) SupplierServiceImpl.getInstance();
+            case USER: return (T) LoginSignUpServiceImpl.getInstance();
             default: return null;
         }
     }

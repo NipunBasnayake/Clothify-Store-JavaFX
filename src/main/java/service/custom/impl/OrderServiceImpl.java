@@ -1,11 +1,8 @@
 package service.custom.impl;
 
-import com.google.inject.Inject;
 import dao.Custom.OrderDao;
 import dao.Custom.OrderDetailsDao;
 import dao.Custom.ProductDao;
-import dao.Custom.impl.OrderDaoImpl;
-import dao.Custom.impl.OrderDetailsDaoImpl;
 import dao.DaoFactory;
 import dto.Order;
 import dto.OrderDetails;
@@ -21,13 +18,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
+    private static OrderServiceImpl orderServiceImpl;
+    private final OrderDao orderDao;
+    private final OrderDetailsDao orderDetailsDao;
+    private final ProductDao productDao;
+    private final ModelMapper modelMapper;
 
-    ModelMapper modelMapper = new ModelMapper();
+    private OrderServiceImpl() {
+        orderDao = DaoFactory.getInstance().getDao(DaoType.ORDERS);
+        orderDetailsDao = DaoFactory.getInstance().getDao(DaoType.ORDERPRODUCT);
+        productDao = DaoFactory.getInstance().getDao(DaoType.PRODUCT);
+        modelMapper = new ModelMapper();
+    }
 
-    OrderDao orderDao = new OrderDaoImpl();
-
-    @Inject
-    OrderDetailsDao orderDetailsDao = new OrderDetailsDaoImpl();
+    public static OrderServiceImpl getInstance() {
+        if (orderServiceImpl == null) {
+            orderServiceImpl = new OrderServiceImpl();
+        }
+        return orderServiceImpl;
+    }
 
     @Override
     public int getLastOrderId() {

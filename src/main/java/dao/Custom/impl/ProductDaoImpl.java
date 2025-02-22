@@ -15,8 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDaoImpl implements ProductDao {
+    private static ProductDaoImpl productDaoImpl;
 
-    public ProductDaoImpl() {}
+    public static ProductDaoImpl getInstance() {
+        if (productDaoImpl == null) {
+            productDaoImpl = new ProductDaoImpl();
+        }
+        return productDaoImpl;
+    }
 
     @Override
     public boolean save(ProductEntity entity) {

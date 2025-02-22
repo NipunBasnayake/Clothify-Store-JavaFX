@@ -1,6 +1,5 @@
 package controller;
 
-import com.google.inject.Inject;
 import db.DBConnection;
 import dto.*;
 import javafx.event.ActionEvent;
@@ -24,45 +23,29 @@ import java.util.*;
 
 public class ReportsViewController implements Initializable {
 
-    @Inject
-    private CustomerService customerService;
-
-    @Inject
-    private OrderService orderService;
-
-    @Inject
-    private ProductService productService;
-
-    @Inject
-    private OrderDetailsService orderDetailsService;
-
-    @Inject
-    private SupplierService supplierService;
-
     @FXML
     public ComboBox cmbSaleSortTime;
-
     @FXML
     public BarChart<String, Number> chartCustomer;
-
     @FXML
     public AreaChart<String, Number> chartSales;
-
     @FXML
     public LineChart chartSupplier;
-
     @FXML
     public Rectangle rect1;
-
     @FXML
     public Rectangle rect2;
-
     @FXML
     public Rectangle rect3;
-
     @FXML
     public ComboBox cmbProductCategories;
 
+
+    private CustomerService customerService;
+    private OrderService orderService;
+    private ProductService productService;
+    private OrderProductService orderProductService;
+    private SupplierService supplierService;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -74,7 +57,7 @@ public class ReportsViewController implements Initializable {
         customerService = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
         orderService = ServiceFactory.getInstance().getService(ServiceType.ORDERS);
         productService = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
-        orderDetailsService = ServiceFactory.getInstance().getService(ServiceType.ORDERPRODUCT);
+        orderProductService = ServiceFactory.getInstance().getService(ServiceType.ORDERPRODUCT);
         supplierService = ServiceFactory.getInstance().getService(ServiceType.SUPPLIER);
 
         loadCustomerChart();
@@ -200,7 +183,7 @@ public class ReportsViewController implements Initializable {
             if (startDate != null && orderLocalDate.isBefore(startDate)) continue;
             if (endDate != null && orderLocalDate.isAfter(endDate)) continue;
 
-            for (OrderDetails orderDetails : orderDetailsService.getOrderProducts()) {
+            for (OrderDetails orderDetails : orderProductService.getOrderProducts()) {
                 Product product = productService.getProductById(orderDetails.getProductId());
                 if (product != null && product.getProductCategory() != null) {
                     String category = product.getProductCategory();
@@ -231,7 +214,6 @@ public class ReportsViewController implements Initializable {
     }
 
     private void adjustYAxis(Chart chart, Collection<Integer> dataValues) {
-        if (dataValues.isEmpty()) return;
         NumberAxis yAxis = (NumberAxis) ((XYChart<String, Number>) chart).getYAxis();
         yAxis.setTickUnit(1);
         yAxis.setMinorTickCount(0);
@@ -239,7 +221,6 @@ public class ReportsViewController implements Initializable {
         yAxis.setLowerBound(0);
         yAxis.setUpperBound(Collections.max(dataValues) + 5);
     }
-
 
     private void generateReport(String reportFileName) {
         try {

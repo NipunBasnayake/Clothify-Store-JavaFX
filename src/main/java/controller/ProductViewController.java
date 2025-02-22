@@ -1,10 +1,6 @@
 package controller;
 
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.jfoenix.controls.JFXRadioButton;
-import config.AppModule;
 import dto.Product;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -39,9 +35,7 @@ import java.util.ResourceBundle;
 
 public class ProductViewController implements Initializable {
 
-    @Inject
-    ProductService service;
-
+    private final ProductService service = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
     private List<Product> productList;
 
     @FXML
@@ -196,20 +190,17 @@ public class ProductViewController implements Initializable {
 
     private void updateProduct(Product product) {
         try {
-            Stage stage = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/update-product-view.fxml"));
+            Parent root = loader.load();
 
-            Injector injector = Guice.createInjector(new AppModule());
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/update-product-view.fxml"));
-            fxmlLoader.setControllerFactory(injector::getInstance);
-
-            UpdateProductViewController controller = fxmlLoader.getController();
+            UpdateProductViewController controller = loader.getController();
             controller.setProduct(product);
 
-            stage.setScene(new Scene(fxmlLoader.load()));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
             stage.setTitle("Update Product");
             stage.setResizable(false);
             stage.show();
-
 
             stage.setOnHidden(e -> Platform.runLater(() -> {
                         productList.clear();
@@ -262,13 +253,9 @@ public class ProductViewController implements Initializable {
     void btnAddProductOnAction(ActionEvent event) {
         try {
             Stage stage = new Stage();
-
-            Injector injector = Guice.createInjector(new AppModule());
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/add-product-view.fxml"));
-            fxmlLoader.setControllerFactory(injector::getInstance);
-            stage.setScene(new Scene(fxmlLoader.load()));
+            Parent root = FXMLLoader.load(getClass().getResource("/view/add-product-view.fxml"));
+            stage.setScene(new Scene(root));
             stage.setTitle("Add Product");
-            stage.setResizable(false);
             stage.show();
 
             stage.setOnHidden(e -> Platform.runLater(() -> {

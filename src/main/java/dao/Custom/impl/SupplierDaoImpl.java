@@ -12,6 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SupplierDaoImpl implements SupplierDao {
+    private static SupplierDaoImpl supplierDaoImpl;
+
+    public static SupplierDaoImpl getInstance() {
+        if (supplierDaoImpl == null) {
+            supplierDaoImpl = new SupplierDaoImpl();
+        }
+        return supplierDaoImpl;
+    }
 
     @Override
     public boolean save(SupplierEntity entity) {

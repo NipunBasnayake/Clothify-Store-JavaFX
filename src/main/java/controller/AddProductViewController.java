@@ -1,6 +1,5 @@
 package controller;
 
-import com.google.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -29,11 +28,8 @@ import java.util.ResourceBundle;
 
 public class AddProductViewController implements Initializable {
 
-    @Inject
-    ProductService service;
-
-    @Inject
-    SupplierService supplierService;
+    ProductService service = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
+    SupplierService supplierService = ServiceFactory.getInstance().getService(ServiceType.SUPPLIER);
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

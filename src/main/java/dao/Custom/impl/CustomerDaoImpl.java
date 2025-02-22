@@ -11,6 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerDaoImpl implements CustomerDao {
+    private static CustomerDaoImpl customerDaoImpl;
+
+    public static CustomerDaoImpl getInstance() {
+        if (customerDaoImpl == null) {
+            customerDaoImpl = new CustomerDaoImpl();
+        }
+        return customerDaoImpl;
+    }
 
     @Override
     public boolean save(CustomerEntity entity) {

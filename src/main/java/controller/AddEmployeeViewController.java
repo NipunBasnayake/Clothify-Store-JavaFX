@@ -1,6 +1,5 @@
 package controller;
 
-import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,8 +17,7 @@ import java.util.ResourceBundle;
 
 public class AddEmployeeViewController implements Initializable {
 
-    @Inject
-    EmployeeService employeeService;
+    EmployeeService employeeService = ServiceFactory.getInstance().getService(ServiceType.EMPLOYEE);
 
     @FXML
     private ComboBox cmbAddEmployeeRole;
@@ -32,7 +30,6 @@ public class AddEmployeeViewController implements Initializable {
 
     @FXML
     void btnSaveEmployeeOnAction(ActionEvent event) {
-        System.out.println(employeeService);
         boolean isEmployeeAdded = employeeService.addEmployee(new Employee(
                 1,
                 txtAddEmployeeName.getText(),
@@ -53,7 +50,7 @@ public class AddEmployeeViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        cmbAddEmployeeRole.getItems().addAll("Sales Assistant", "Cashier");
-
+        cmbAddEmployeeRole.getItems().add("Sales Assistant");
+        cmbAddEmployeeRole.getItems().add("Cashier");
     }
 }

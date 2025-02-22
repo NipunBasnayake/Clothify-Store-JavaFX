@@ -1,12 +1,8 @@
 package controller;
 
 import animatefx.animation.SlideInRight;
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.jfoenix.controls.JFXButton;
 
-import config.AppModule;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +16,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import dto.User;
 import service.ServiceFactory;
-import service.custom.CustomerService;
 import service.custom.LoginSignupService;
 import util.ServiceType;
 
@@ -35,14 +30,7 @@ import java.util.Random;
 public class LoginSignupViewController {
     static String otp;
 
-    LoginSignupService loginSignupService = ServiceFactory.getInstance().getService(ServiceType.USER);
-
-    @Inject
-    CustomerService customerService;
-
-    @FXML
     public Label lblForgitPassword;
-
     @FXML
     private JFXButton btnLogin;
 
@@ -70,6 +58,7 @@ public class LoginSignupViewController {
     @FXML
     private TextField txtOTP;
 
+    LoginSignupService loginSignupService = ServiceFactory.getInstance().getService(ServiceType.USER);
 
     @FXML
     void btnLogInOnAction(ActionEvent event) {
@@ -87,12 +76,9 @@ public class LoginSignupViewController {
                 alert.show();
             } else {
                 try {
-                    Stage stage = (Stage) txtLoginEmail.getScene().getWindow();
-                    Injector injector = Guice.createInjector(new AppModule());
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/home-view.fxml"));
-                    loader.setControllerFactory(injector::getInstance);
+                    Stage stage = (Stage) txtLoginEmail.getScene().getWindow();
                     stage.setScene(new Scene(loader.load()));
-
                     stage.setTitle("Clothify");
                     stage.setResizable(false);
                     stage.centerOnScreen();

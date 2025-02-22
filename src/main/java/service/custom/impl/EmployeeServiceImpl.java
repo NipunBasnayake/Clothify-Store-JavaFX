@@ -1,6 +1,5 @@
 package service.custom.impl;
 
-import com.google.inject.Inject;
 import dao.Custom.EmployeeDao;
 import dao.DaoFactory;
 import dto.Employee;
@@ -13,23 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeServiceImpl implements EmployeeService {
+    private static EmployeeServiceImpl employeeServiceImpl;
+    private final EmployeeDao employeeDao;
+    private final ModelMapper modelMapper;
 
-//    private static EmployeeServiceImpl instance;
-//
-//    public static EmployeeServiceImpl getInstance() {
-//        if (instance == null) {
-//            instance = new EmployeeServiceImpl();
-//        }
-//        return instance;
-//    }
-//
-//    public EmployeeServiceImpl(){}
+    private EmployeeServiceImpl() {
+        employeeDao = DaoFactory.getInstance().getDao(DaoType.EMPLOYEE);
+        modelMapper = new ModelMapper();
+    }
 
-    ModelMapper modelMapper = new ModelMapper();
-
-    @Inject
-    EmployeeDao employeeDao;
-
+    public static EmployeeServiceImpl getInstance() {
+        if (employeeServiceImpl == null) {
+            employeeServiceImpl = new EmployeeServiceImpl();
+        }
+        return employeeServiceImpl;
+    }
 
     @Override
     public boolean addEmployee(Employee employee) {
