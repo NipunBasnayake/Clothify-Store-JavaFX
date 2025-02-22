@@ -152,9 +152,7 @@ public class DashboardViewController implements Initializable {
             alert.setHeaderText("Order Not Placed");
             alert.show();
         }
-
     }
-
 
     @FXML
     void btnAllProductsOnAction(ActionEvent actionEvent) {

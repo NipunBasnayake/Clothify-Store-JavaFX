@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import dto.User;
+import org.jasypt.util.text.BasicTextEncryptor;
 import service.ServiceFactory;
 import service.custom.LoginSignupService;
 import util.ServiceType;
@@ -149,18 +150,30 @@ public class LoginSignupViewController {
             return;
         }
 
-        boolean isUpdated = loginSignupService.updatePassword(txtForgotEmail.getText(), txtNewPassword.getText());
-        if (isUpdated) {
+        BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+        textEncryptor.setPassword("ClothifySecureKey");
+        String encryptedPassword = textEncryptor.encrypt(txtNewPassword.getText().trim());
+
+        User passwordUpdatedUser = loginSignupService.updatePassword(txtForgotEmail.getText(), encryptedPassword);
+
+        if (passwordUpdatedUser != null) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");
             alert.setHeaderText("Password updated successfully");
             alert.show();
-            Stage stage = new Stage();
             try {
-                stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/home-view.fxml"))));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/home-view.fxml"));
+                Stage stage = (Stage) txtLoginEmail.getScene().getWindow();
+                stage.setScene(new Scene(loader.load()));
                 stage.setTitle("Clothify");
                 stage.setResizable(false);
-                stage.show();
+                stage.centerOnScreen();
+
+                HomeViewController homeViewController = loader.getController();
+                homeViewController.setCurrentUser(passwordUpdatedUser);
+
+                DashboardViewController dashboardViewController = new DashboardViewController();
+                dashboardViewController.setCurrentUser(passwordUpdatedUser);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

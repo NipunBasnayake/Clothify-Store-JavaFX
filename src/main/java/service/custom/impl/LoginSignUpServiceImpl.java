@@ -33,13 +33,8 @@ public class LoginSignUpServiceImpl implements LoginSignupService {
     }
 
     @Override
-    public boolean updatePassword(String email, String password) {
-        try {
-            return loginSignUpDao.updatePassword(email, password);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    public User updatePassword(String email, String password) {
+        return new ModelMapper().map(loginSignUpDao.updatePassword(email, password), User.class);
     }
 
     @Override
@@ -49,5 +44,14 @@ public class LoginSignUpServiceImpl implements LoginSignupService {
             return new ModelMapper().map(userEntity, User.class);
         }
         return null;
+    }
+
+    @Override
+    public boolean addNewUser(User newUser) {
+        if (newUser != null) {
+            UserEntity userEntity = new ModelMapper().map(newUser, UserEntity.class);
+            return loginSignUpDao.saveUser(userEntity);
+        }
+        return false;
     }
 }

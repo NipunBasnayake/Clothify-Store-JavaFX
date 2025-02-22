@@ -19,17 +19,24 @@ import java.util.ResourceBundle;
 
 public class HomeViewController implements Initializable {
     private static User currentUser;
-    public JFXButton btnUserName;
-    public Label lbl;
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
         setUserButton();
     }
 
-    private void setUserButton(){
+    private void setUserButton() {
         btnUserName.setText(currentUser.getUserName());
     }
+
+    @FXML
+    public JFXButton btnUserName;
+
+    @FXML
+    public JFXButton btnCreateUserAccount;
+
+    @FXML
+    public Label lbl;
 
     @FXML
     private JFXButton btnAdmin;
@@ -174,6 +181,18 @@ public class HomeViewController implements Initializable {
             AnchorPane pane = new FXMLLoader().load(getClass().getResource("/view/supplier-management-view.fxml"));
             paneLoadFXML.getChildren().clear();
             paneLoadFXML.getChildren().add(pane);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void btnCreateUserAccountOnAction(ActionEvent actionEvent) {
+        try {
+            Stage stage = new Stage();
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/create-user-account-view.fxml"))));
+            stage.setTitle("Create User Account");
+            stage.setResizable(false);
+            stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

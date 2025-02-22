@@ -77,7 +77,7 @@ public class UpdateProductViewController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Product Image");
 
-        File initialDirectory = new File("E:\\05 JavaFX\\#Final Coursework\\Clothify\\src\\main\\resources\\images\\products");
+        File initialDirectory = new File("src\\main\\resources\\images\\products");
         fileChooser.setInitialDirectory(initialDirectory);
 
         fileChooser.getExtensionFilters().add(

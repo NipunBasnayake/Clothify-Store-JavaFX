@@ -26,6 +26,8 @@ public class OrderHistoryViewController implements Initializable {
     private final CustomerService customerService = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
     private final LoginSignupService loginSignupService = ServiceFactory.getInstance().getService(ServiceType.USER);
 
+    private ObservableList<OrderHistory> orderHistoryItems = FXCollections.observableArrayList();
+
     @FXML
     public TableColumn<OrderHistory, Integer> colOrderId;
     @FXML
@@ -49,7 +51,6 @@ public class OrderHistoryViewController implements Initializable {
     @FXML
     private TableView<OrderHistory> tblOrderHistory;
 
-    private ObservableList<OrderHistory> orderHistoryItems = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -72,26 +73,22 @@ public class OrderHistoryViewController implements Initializable {
             List<OrderDetails> orderDetails = orderProductService.getOrderProducts();
 
             for (Order order : orders) {
-
                 for (OrderDetails orderDetail : orderDetails) {
-
                     if (orderDetail.getOrderId() == order.getOrderId()) {
                         Customer customer = customerService.getCustomerById(order.getCustomerId());
-                        if (customer == null) {
-                            continue;
-                        }
                         Product product = productService.getProductById(orderDetail.getProductId());
+                        User user = loginSignupService.getUserById(order.getUserId());
 
                         OrderHistory orderHistory = new OrderHistory(
                                 order.getOrderId(),
                                 order.getOrderDate(),
-                                product.getProductName(),
-                                product.getProductPrice(),
+                                product != null ? product.getProductName() : "null",
+                                product != null ? product.getProductPrice() : 0.0,
                                 orderDetail.getQuantity(),
-                                product.getProductPrice() * orderDetail.getQuantity(),
-                                order.getPaymentMethod(),
-                                customer.getCustomerName(),
-                                loginSignupService.getUserById(order.getUserId()).getUserName()
+                                (product != null ? product.getProductPrice() * orderDetail.getQuantity() : 0.0),
+                                order.getPaymentMethod() != null ? order.getPaymentMethod() : "null",
+                                customer != null ? customer.getCustomerName() : "null",
+                                user != null ? user.getUserName() : "null"
                         );
                         orderHistoryItems.add(orderHistory);
                     }
@@ -103,6 +100,7 @@ public class OrderHistoryViewController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
     public void btnSearchOrderHistory(ActionEvent actionEvent) {
         String searchText = txtSearchOrder.getText().trim().toLowerCase();
