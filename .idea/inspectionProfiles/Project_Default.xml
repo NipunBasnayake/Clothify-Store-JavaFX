@@ -6,15 +6,24 @@
       <option name="ignoredModules">
         <list>
           <option value="Clothify" />
+          <option value="Clothify-Store" />
+          <option value="Clothify-Store" />
+          <option value="Clothify-Store" />
         </list>
       </option>
       <option name="ignoredPackages">
         <list>
           <option value="com.google.protobuf:protobuf-java:4.26.1" />
+          <option value="commons-io:commons-io:2.11.0" />
+          <option value="com.google.guava:guava:31.0.1-jre" />
+          <option value="com.google.protobuf:protobuf-java:4.26.1" />
         </list>
       </option>
       <option name="ignoredReasons">
         <list>
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
           <option value="Not exploitable" />
         </list>
       </option>

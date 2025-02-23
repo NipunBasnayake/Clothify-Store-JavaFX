@@ -102,7 +102,6 @@ public class LoginSignupViewController {
         }
     }
 
-
     @FXML
     void btnSendOTP(ActionEvent event) {
         if (txtForgotEmail.getText().isEmpty()) {

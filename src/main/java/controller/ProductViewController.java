@@ -248,7 +248,6 @@ public class ProductViewController implements Initializable {
         }
     }
 
-
     @FXML
     void btnAddProductOnAction(ActionEvent event) {
         try {
@@ -351,9 +350,7 @@ public class ProductViewController implements Initializable {
 
     private VBox createProductCard(Product product) {
         VBox productCard = new VBox(5);
-        productCard.setStyle("-fx-padding: 12; -fx-background-color: #ffffff; "
-                + "-fx-border-width: 2; -fx-border-color: #ccc; "
-                + "-fx-background-radius: 10; -fx-border-radius: 10;");
+        productCard.setStyle("-fx-padding: 12; -fx-background-color: #ffffff; -fx-background-radius: 12; -fx-border-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(97,97,97,0.2), 15, 0, 0, 0);");
         productCard.setPrefWidth(182);
         productCard.setPrefHeight(300);
         productCard.setAlignment(Pos.CENTER);
@@ -408,7 +405,6 @@ public class ProductViewController implements Initializable {
 
         return productCard;
     }
-
 
     private void populateTable(List<Product> products) {
         tableProducts.getItems().clear();

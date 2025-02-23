@@ -5,13 +5,13 @@ import dao.DaoFactory;
 import dto.OrderDetails;
 import entity.OrderDetailEntity;
 import org.modelmapper.ModelMapper;
-import service.custom.OrderProductService;
+import service.custom.OrderDetailService;
 import util.DaoType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDetailsServiceImpl implements OrderProductService {
+public class OrderDetailsServiceImpl implements OrderDetailService {
     private static OrderDetailsServiceImpl orderDetailsServiceImpl;
     private final OrderDetailsDao orderDetailsDao;
     private final ModelMapper modelMapper;

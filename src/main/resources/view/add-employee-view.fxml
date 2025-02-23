@@ -24,6 +24,6 @@
       <Label layoutX="90.0" layoutY="201.0" text="Email" />
       <TextField fx:id="txtAddEmployeeEmail" layoutX="91.0" layoutY="225.0" prefHeight="48.0" prefWidth="421.0" />
       <Label layoutX="90.0" layoutY="289.0" text="Employee Role" />
-      <ComboBox fx:id="cmbAddEmployeeRole" layoutX="90.0" layoutY="312.0" prefHeight="48.0" prefWidth="421.0" />
+      <ComboBox fx:id="cmbAddEmployeeRole" layoutX="90.0" layoutY="312.0" prefHeight="48.0" prefWidth="421.0" promptText="Select Employee Role" />
    </children>
 </AnchorPane>

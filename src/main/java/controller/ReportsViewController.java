@@ -44,7 +44,7 @@ public class ReportsViewController implements Initializable {
     private CustomerService customerService;
     private OrderService orderService;
     private ProductService productService;
-    private OrderProductService orderProductService;
+    private OrderDetailService orderDetailService;
     private SupplierService supplierService;
 
     @Override
@@ -57,7 +57,7 @@ public class ReportsViewController implements Initializable {
         customerService = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
         orderService = ServiceFactory.getInstance().getService(ServiceType.ORDERS);
         productService = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
-        orderProductService = ServiceFactory.getInstance().getService(ServiceType.ORDERPRODUCT);
+        orderDetailService = ServiceFactory.getInstance().getService(ServiceType.ORDERPRODUCT);
         supplierService = ServiceFactory.getInstance().getService(ServiceType.SUPPLIER);
 
         loadCustomerChart();
@@ -72,7 +72,19 @@ public class ReportsViewController implements Initializable {
     @FXML
     public void btnSalesReportsOnAction(ActionEvent actionEvent) {
         String selectedOption = cmbSaleSortTime.getSelectionModel().getSelectedItem().toString();
-        generateReport("Sales_" + selectedOption.replace(" ", "_") + ".jrxml");
+
+        switch (selectedOption){
+            case "All Time": generateReport("AllTimeOrders.jrxml");
+            break;
+            case "Last Month": generateReport("LastMonthOrders.jrxml");
+            break;
+            case "Last Week": generateReport("LastWeekOrders.jrxml");
+            break;
+            case "Last Day": generateReport("LastDayOrders.jrxml");
+            break;
+            default: generateReport("AllTimeOrders.jrxml");
+            break;
+        }
     }
 
     @FXML
@@ -96,7 +108,7 @@ public class ReportsViewController implements Initializable {
 
     @FXML
     public void btnSupplierReportsOnAction(ActionEvent actionEvent) {
-        generateReport("Supplier_Report.jrxml");
+        generateReport("Suppliers.jrxml");
     }
 
     public void cmbProductCategoriesOnAction(ActionEvent actionEvent) {
@@ -146,8 +158,6 @@ public class ReportsViewController implements Initializable {
         chartSupplier.getData().add(series);
     }
 
-
-
     private void loadCustomerChart() {
         List<Customer> customers = customerService.getCustomers();
         chartCustomer.getData().clear();
@@ -183,7 +193,7 @@ public class ReportsViewController implements Initializable {
             if (startDate != null && orderLocalDate.isBefore(startDate)) continue;
             if (endDate != null && orderLocalDate.isAfter(endDate)) continue;
 
-            for (OrderDetails orderDetails : orderProductService.getOrderProducts()) {
+            for (OrderDetails orderDetails : orderDetailService.getOrderProducts()) {
                 Product product = productService.getProductById(orderDetails.getProductId());
                 if (product != null && product.getProductCategory() != null) {
                     String category = product.getProductCategory();
@@ -224,7 +234,7 @@ public class ReportsViewController implements Initializable {
 
     private void generateReport(String reportFileName) {
         try {
-            JasperDesign design = JRXmlLoader.load("src/main/resources/report/" + reportFileName);
+            JasperDesign design = JRXmlLoader.load("E:/05 JavaFX/#Clothify/2/Clothify-Store-JavaFX-ef77b1344b401ce55325387b88b39fc63734bea9/src/main/resources/reports/" + reportFileName);
             JasperReport jasperReport = JasperCompileManager.compileReport(design);
 
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, DBConnection.getInstance().getConnection());

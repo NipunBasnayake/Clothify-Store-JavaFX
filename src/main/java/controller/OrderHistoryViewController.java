@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 public class OrderHistoryViewController implements Initializable {
 
     private final OrderService orderService = ServiceFactory.getInstance().getService(ServiceType.ORDERS);
-    private final OrderProductService orderProductService = ServiceFactory.getInstance().getService(ServiceType.ORDERPRODUCT);
+    private final OrderDetailService orderDetailService = ServiceFactory.getInstance().getService(ServiceType.ORDERPRODUCT);
     private final ProductService productService = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
     private final CustomerService customerService = ServiceFactory.getInstance().getService(ServiceType.CUSTOMERS);
     private final LoginSignupService loginSignupService = ServiceFactory.getInstance().getService(ServiceType.USER);
@@ -70,7 +70,7 @@ public class OrderHistoryViewController implements Initializable {
     private void populateTable() {
         try {
             List<Order> orders = orderService.getOrders();
-            List<OrderDetails> orderDetails = orderProductService.getOrderProducts();
+            List<OrderDetails> orderDetails = orderDetailService.getOrderProducts();
 
             for (Order order : orders) {
                 for (OrderDetails orderDetail : orderDetails) {
@@ -100,7 +100,6 @@ public class OrderHistoryViewController implements Initializable {
             e.printStackTrace();
         }
     }
-
 
     public void btnSearchOrderHistory(ActionEvent actionEvent) {
         String searchText = txtSearchOrder.getText().trim().toLowerCase();

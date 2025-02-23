@@ -5,6 +5,6 @@ import service.SuperService;
 
 import java.util.List;
 
-public interface OrderProductService extends SuperService {
+public interface OrderDetailService extends SuperService {
     List<OrderDetails> getOrderProducts();
 }
