@@ -2,8 +2,6 @@ package dao.Custom.impl;
 
 import dao.Custom.ProductDao;
 import db.DBConnection;
-import dto.OrderDetails;
-import dto.Product;
 import entity.OrderDetailEntity;
 import entity.ProductEntity;
 

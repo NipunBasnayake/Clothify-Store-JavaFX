@@ -2,7 +2,6 @@ package dao.Custom.impl;
 
 import dao.Custom.SupplierDao;
 import db.DBConnection;
-import dto.Supplier;
 import entity.SupplierEntity;
 
 import java.sql.PreparedStatement;

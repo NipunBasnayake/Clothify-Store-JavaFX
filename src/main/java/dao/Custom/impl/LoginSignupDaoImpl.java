@@ -2,11 +2,9 @@ package dao.Custom.impl;
 
 import dao.Custom.LoginSignUpDao;
 import db.DBConnection;
-import dto.User;
 import entity.UserEntity;
 import org.jasypt.util.text.BasicTextEncryptor;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -52,13 +50,8 @@ public class LoginSignupDaoImpl implements LoginSignUpDao {
                                 resultSet2.getString("registrationDate")
                         );
                     }
-                } else {
-                    System.out.println("Invalid password!");
                 }
-            } else {
-                System.out.println("Email not found!");
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

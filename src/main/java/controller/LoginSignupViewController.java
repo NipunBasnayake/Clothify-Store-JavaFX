@@ -1,7 +1,6 @@
 package controller;
 
 import animatefx.animation.SlideInRight;
-import com.jfoenix.controls.JFXButton;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,13 +26,10 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 
-
 public class LoginSignupViewController {
     static String otp;
 
     public Label lblForgitPassword;
-    @FXML
-    private JFXButton btnLogin;
 
     @FXML
     private AnchorPane paneForgotPassword;
@@ -96,7 +92,6 @@ public class LoginSignupViewController {
                     alert.setTitle("Error");
                     alert.setHeaderText("Unable to load the home view.");
                     alert.show();
-                    e.printStackTrace();
                 }
             }
         }
@@ -261,6 +256,4 @@ public class LoginSignupViewController {
             e.printStackTrace();
         }
     }
-
-
 }

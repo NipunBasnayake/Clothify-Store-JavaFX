@@ -1,6 +1,5 @@
 package controller;
 
-import dto.Customer;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,12 +19,9 @@ import util.ServiceType;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class EmployeeViewController implements Initializable {
 

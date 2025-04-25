@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-
 public class UpdateProductViewController {
     ProductService productService = ServiceFactory.getInstance().getService(ServiceType.PRODUCT);
     SupplierService supplierService = ServiceFactory.getInstance().getService(ServiceType.SUPPLIER);

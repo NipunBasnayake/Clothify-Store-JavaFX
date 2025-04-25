@@ -234,7 +234,7 @@ public class ReportsViewController implements Initializable {
 
     private void generateReport(String reportFileName) {
         try {
-            JasperDesign design = JRXmlLoader.load("E:/05 JavaFX/#Clothify/2/Clothify-Store-JavaFX-ef77b1344b401ce55325387b88b39fc63734bea9/src/main/resources/reports/" + reportFileName);
+            JasperDesign design = JRXmlLoader.load("E:/Projects/Clothify Store POS System - JavaFx/Clothify-Store-JavaFX/src/main/resources/reports/" + reportFileName);
             JasperReport jasperReport = JasperCompileManager.compileReport(design);
 
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, DBConnection.getInstance().getConnection());
