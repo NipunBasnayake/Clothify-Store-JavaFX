@@ -45,7 +45,7 @@ public class AddSupplierViewController implements Initializable {
         if (isSupplierAdded) {
             Stage stage = (Stage) txtSupplierCompany.getScene().getWindow();
             stage.close();
-        }else {
+        } else {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Supplier Not Added");
             alert.setHeaderText("Supplier Not Added");

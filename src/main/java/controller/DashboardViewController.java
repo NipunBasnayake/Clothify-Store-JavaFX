@@ -320,7 +320,7 @@ public class DashboardViewController implements Initializable {
                                     product.getProductImage(),
                                     product.getSupplierID()
                             ));
-                        }else {
+                        } else {
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setTitle("Stock Error");
                             alert.setHeaderText("Stock not enough to add product");

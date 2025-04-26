@@ -49,7 +49,7 @@ public class ReportsViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        cmbProductCategories.getItems().addAll("Gents","Ladies","Kids","Accessories","Footwear");
+        cmbProductCategories.getItems().addAll("Gents", "Ladies", "Kids", "Accessories", "Footwear");
         cmbProductCategories.setValue("Gents");
         cmbSaleSortTime.getItems().addAll("All Time", "Last Month", "Last Week", "Last Day");
         cmbSaleSortTime.setValue("All Time");
@@ -73,17 +73,22 @@ public class ReportsViewController implements Initializable {
     public void btnSalesReportsOnAction(ActionEvent actionEvent) {
         String selectedOption = cmbSaleSortTime.getSelectionModel().getSelectedItem().toString();
 
-        switch (selectedOption){
-            case "All Time": generateReport("AllTimeOrders.jrxml");
-            break;
-            case "Last Month": generateReport("LastMonthOrders.jrxml");
-            break;
-            case "Last Week": generateReport("LastWeekOrders.jrxml");
-            break;
-            case "Last Day": generateReport("LastDayOrders.jrxml");
-            break;
-            default: generateReport("AllTimeOrders.jrxml");
-            break;
+        switch (selectedOption) {
+            case "All Time":
+                generateReport("AllTimeOrders.jrxml");
+                break;
+            case "Last Month":
+                generateReport("LastMonthOrders.jrxml");
+                break;
+            case "Last Week":
+                generateReport("LastWeekOrders.jrxml");
+                break;
+            case "Last Day":
+                generateReport("LastDayOrders.jrxml");
+                break;
+            default:
+                generateReport("AllTimeOrders.jrxml");
+                break;
         }
     }
 
@@ -244,5 +249,4 @@ public class ReportsViewController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
 }

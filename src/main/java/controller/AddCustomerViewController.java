@@ -34,7 +34,7 @@ public class AddCustomerViewController {
         if (isCustomerAdded) {
             Stage stage = (Stage) txtAddCustomerAddress.getScene().getWindow();
             stage.close();
-        }else{
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Customer Not Added");
             alert.setHeaderText("Customer Not Added");

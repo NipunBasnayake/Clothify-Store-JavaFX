@@ -42,7 +42,7 @@ public class UpdateCustomerViewController {
         if (isUpdatedCustomer) {
             Stage stage = (Stage) txtUpdateCustomerAddress.getScene().getWindow();
             stage.close();
-        }else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Customer Not Updated");
             alert.setHeaderText("Customer Not Updated");

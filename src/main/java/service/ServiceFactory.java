@@ -13,21 +13,27 @@ public class ServiceFactory {
         return serviceFactory;
     }
 
-    private ServiceFactory() {}
+    private ServiceFactory() {
+    }
 
     public <T extends SuperService> T getService(ServiceType serviceType) {
         switch (serviceType) {
-            case CUSTOMERS: return (T) CustomerServiceImpl.getInstance();
-            case EMPLOYEE: return (T) EmployeeServiceImpl.getInstance();
-            case ORDERPRODUCT: return (T) OrderDetailsServiceImpl.getInstance();
-            case ORDERS: return (T) OrderServiceImpl.getInstance();
-            case PRODUCT: return (T) ProductServiceImpl.getInstance();
-            case SUPPLIER: return (T) SupplierServiceImpl.getInstance();
-            case USER: return (T) LoginSignUpServiceImpl.getInstance();
-            default: return null;
+            case CUSTOMERS:
+                return (T) CustomerServiceImpl.getInstance();
+            case EMPLOYEE:
+                return (T) EmployeeServiceImpl.getInstance();
+            case ORDERPRODUCT:
+                return (T) OrderDetailsServiceImpl.getInstance();
+            case ORDERS:
+                return (T) OrderServiceImpl.getInstance();
+            case PRODUCT:
+                return (T) ProductServiceImpl.getInstance();
+            case SUPPLIER:
+                return (T) SupplierServiceImpl.getInstance();
+            case USER:
+                return (T) LoginSignUpServiceImpl.getInstance();
+            default:
+                return null;
         }
     }
-
-
-
 }

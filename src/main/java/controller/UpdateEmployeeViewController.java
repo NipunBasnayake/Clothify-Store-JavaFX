@@ -49,7 +49,7 @@ public class UpdateEmployeeViewController {
             if (isEmployeeUpdated) {
                 Stage stage = (Stage) txtUpdateEmployeeEmail.getScene().getWindow();
                 stage.close();
-            }else {
+            } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Update Error");
                 alert.setHeaderText("Employee Not Updated");

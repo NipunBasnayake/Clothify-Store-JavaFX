@@ -40,7 +40,7 @@ public class AddEmployeeViewController implements Initializable {
         if (isEmployeeAdded) {
             Stage stage = (Stage) txtAddEmployeeEmail.getScene().getWindow();
             stage.close();
-        }else {
+        } else {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Employee Not Added");
             alert.setHeaderText("Employee Not Added");

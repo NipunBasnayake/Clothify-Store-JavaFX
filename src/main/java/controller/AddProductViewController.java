@@ -119,7 +119,7 @@ public class AddProductViewController implements Initializable {
         if (isProductAdded) {
             Stage stage = (Stage) txtAddProductImagePath.getScene().getWindow();
             stage.close();
-        }else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Product Adding Failed");
             alert.setHeaderText("Product Adding Failed");

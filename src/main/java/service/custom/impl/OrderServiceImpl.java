@@ -87,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
     public boolean addOrder(Order order) {
         try {
             List<OrderDetailEntity> orderDetailEntities = new ArrayList<>();
-            for(OrderDetails orderDetails : order.getOrderDetailsList()){
+            for (OrderDetails orderDetails : order.getOrderDetailsList()) {
                 orderDetailEntities.add(modelMapper.map(orderDetails, OrderDetailEntity.class));
             }
 
